@@ -10,5 +10,10 @@ package m15;
  * @author m15
  */
 public class NewClass {
+    int potato = 125;
+    
+    private void lol(){
+        System.out.println(potato);
+    }
     
 }
