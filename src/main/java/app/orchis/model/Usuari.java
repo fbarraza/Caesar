@@ -10,7 +10,7 @@ import java.util.Date;
 
 
 @Entity
-@Table (name = "usuaris")
+@Table (name = "user")
 public class Usuari implements Serializable{
  
 
@@ -20,7 +20,7 @@ public class Usuari implements Serializable{
     @Column(name = "id", unique = true)
     private int codi;
 
-    @Column(name = "username")
+    @Column(name = "nom")
     private String nom;
 
     @Column(name = "password")

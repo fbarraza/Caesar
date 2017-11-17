@@ -12,8 +12,8 @@ and open the template in the editor.
     -fx-align-content: "center";
 }
 
-.showerr{
-    -fx-color: "red";
+#showerr{
+    -fx-fill:#990000;
 }
 
 .helpicon{
