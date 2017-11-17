@@ -64,7 +64,7 @@ public class LoginController implements Initializable{
         emf.close();
     }
     
-    protected void intents(boolean usuari){
+    protected void intents(boolean usuari, Usuari user){
         if(!usuari){
             intents_n--;
             if (intents_n == 0){
@@ -72,7 +72,7 @@ public class LoginController implements Initializable{
                 bloqueig();
             }
             else{
-                tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intents restants.");
+                tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");
             }            
         }
     }
@@ -141,7 +141,7 @@ public class LoginController implements Initializable{
             }
         }
         if(!login){
-            intents(login);
+            intents(login,user);
         }
     }   
 }
