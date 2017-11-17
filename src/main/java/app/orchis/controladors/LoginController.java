@@ -7,7 +7,8 @@ package app.orchis.controladors;
 
 
 import app.orchis.model.Usuari;
-import app.orchis.utils.CryptoHelper.encripta;
+import static app.orchis.utils.CryptoHelper.encripta;
+import static app.orchis.utils.CryptoHelper.testPassword;
 import app.orchis.utils.EntityMan;
 import app.orchis.utils.eines.AppPropertiesFileHelper;
 import app.orchis.utils.eines.PropertiesHelperException;
@@ -141,7 +142,7 @@ public class LoginController implements Initializable{
         for(i=0;i<llista.size();i++){
             if(llista.get(i).getLogin().equals(username)){
                 login = true;
-                if(testpassword(tfPasswd.getText(),llista.get(i).getPasswd())){
+                if(testPassword(password,llista.get(i).getPasswd())){
                     passwd=true;
                     user = llista.get(i);
                     break;
