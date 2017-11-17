@@ -32,6 +32,8 @@ public class Usuari implements Serializable{
     @Column(name = "login")
     private String login;
 
+    //test
+    
     public Usuari() {
     }
 
