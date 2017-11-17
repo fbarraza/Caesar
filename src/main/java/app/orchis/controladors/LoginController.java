@@ -46,7 +46,7 @@ public class LoginController implements Initializable{
     @FXML private Button btLogin;
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory( "app.orchis.persistencia");
     private static EntityManager manager = emf.createEntityManager();    
-    private static int intents_n = 0;
+    private static int intents_n = 3;
     private static Usuari user = new Usuari();
     private static EntityMan test = new EntityMan();
     
@@ -64,26 +64,15 @@ public class LoginController implements Initializable{
         emf.close();
     }
     
-    protected void intents(boolean usuari, boolean password){
+    protected void intents(boolean usuari){
         if(!usuari){
-            intents_n++;
-            if (intents_n == 3){
+            intents_n--;
+            if (intents_n == 0){
                 tfInfo.setText("Has fallat el teu login tres vegades! S'ha informat a l'admin i app bloquejada");
                 bloqueig();
             }
             else{
-                tfInfo.setText("Usuari erroni, tens "+intents_n+" intents restants.");
-            }            
-        }
-        
-        else if(!password){
-            intents_n++;
-            if (intents_n == 3){
-                tfInfo.setText("Has fallat el teu login tres vegades! S'ha informat a l'admin i app bloquejada");
-                bloqueig();
-            }
-            else{
-                tfInfo.setText("Contrassenya erronia, tens "+intents_n+" intents restants.");
+                tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intents restants.");
             }            
         }
     }
@@ -135,7 +124,7 @@ public class LoginController implements Initializable{
         //Variables per obtenir els valors i fer el login
         String username = tfUser.getText();
         String password = encripta(tfPasswd.getText());
-        boolean login=false,passwd=false;
+        boolean login=false;
         int i,x=0;
         
         
@@ -143,7 +132,6 @@ public class LoginController implements Initializable{
             if(llista.get(i).getLogin().equals(username)){
                 login = true;
                 if(testPassword(password,llista.get(i).getPasswd())){
-                    passwd=true;
                     user = llista.get(i);
                     break;
                 }
@@ -153,7 +141,7 @@ public class LoginController implements Initializable{
             }
         }
         if(!login){
-            intents(login,passwd);
+            intents(login);
         }
     }   
 }
