@@ -7,6 +7,7 @@ package app.orchis.controladors;
 
 
 import app.orchis.model.Usuari;
+import app.orchis.utils.CryptoHelper.encripta;
 import app.orchis.utils.EntityMan;
 import app.orchis.utils.eines.AppPropertiesFileHelper;
 import app.orchis.utils.eines.PropertiesHelperException;
@@ -131,16 +132,19 @@ public class LoginController implements Initializable{
     //Botó login
     @FXML protected void Login(ActionEvent actionEvent) throws ConfigurationException{
         //Variables per obtenir els valors i fer el login
-        String username = tfUser.getText();        
+        String username = tfUser.getText();
+        String password = encripta(tfPasswd.getText());
         boolean login=false,passwd=false;
         int i,x=0;
+        
         
         for(i=0;i<llista.size();i++){
             if(llista.get(i).getLogin().equals(username)){
                 login = true;
-                if(llista.get(i).getPasswd().equals(tfPasswd.getText())){
+                if(testpassword(tfPasswd.getText(),llista.get(i).getPasswd())){
                     passwd=true;
                     user = llista.get(i);
+                    break;
                 }
                 else{
                     login = false;

@@ -8,10 +8,9 @@ public class CryptoHelper {
         return DigestUtils.sha256Hex(s);
     }
 
-    public static boolean testPassword (String clar, String encriptat) {
-        String tmp =  encripta(clar);
+    public static boolean testPassword (String bbdd, String encriptat) {
 
-        if (encriptat.equals(tmp))
+        if (encriptat.equals(bbdd))
             return true;
         else
             return false;
