@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="480.0" maxWidth="640.0" minHeight="480.0" minWidth="640.0" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView id="background" fitHeight="480.0" fitWidth="640.0">
+         <image>
+            <Image url="@../background/background.jpg" />
+         </image>
+         <viewport>
+            <Rectangle2D minX="640.0" minY="480.0" />
+         </viewport>
+      </ImageView>
+      <Text id="user" layoutX="203.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Usuari">
+         <font>
+            <Font size="16.0" />
+         </font></Text>
+      <Text id="pw" layoutX="152.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contrasenya" wrappingWidth="102.7294921875">
+         <font>
+            <Font size="16.0" />
+         </font></Text>
+      <TextField id="usertext" layoutX="284.0" layoutY="202.0" prefHeight="26.0" prefWidth="184.0" stylesheets="@../styles/login.css" />
+      <TextField id="pwtext" layoutX="284.0" layoutY="252.0" prefHeight="26.0" prefWidth="184.0" />
+      <Button id="login" layoutX="470.0" layoutY="404.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="170.0" text="INICIA SESSIO" />
+      <Text id="showerr" layoutX="85.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="470.7294921875" />
+      <MenuButton id="options" layoutX="551.0" layoutY="1.0" mnemonicParsing="false" text="Opcions">
+        <items>
+          <MenuItem id="about" mnemonicParsing="false" text="Quant a 'M15'">
+               <graphic>
+                  <ImageView id="helppng" fitHeight="16.0" fitWidth="16.0">
+                     <image>
+                        <Image url="@../icons/help.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+          <MenuItem id="exit" mnemonicParsing="false" text="Surt">
+               <graphic>
+                  <ImageView id="surtpng" fitHeight="16.0" fitWidth="16.0">
+                     <image>
+                        <Image url="@../icons/surt.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+        </items>
+      </MenuButton>
+   </children>
+</Pane>

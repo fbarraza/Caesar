@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package m15;
+package app.orchis;
 
 /**
  *
  * @author m15
  */
-public class NewClass {
+public class LoginController {
     
 }
