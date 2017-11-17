@@ -1,0 +1,31 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 03/11/2017, 16:38:18
+    Author     : m15
+*/
+
+.text{
+    -fx-align-content: "center";
+}
+
+#showerr{
+    -fx-fill:#990000;
+}
+
+.helpicon{
+    -fx-width: "16px";
+    -fx-height: "16px";
+}
+
+.exiticon{
+    -fx-width: "16px";
+    -fx-height: "16px";
+}
+
+.button{   
+    -fx-background-radius: 75%;
+}
