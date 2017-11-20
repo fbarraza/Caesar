@@ -10,11 +10,11 @@ import app.orchis.model.Usuari;
 import static app.orchis.utils.CryptoHelper.encripta;
 import static app.orchis.utils.CryptoHelper.testPassword;
 import app.orchis.utils.EntityMan;
+import static app.orchis.utils.JavaEmail.enviarMissatge;
 import app.orchis.utils.eines.AppPropertiesFileHelper;
 import app.orchis.utils.eines.PropertiesHelperException;
 import java.net.URL;
 import java.util.List;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,19 +23,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 import org.apache.commons.configuration.ConfigurationException;
 
 /**
@@ -63,7 +55,7 @@ public class LoginController implements Initializable{
     }
     
     //Bloquejar l'aplicació i apagar la connexió EntityManager.
-    protected void bloqueig(){
+    protected void bloqueigApp(){
         tfUser.setEditable(false);
         tfPasswd.setEditable(false);
         btLogin.setDisable(true);
@@ -71,14 +63,14 @@ public class LoginController implements Initializable{
     }    
     
     //Missatge a monstrar si l'usuari està bloquejat
-    protected void isBloquejat(String user){
+    protected void userBloquejat(String user){
         tfInfo.setText("L'usuari està bloquejat! No el pots fer servir fins que l'admin el desbloquegi.");
-        bloqueig();
+        bloqueigApp();
     }
     
     //Manager d'intents
     protected void intents(boolean usuari, String username, int i) throws MessagingException{
-        //Vars
+        //Restar intent
         intents_n--;
         
         //Programa
@@ -86,7 +78,7 @@ public class LoginController implements Initializable{
             if (intents_n == 0){
                 tfInfo.setText("Has fallat el teu login tres vegades! S'ha informat a l'admin i la app ha quedat bloquejada");
                 enviarMissatge(username);
-                bloqueig();
+                bloqueigApp();
             }
             else{
                 tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");
@@ -99,7 +91,7 @@ public class LoginController implements Initializable{
                 llista.get(i).setBloquejat(true); 
                 tx.commit();
                 enviarMissatge(username);
-                bloqueig();                
+                bloqueigApp();                
             }
             else{
                 tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");              
@@ -107,47 +99,19 @@ public class LoginController implements Initializable{
         }
     }
     
-    //Enviar missatge a l'admin. TODO:Encriptar la contrassenya
-    protected void enviarMissatge(String username) throws AddressException, MessagingException{
-        Properties mailServerProperties;
-        Session getMailSession;
-        MimeMessage generateMailMessage;
-        
-        //Configuració servidor Gmail
-        mailServerProperties = System.getProperties();
-        mailServerProperties.put("mail.smtp.port", "587");
-        mailServerProperties.put("mail.smtp.auth", "true");
-        mailServerProperties.put("mail.smtp.starttls.enable", "true");
-
-        //Configuració missatge
-        getMailSession = Session.getDefaultInstance(mailServerProperties, null);
-        generateMailMessage = new MimeMessage(getMailSession);
-        generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("m15orchisserver@gmail.com"));
-        generateMailMessage.setSubject("Intent de login");
-        String emailBody = "Han intentat iniciar sessió amb l'usuari: " +username + " i ha quedat bloquejat. <br><br> Localhost <br>";
-        generateMailMessage.setContent(emailBody, "text/html");
-        System.out.println("Mail Session has been created successfully..");
-        Transport transport = getMailSession.getTransport("smtp");
-
-        //Enviar missatge amb el compte de gmail.
-        transport.connect("smtp.gmail.com", "m15orchisserver@gmail.com", "5t34mWindows");
-        transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
-        transport.close();
-	
-    }
-    
     //Botó login
     @FXML protected void Login(ActionEvent actionEvent) throws ConfigurationException, MessagingException{
         String username = tfUser.getText();
         String password = encripta(tfPasswd.getText());
-        int pos=0;
         boolean login=false,pass=false;
-        int i,x=0;
+        int i,pos=0;
         
+        //Mirar usuaris en la llista
         for(i=0;i<llista.size();i++){
             if(llista.get(i).getLogin().equals(username)){
+                //Trencar bucle for si l'usuari està bloquejat
                 if(llista.get(i).isBloquejat()){
-                    isBloquejat(username);
+                    userBloquejat(username);
                     break;
                 }
                 else{
