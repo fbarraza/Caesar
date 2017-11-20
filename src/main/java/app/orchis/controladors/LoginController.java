@@ -62,20 +62,26 @@ public class LoginController implements Initializable{
         
     }
     
-    protected void isBloquejat(String user){
-        tfInfo.setText("L'usuari està bloquejat! No el pots fer servir fins que l'admin el desbloquegi.");
-        bloqueig();
-    }
-    
+    //Bloquejar l'aplicació i apagar la connexió EntityManager.
     protected void bloqueig(){
         tfUser.setEditable(false);
         tfPasswd.setEditable(false);
         btLogin.setDisable(true);
         emf.close();
+    }    
+    
+    //Missatge a monstrar si l'usuari està bloquejat
+    protected void isBloquejat(String user){
+        tfInfo.setText("L'usuari està bloquejat! No el pots fer servir fins que l'admin el desbloquegi.");
+        bloqueig();
     }
     
+    //Manager d'intents
     protected void intents(boolean usuari, String username, int i) throws MessagingException{
+        //Vars
         intents_n--;
+        
+        //Programa
         if(!usuari){
             if (intents_n == 0){
                 tfInfo.setText("Has fallat el teu login tres vegades! S'ha informat a l'admin i la app ha quedat bloquejada");
@@ -101,6 +107,7 @@ public class LoginController implements Initializable{
         }
     }
     
+    //Enviar missatge a l'admin. TODO:Encriptar la contrassenya
     protected void enviarMissatge(String username) throws AddressException, MessagingException{
         Properties mailServerProperties;
         Session getMailSession;
@@ -132,8 +139,9 @@ public class LoginController implements Initializable{
     //Botó login
     @FXML protected void Login(ActionEvent actionEvent) throws ConfigurationException, MessagingException{
         String username = tfUser.getText();
-        String password = encripta(tfPasswd.getText());      
-        boolean login=false;
+        String password = encripta(tfPasswd.getText());
+        int pos=0;
+        boolean login=false,pass=false;
         int i,x=0;
         
         for(i=0;i<llista.size();i++){
@@ -144,20 +152,19 @@ public class LoginController implements Initializable{
                 }
                 else{
                     login = true;
+                    pos = i;
                     if(testPassword(password,llista.get(i).getPasswd())){
+                        pass= true;
                         user = llista.get(i);
                         break;
                     }
-                    else{
-                        intents(login,username,i);
-                        login = false;
-                    }    
                 }
-            }
-            else{
-                intents(login,username,i);
-                login = false;
-            }            
+            }         
         }
+        
+        if((!login)||(!pass)){
+            intents(login,username,pos);
+        }
+        
     }   
 }
