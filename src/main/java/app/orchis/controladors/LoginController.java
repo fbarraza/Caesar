@@ -25,8 +25,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
@@ -64,12 +66,12 @@ public class LoginController implements Initializable{
         emf.close();
     }
     
-    protected void intents(boolean usuari, Usuari user){
+    protected void intents(boolean usuari, String username) throws MessagingException{
         if(!usuari){
             intents_n--;
             if (intents_n == 0){
                 tfInfo.setText("Has fallat el teu login tres vegades! S'ha informat a l'admin i app bloquejada");
-                enviarmissatge();
+                enviarmissatge(username);
                 bloqueig();
             }
             else{
@@ -78,50 +80,36 @@ public class LoginController implements Initializable{
         }
     }
     
-    protected void enviarmissatge(){
-        // Recipient's email ID needs to be mentioned.
-        String to = "m15orchisserver@gmail.com";
+    protected void enviarmissatge(String username) throws AddressException, MessagingException{
+        Properties mailServerProperties;
+        Session getMailSession;
+        MimeMessage generateMailMessage;
+        
+        //Configuració servidor Gmail
+        mailServerProperties = System.getProperties();
+        mailServerProperties.put("mail.smtp.port", "587");
+        mailServerProperties.put("mail.smtp.auth", "true");
+        mailServerProperties.put("mail.smtp.starttls.enable", "true");
 
-        // Sender's email ID needs to be mentioned
-        String from = "m15orchisserver@gmail.com";
+        //Configuració missatge
+        getMailSession = Session.getDefaultInstance(mailServerProperties, null);
+        generateMailMessage = new MimeMessage(getMailSession);
+        generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("m15orchisserver@gmail.com"));
+        generateMailMessage.setSubject("Intent de login");
+        String emailBody = "Han intentat iniciar sessió amb l'usuari: " +username + " i ha quedat bloquejat. <br><br> Localhost <br>";
+        generateMailMessage.setContent(emailBody, "text/html");
+        System.out.println("Mail Session has been created successfully..");
+        Transport transport = getMailSession.getTransport("smtp");
 
-        // Assuming you are sending email from localhost
-        String host = "localhost";
-
-        // Get system properties
-        Properties properties = System.getProperties();
-
-        // Setup mail server
-        properties.setProperty("mail.smtp.host", host);
-
-        // Get the default Session object.
-        Session session = Session.getDefaultInstance(properties);
-        try {
-           // Create a default MimeMessage object.
-           MimeMessage message = new MimeMessage(session);
-
-           // Set From: header field of the header.
-           message.setFrom(new InternetAddress(from));
-
-           // Set To: header field of the header.
-           message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-
-           // Set Subject: header field
-           message.setSubject("This is the Subject Line!");
-
-           // Now set the actual message
-           message.setText("This is actual message");
-
-           // Send message
-           Transport.send(message);
-           System.out.println("Sent message successfully....");
-        } catch (MessagingException mex) {
-           mex.printStackTrace();
-        }        
+        //Enviar missatge amb el compte de gmail.
+        transport.connect("smtp.gmail.com", "m15orchisserver@gmail.com", "5t34mWindows");
+        transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
+        transport.close();
+	
     }
     
     //Botó login
-    @FXML protected void Login(ActionEvent actionEvent) throws ConfigurationException{
+    @FXML protected void Login(ActionEvent actionEvent) throws ConfigurationException, MessagingException{
         //Variables per obtenir els valors i fer el login
         String username = tfUser.getText();
         String password = encripta(tfPasswd.getText());
@@ -142,7 +130,7 @@ public class LoginController implements Initializable{
             }
         }
         if(!login){
-            intents(login,user);
+            intents(login,username);
         }
     }   
 }
