@@ -69,6 +69,7 @@ public class LoginController implements Initializable{
             intents_n--;
             if (intents_n == 0){
                 tfInfo.setText("Has fallat el teu login tres vegades! S'ha informat a l'admin i app bloquejada");
+                enviarmissatge();
                 bloqueig();
             }
             else{
@@ -79,10 +80,10 @@ public class LoginController implements Initializable{
     
     protected void enviarmissatge(){
         // Recipient's email ID needs to be mentioned.
-        String to = "3xlneet@gmail.com";
+        String to = "m15orchisserver@gmail.com";
 
         // Sender's email ID needs to be mentioned
-        String from = "m3xlneet@gmail.com";
+        String from = "m15orchisserver@gmail.com";
 
         // Assuming you are sending email from localhost
         String host = "localhost";
