@@ -9,7 +9,6 @@ package app.orchis.controladors;
 import app.orchis.model.Usuari;
 import static app.orchis.utils.CryptoHelper.encripta;
 import static app.orchis.utils.CryptoHelper.testPassword;
-import app.orchis.utils.EntityMan;
 import static app.orchis.utils.JavaEmail.enviarMissatge;
 import app.orchis.utils.eines.AppPropertiesFileHelper;
 import app.orchis.utils.eines.PropertiesHelperException;
@@ -36,17 +35,18 @@ import org.apache.commons.configuration.ConfigurationException;
  */
 public class LoginController implements Initializable{
 
+    //Vars elements FXML
     @FXML private TextField tfUser;
     @FXML private PasswordField tfPasswd;
     @FXML private Text tfInfo;
     @FXML private Button btLogin;
+    
+    //Vars pel programa
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory( "app.orchis.persistencia");
     private static EntityManager manager = emf.createEntityManager();    
     private static EntityTransaction tx = manager.getTransaction();
     private static int intents_n = 3;
     private static Usuari user = new Usuari();
-    private static EntityMan test = new EntityMan();
-    
     private static List<Usuari> llista = (List<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
     
     @Override
