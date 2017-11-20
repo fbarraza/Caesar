@@ -33,7 +33,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import org.apache.commons.configuration.ConfigurationException;
 
 /**
@@ -48,6 +50,7 @@ public class LoginController implements Initializable{
     @FXML private Button btLogin;
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory( "app.orchis.persistencia");
     private static EntityManager manager = emf.createEntityManager();    
+    private static EntityTransaction tx = manager.getTransaction();
     private static int intents_n = 3;
     private static Usuari user = new Usuari();
     private static EntityMan test = new EntityMan();
@@ -59,6 +62,11 @@ public class LoginController implements Initializable{
         
     }
     
+    protected void isBloquejat(String user){
+        tfInfo.setText("L'usuari està bloquejat! No el pots fer servir fins que l'admin el desbloquegi.");
+        bloqueig();
+    }
+    
     protected void bloqueig(){
         tfUser.setEditable(false);
         tfPasswd.setEditable(false);
@@ -66,21 +74,34 @@ public class LoginController implements Initializable{
         emf.close();
     }
     
-    protected void intents(boolean usuari, String username) throws MessagingException{
+    protected void intents(boolean usuari, String username, int i) throws MessagingException{
+        intents_n--;
         if(!usuari){
-            intents_n--;
             if (intents_n == 0){
-                tfInfo.setText("Has fallat el teu login tres vegades! S'ha informat a l'admin i app bloquejada");
-                enviarmissatge(username);
+                tfInfo.setText("Has fallat el teu login tres vegades! S'ha informat a l'admin i la app ha quedat bloquejada");
+                enviarMissatge(username);
                 bloqueig();
             }
             else{
                 tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");
             }            
         }
+        else{
+            if(intents_n == 0){
+                tfInfo.setText("L'usuari ha sigut bloquejat ja que has fallat 3 vegades! S'ha informat a l'admin i la app ha quedat bloquejada. FUCK YOU");                                              
+                tx.begin();
+                llista.get(i).setBloquejat(true); 
+                tx.commit();
+                enviarMissatge(username);
+                bloqueig();                
+            }
+            else{
+                tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");              
+            }
+        }
     }
     
-    protected void enviarmissatge(String username) throws AddressException, MessagingException{
+    protected void enviarMissatge(String username) throws AddressException, MessagingException{
         Properties mailServerProperties;
         Session getMailSession;
         MimeMessage generateMailMessage;
@@ -110,27 +131,33 @@ public class LoginController implements Initializable{
     
     //Botó login
     @FXML protected void Login(ActionEvent actionEvent) throws ConfigurationException, MessagingException{
-        //Variables per obtenir els valors i fer el login
         String username = tfUser.getText();
-        String password = encripta(tfPasswd.getText());
+        String password = encripta(tfPasswd.getText());      
         boolean login=false;
         int i,x=0;
         
-        
         for(i=0;i<llista.size();i++){
             if(llista.get(i).getLogin().equals(username)){
-                login = true;
-                if(testPassword(password,llista.get(i).getPasswd())){
-                    user = llista.get(i);
+                if(llista.get(i).isBloquejat()){
+                    isBloquejat(username);
                     break;
                 }
                 else{
-                    login = false;
+                    login = true;
+                    if(testPassword(password,llista.get(i).getPasswd())){
+                        user = llista.get(i);
+                        break;
+                    }
+                    else{
+                        intents(login,username,i);
+                        login = false;
+                    }    
                 }
             }
-        }
-        if(!login){
-            intents(login,username);
+            else{
+                intents(login,username,i);
+                login = false;
+            }            
         }
     }   
 }
