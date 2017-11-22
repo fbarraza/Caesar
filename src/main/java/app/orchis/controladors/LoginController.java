@@ -52,9 +52,6 @@ public class LoginController implements Initializable{
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory( "app.orchis.persistencia");
     private static final EntityManager manager = emf.createEntityManager();    
     private static final EntityTransaction tx = manager.getTransaction();
-    private static final CriteriaBuilder cb = emf.getCriteriaBuilder();
-    private static final CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);
-    private static final CriteriaQuery<Usuari> cbQuery = cb.createQuery(Usuari.class);
     private static int intents_n = 3;
     private static Usuari user = new Usuari();
     //private static List<Usuari> llista = (List<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
@@ -94,18 +91,27 @@ public class LoginController implements Initializable{
         }            
     }
     
-    protected void intents(String username, List<Usuari> userlist) throws MessagingException{
+    protected void intents(String username, List<Usuari> userlist) throws MessagingException {
+        intents_n--;
         //Usuari existeix
         if(intents_n == 0){
-            tfInfo.setText("L'usuari ha sigut bloquejat ja que has fallat 3 vegades! S'ha informat a l'admin i la app ha quedat bloquejada. FUCK YOU");            
+            tfInfo.setText("L'usuari ha sigut bloquejat ja que has fallat 3 vegades! S'ha informat a l'admin i la app ha quedat bloquejada.");            
             /*tx.begin();
             userlist.get(0).setBloquejat(true); 
             tx.commit();*/
+            EntityManager manager = emf.createEntityManager();
+            CriteriaBuilder cb = emf.getCriteriaBuilder();
+            CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
             Root<Usuari> c = update.from(Usuari.class);
             update.set("bloquejat", true);
-            update.where(cb.equal(c.get("login"), username));
-            enviarMissatge(username);
-            bloqueigApp();                
+            update.where(cb.equal(c.get("login"), username));  
+            
+            manager.getTransaction().begin();
+            manager.createQuery(update).executeUpdate();
+            manager.getTransaction().commit();
+                     
+            enviarMissatge(username); 
+                        bloqueigApp();    
         }
         else{
             tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");              
@@ -118,27 +124,28 @@ public class LoginController implements Initializable{
         //Variables del programa
         String username = tfUser.getText();
         String password = encripta(tfPasswd.getText());
-        boolean login=false;
+                
+        // Manager local
+        EntityManager _manager = emf.createEntityManager();
 
         //Obtenir dades de l'usuari introduit
+        CriteriaBuilder cb = emf.getCriteriaBuilder();
+        CriteriaQuery<Usuari> cbQuery = cb.createQuery(Usuari.class);
         Root<Usuari> c = cbQuery.from(Usuari.class);
         cbQuery.select(c);
         cbQuery.where(cb.equal(c.get("login"), username));
-
-        Query query = manager.createQuery(cbQuery);
-
+        Query query = _manager.createQuery(cbQuery);                       
+        
         List<Usuari> llista = query.getResultList();
         
-        //Mirar usuaris en la llista
-        
+        //Mirar si hi han usuaris en la llista      
         if(!llista.isEmpty()){
-            //L'suari introduit existeix
+            //L'usuari introduit existeix
             if(llista.get(0).isBloquejat()){
                 usuariBloquejat(username);
             }
             else{
                 //L'usuari introduit existeix
-                login = true;
                 if(testPassword(password,llista.get(0).getPasswd())){
                     //Login OK
                     user = llista.get(0); //Necessari?
@@ -153,6 +160,9 @@ public class LoginController implements Initializable{
         else{
             intents(username);
         }
+        
+        if (_manager.isOpen())
+            _manager.close();
         
     }   
 }
