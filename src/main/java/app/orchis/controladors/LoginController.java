@@ -13,7 +13,6 @@ import static app.orchis.utils.JavaEmail.enviarMissatge;
 import app.orchis.utils.eines.AppPropertiesFileHelper;
 import app.orchis.utils.eines.PropertiesHelperException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,8 +24,16 @@ import javafx.scene.text.Text;
 import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.math.BigInteger;
+import java.util.List;
+import javax.persistence.EntityTransaction;
+import javax.persistence.criteria.CriteriaUpdate;
+
 import org.apache.commons.configuration.ConfigurationException;
 
 /**
@@ -42,12 +49,15 @@ public class LoginController implements Initializable{
     @FXML private Button btLogin;
     
     //Vars pel programa
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory( "app.orchis.persistencia");
-    private static EntityManager manager = emf.createEntityManager();    
-    private static EntityTransaction tx = manager.getTransaction();
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory( "app.orchis.persistencia");
+    private static final EntityManager manager = emf.createEntityManager();    
+    private static final EntityTransaction tx = manager.getTransaction();
+    private static final CriteriaBuilder cb = emf.getCriteriaBuilder();
+    private static final CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);
+    private static final CriteriaQuery<Usuari> cbQuery = cb.createQuery(Usuari.class);
     private static int intents_n = 3;
     private static Usuari user = new Usuari();
-    private static List<Usuari> llista = (List<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
+    //private static List<Usuari> llista = (List<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -69,69 +79,79 @@ public class LoginController implements Initializable{
     }
     
     //Manager d'intents
-    protected void intents(boolean usuari, String username, int i) throws MessagingException{
+    protected void intents(String username) throws MessagingException{
         //Restar intent
         intents_n--;
         
         //Programa
-        //L'usuari existeix? - No
-        if(!usuari){
-            if (intents_n == 0){
-                tfInfo.setText("Has fallat el teu login tres vegades! S'ha informat a l'admin i la app ha quedat bloquejada");
-                enviarMissatge(username);
-                bloqueigApp();
-            }
-            else{
-                tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");
-            }            
+        if (intents_n == 0){
+            tfInfo.setText("Has fallat el teu login tres vegades! S'ha informat a l'admin i la app ha quedat bloquejada");
+            enviarMissatge(username);
+            bloqueigApp();
         }
-        //Usuari existeix
         else{
-            if(intents_n == 0){
-                tfInfo.setText("L'usuari ha sigut bloquejat ja que has fallat 3 vegades! S'ha informat a l'admin i la app ha quedat bloquejada. FUCK YOU");                                              
-                tx.begin();
-                llista.get(i).setBloquejat(true); 
-                tx.commit();
-                enviarMissatge(username);
-                bloqueigApp();                
-            }
-            else{
-                tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");              
-            }
+            tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");
+        }            
+    }
+    
+    protected void intents(String username, List<Usuari> userlist) throws MessagingException{
+        //Usuari existeix
+        if(intents_n == 0){
+            tfInfo.setText("L'usuari ha sigut bloquejat ja que has fallat 3 vegades! S'ha informat a l'admin i la app ha quedat bloquejada. FUCK YOU");            
+            /*tx.begin();
+            userlist.get(0).setBloquejat(true); 
+            tx.commit();*/
+            Root<Usuari> c = update.from(Usuari.class);
+            update.set("bloquejat", true);
+            update.where(cb.equal(c.get("login"), username));
+            enviarMissatge(username);
+            bloqueigApp();                
         }
+        else{
+            tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");              
+        }
+              
     }
     
     //Botó login
     @FXML protected void Login(ActionEvent actionEvent) throws ConfigurationException, MessagingException{
+        //Variables del programa
         String username = tfUser.getText();
         String password = encripta(tfPasswd.getText());
         boolean login=false;
-        int i,pos=0;
+
+        //Obtenir dades de l'usuari introduit
+        Root<Usuari> c = cbQuery.from(Usuari.class);
+        cbQuery.select(c);
+        cbQuery.where(cb.equal(c.get("login"), username));
+
+        Query query = manager.createQuery(cbQuery);
+
+        List<Usuari> llista = query.getResultList();
         
         //Mirar usuaris en la llista
-        for(i=0;i<llista.size();i++){
-            if(llista.get(i).getLogin().equals(username)){
-                //Trencar bucle for si l'usuari està bloquejat
-                if(llista.get(i).isBloquejat()){
-                    usuariBloquejat(username);
-                    break;
+        
+        if(!llista.isEmpty()){
+            //L'suari introduit existeix
+            if(llista.get(0).isBloquejat()){
+                usuariBloquejat(username);
+            }
+            else{
+                //L'usuari introduit existeix
+                login = true;
+                if(testPassword(password,llista.get(0).getPasswd())){
+                    //Login OK
+                    user = llista.get(0); //Necessari?
+                    //TODO: Obrir app principal
                 }
                 else{
-                    //L'usuari introduit existeix
-                    login = true;
-                    pos = i;
-                    if(testPassword(password,llista.get(i).getPasswd())){
-                        //Login OK
-                        user = llista.get(i); //Necessari?
-                        //TODO: Obrir app principal
-                        break;
-                    }
+                    intents(username,llista);
                 }
-            }         
+            }
         }
         
-        if(!login){
-            intents(login,username,pos);
+        else{
+            intents(username);
         }
         
     }   

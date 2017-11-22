@@ -5,12 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Date;
+import javax.persistence.UniqueConstraint;
+//import java.util.Date;
 
 
 
 @Entity
-@Table (name = "user")
+@Table (name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {"login"}))
 public class Usuari implements Serializable{
  
 
@@ -32,8 +33,7 @@ public class Usuari implements Serializable{
     @Column(name = "login")
     private String login;
 
-    //test
-    
+    //Constructor
     public Usuari() {
     }
 
