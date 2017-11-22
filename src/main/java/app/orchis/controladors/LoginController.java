@@ -63,7 +63,7 @@ public class LoginController implements Initializable{
     }    
     
     //Missatge a monstrar si l'usuari està bloquejat
-    protected void userBloquejat(String user){
+    protected void usuariBloquejat(String user){
         tfInfo.setText("L'usuari està bloquejat! No el pots fer servir fins que l'admin el desbloquegi.");
         bloqueigApp();
     }
@@ -74,6 +74,7 @@ public class LoginController implements Initializable{
         intents_n--;
         
         //Programa
+        //L'usuari existeix? - No
         if(!usuari){
             if (intents_n == 0){
                 tfInfo.setText("Has fallat el teu login tres vegades! S'ha informat a l'admin i la app ha quedat bloquejada");
@@ -84,6 +85,7 @@ public class LoginController implements Initializable{
                 tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");
             }            
         }
+        //Usuari existeix
         else{
             if(intents_n == 0){
                 tfInfo.setText("L'usuari ha sigut bloquejat ja que has fallat 3 vegades! S'ha informat a l'admin i la app ha quedat bloquejada. FUCK YOU");                                              
@@ -103,7 +105,7 @@ public class LoginController implements Initializable{
     @FXML protected void Login(ActionEvent actionEvent) throws ConfigurationException, MessagingException{
         String username = tfUser.getText();
         String password = encripta(tfPasswd.getText());
-        boolean login=false,pass=false;
+        boolean login=false;
         int i,pos=0;
         
         //Mirar usuaris en la llista
@@ -111,22 +113,24 @@ public class LoginController implements Initializable{
             if(llista.get(i).getLogin().equals(username)){
                 //Trencar bucle for si l'usuari està bloquejat
                 if(llista.get(i).isBloquejat()){
-                    userBloquejat(username);
+                    usuariBloquejat(username);
                     break;
                 }
                 else{
+                    //L'usuari introduit existeix
                     login = true;
                     pos = i;
                     if(testPassword(password,llista.get(i).getPasswd())){
-                        pass= true;
-                        user = llista.get(i);
+                        //Login OK
+                        user = llista.get(i); //Necessari?
+                        //TODO: Obrir app principal
                         break;
                     }
                 }
             }         
         }
         
-        if((!login)||(!pass)){
+        if(!login){
             intents(login,username,pos);
         }
         
