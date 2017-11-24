@@ -14,7 +14,6 @@ import app.orchis.utils.eines.AppPropertiesFileHelper;
 import app.orchis.utils.eines.PropertiesHelperException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -30,10 +29,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.WindowEvent;
 import javax.persistence.criteria.CriteriaUpdate;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -172,9 +171,9 @@ public class LoginController implements Initializable{
         //Fi manager
         if (_manager.isOpen())
             _manager.close();
-        
-    }
+    }     
     
+    //Listener
     @FXML
     private void keyPress(KeyEvent e) throws Exception{
         if(e.getCode()==KeyCode.ENTER){
