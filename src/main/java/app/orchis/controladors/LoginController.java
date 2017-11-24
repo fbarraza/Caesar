@@ -10,8 +10,7 @@ import app.orchis.model.Usuari;
 import static app.orchis.utils.CryptoHelper.encripta;
 import static app.orchis.utils.CryptoHelper.testPassword;
 import static app.orchis.utils.JavaEmail.enviarMissatge;
-import app.orchis.utils.eines.AppPropertiesFileHelper;
-import app.orchis.utils.eines.PropertiesHelperException;
+import static app.orchis.utils.eines.AppPropertiesFileHelper.llegirFitxerPropietats;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -29,10 +28,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
-import javafx.event.EventHandler;
+import java.util.Map;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.WindowEvent;
 import javax.persistence.criteria.CriteriaUpdate;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -50,7 +48,20 @@ public class LoginController implements Initializable{
     @FXML private Button btLogin;
     
     //Vars pel programa
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory( "app.orchis.persistencia");
+    private static Map properties = llegirFitxerPropietats("app.properties");
+    
+    public static EntityManagerFactory generar(){
+        if (properties == null) {
+            System.out.println("Error greu. Contacti amb l'administrador");
+        } else {
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("app.orchis.persistencia", properties);
+            return emf;
+        }
+        return null;
+    }
+    
+    private static final EntityManagerFactory emf = generar();
+    //private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory( "app.orchis.persistencia");
     private static int intents_n = 3;
     private static Usuari user = new Usuari(); //?
     
@@ -175,12 +186,20 @@ public class LoginController implements Initializable{
     
     //Listener
     @FXML
-    private void keyPress(KeyEvent e) throws Exception{
-        if(e.getCode()==KeyCode.ENTER){
-            Login();
-        }
-        else{
-            e.consume();
+    private void keyPress(KeyEvent e) throws Exception {
+        if (e.getSource().equals(tfUser)) {
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB))
+                if (tfPasswd.getText().isEmpty()) {
+                    tfPasswd.requestFocus();
+                } else {
+                    Login();
+                }            
+        } else {
+            if (e.getCode().equals(KeyCode.ENTER)) {
+                Login();
+            } else {
+                e.consume();
+            }
         }
     }
 }
