@@ -12,7 +12,6 @@ import static app.orchis.utils.CryptoHelper.testPassword;
 import static app.orchis.utils.JavaEmail.enviarMissatge;
 import app.orchis.utils.eines.AppPropertiesFileHelper;
 import app.orchis.utils.eines.PropertiesHelperException;
-import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -33,6 +32,8 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javax.persistence.criteria.CriteriaUpdate;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -172,20 +173,15 @@ public class LoginController implements Initializable{
         if (_manager.isOpen())
             _manager.close();
         
-    }   
+    }
     
-    
-    public void keyPressed(KeyEvent e) throws Exception{
-        if (e.getKeyCode()==KeyEvent.VK_ENTER){
-            try {
-                Login();
-            } catch (Exception ex) {
-                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    @FXML
+    private void keyPress(KeyEvent e) throws Exception{
+        if(e.getCode()==KeyCode.ENTER){
+            Login();
         }
         else{
             e.consume();
         }
-
-    }       
+    }
 }
