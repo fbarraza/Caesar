@@ -30,8 +30,8 @@
          <font>
             <Font size="16.0" />
          </font></Text>
-      <TextField id="usertext" fx:id="tfUser" layoutX="284.0" layoutY="202.0" prefHeight="26.0" prefWidth="184.0" stylesheets="@../app/orchis/recursos/login.css" />
-      <PasswordField fx:id="tfPasswd" layoutX="284.0" layoutY="252.0" prefHeight="26.0" prefWidth="184.0" />
+      <TextField id="usertext" fx:id="tfUser" layoutX="284.0" layoutY="202.0" onKeyPressed="#keyPress" prefHeight="26.0" prefWidth="184.0" promptText="Nom Usuari" stylesheets="@../app/orchis/recursos/login.css" />
+      <PasswordField fx:id="tfPasswd" layoutX="284.0" layoutY="252.0" onKeyPressed="#keyPress" prefHeight="26.0" prefWidth="184.0" promptText="Contrassenya" />
       <Button id="login" fx:id="btLogin" layoutX="470.0" layoutY="404.0" mnemonicParsing="false" onAction="#Login" prefHeight="75.0" prefWidth="170.0" text="INICIA SESSIO" />
       <Text id="showerr" fx:id="tfInfo" layoutX="85.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="470.7294921875" />
       <MenuButton id="options" layoutX="551.0" layoutY="1.0" mnemonicParsing="false" text="Opcions">

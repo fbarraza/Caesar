@@ -1,5 +1,10 @@
 package app.orchis.utils.eines;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
@@ -103,5 +108,62 @@ public class AppPropertiesFileHelper {
         //System.out.println(decryptedPropertyValue);
 
         return decryptedPropertyValue;
+    }    
+    
+    public static Map llegirFitxerPropietats(String filename) {
+        InputStream fitxer = null;
+        Properties credencials = new Properties();
+        Map properties = new HashMap();
+
+        try {
+            fitxer = AppPropertiesFileHelper.class.getClassLoader().getResourceAsStream(filename);
+
+            if (fitxer == null) {
+                System.err.println("No puc llegir " + filename);
+            } else {
+                credencials.load(fitxer);
+
+                properties.put("javax.persistence.jdbc.user", credencials.getProperty("jdbc.username"));
+                String p = getEncryptedPassword();
+                if (p != null)
+                    properties.put("javax.persistence.jdbc.password", p);
+                else {
+                    throw new PropertiesHelperException("EL procés de recuperació de la contrasenya ha fallat");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (PropertiesHelperException e) {
+            e.printStackTrace();
+            properties = null;
+        } finally {
+            if (fitxer != null) {
+                try {
+                    fitxer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return properties;
+    }
+    
+    private static String getEncryptedPassword() {
+        // Generar/Obtenir la contrasenya encriptada
+        AppPropertiesFileHelper appPropertiesFileHelper = null;
+
+        try {
+            appPropertiesFileHelper = new AppPropertiesFileHelper("app.properties",
+                                                                  "jdbc.password",
+                                                                  "encrypted",
+                                                                  true);
+
+        } catch (PropertiesHelperException e) {
+            e.printStackTrace();
+        } catch (ConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        return appPropertiesFileHelper.getDecryptedUserPassword();
     }    
 }

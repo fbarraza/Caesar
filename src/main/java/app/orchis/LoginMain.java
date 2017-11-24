@@ -1,13 +1,13 @@
 package app.orchis;
 
 
+import app.orchis.controladors.LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.io.IOException;
 
 public class LoginMain extends Application{
@@ -17,15 +17,15 @@ public class LoginMain extends Application{
         Parent root = null;
         FXMLLoader loader = new FXMLLoader();
         root = FXMLLoader.load(getClass().getClassLoader().getResource("vistes/FXMLInterface.fxml"));
+        LoginController appCtrl = (LoginController) loader.getController();
         Scene scene = new Scene(root);
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(scene);
-        stage.show();
+        stage.show();   
     }
-
+    
     public static void main(String[] args) {
         launch(args);
-    }
-
-    
+        
+    }   
 }
