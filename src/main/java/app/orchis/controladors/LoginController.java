@@ -12,6 +12,7 @@ import static app.orchis.utils.CryptoHelper.testPassword;
 import static app.orchis.utils.JavaEmail.enviarMissatge;
 import app.orchis.utils.eines.AppPropertiesFileHelper;
 import app.orchis.utils.eines.PropertiesHelperException;
+import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -30,6 +31,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.criteria.CriteriaUpdate;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -57,7 +60,7 @@ public class LoginController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
-    }
+    } 
     
     //Bloquejar l'aplicació i apagar la connexió EntityManager.
     protected void bloqueigApp(){
@@ -124,7 +127,7 @@ public class LoginController implements Initializable{
     }
     
     //Botó login
-    @FXML protected void Login(ActionEvent actionEvent) throws ConfigurationException, MessagingException, Exception{
+    @FXML protected void Login() throws ConfigurationException, MessagingException, Exception{
         //Variables del programa
         String username = tfUser.getText();
         String password = encripta(tfPasswd.getText());
@@ -170,4 +173,19 @@ public class LoginController implements Initializable{
             _manager.close();
         
     }   
+    
+    
+    public void keyPressed(KeyEvent e) throws Exception{
+        if (e.getKeyCode()==KeyEvent.VK_ENTER){
+            try {
+                Login();
+            } catch (Exception ex) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else{
+            e.consume();
+        }
+
+    }       
 }
