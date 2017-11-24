@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Somebody
+ * once
+ * told me
  */
 package app.orchis.controladors;
 
@@ -29,9 +29,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.math.BigInteger;
 import java.util.List;
-import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.CriteriaUpdate;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -50,10 +48,10 @@ public class LoginController implements Initializable{
     
     //Vars pel programa
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory( "app.orchis.persistencia");
-    private static final EntityManager manager = emf.createEntityManager();    
-    private static final EntityTransaction tx = manager.getTransaction();
     private static int intents_n = 3;
-    private static Usuari user = new Usuari();
+    private static Usuari user = new Usuari(); //?
+    
+    //Consulta antiga
     //private static List<Usuari> llista = (List<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
     
     @Override
@@ -76,7 +74,7 @@ public class LoginController implements Initializable{
     }
     
     //Manager d'intents
-    protected void intents(String username) throws MessagingException{
+    protected void intents(String username) throws MessagingException, Exception{
         //Restar intent
         intents_n--;
         
@@ -91,7 +89,7 @@ public class LoginController implements Initializable{
         }            
     }
     
-    protected void intents(String username, List<Usuari> userlist) throws MessagingException {
+    protected void intents(String username, List<Usuari> userlist) throws MessagingException, Exception {
         intents_n--;
         //Usuari existeix
         if(intents_n == 0){
@@ -99,19 +97,25 @@ public class LoginController implements Initializable{
             /*tx.begin();
             userlist.get(0).setBloquejat(true); 
             tx.commit();*/
+            
+            //Creació Entity Manager i del CB
             EntityManager manager = emf.createEntityManager();
             CriteriaBuilder cb = emf.getCriteriaBuilder();
             CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
             Root<Usuari> c = update.from(Usuari.class);
+            
+            //Sentència SQL
             update.set("bloquejat", true);
             update.where(cb.equal(c.get("login"), username));  
             
+            //Actualitzar BBDD
             manager.getTransaction().begin();
             manager.createQuery(update).executeUpdate();
             manager.getTransaction().commit();
                      
+            //Informar administrador
             enviarMissatge(username); 
-                        bloqueigApp();    
+            bloqueigApp();    
         }
         else{
             tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");              
@@ -120,12 +124,12 @@ public class LoginController implements Initializable{
     }
     
     //Botó login
-    @FXML protected void Login(ActionEvent actionEvent) throws ConfigurationException, MessagingException{
+    @FXML protected void Login(ActionEvent actionEvent) throws ConfigurationException, MessagingException, Exception{
         //Variables del programa
         String username = tfUser.getText();
         String password = encripta(tfPasswd.getText());
                 
-        // Manager local
+        //Manager local
         EntityManager _manager = emf.createEntityManager();
 
         //Obtenir dades de l'usuari introduit
@@ -145,9 +149,9 @@ public class LoginController implements Initializable{
                 usuariBloquejat(username);
             }
             else{
-                //L'usuari introduit existeix
+                //Usuari introduit OK
                 if(testPassword(password,llista.get(0).getPasswd())){
-                    //Login OK
+                    //Passwd OK
                     user = llista.get(0); //Necessari?
                     //TODO: Obrir app principal
                 }
@@ -156,11 +160,12 @@ public class LoginController implements Initializable{
                 }
             }
         }
-        
+        //No s'ha trobat l'usuari,
         else{
             intents(username);
         }
         
+        //Fi manager
         if (_manager.isOpen())
             _manager.close();
         

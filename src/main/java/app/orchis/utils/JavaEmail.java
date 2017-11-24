@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * What if we do not want to change the license header?
  */
 package app.orchis.utils;
 
@@ -13,6 +11,7 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import static app.orchis.utils.CryptoHelper.desencriptarPublic;
 
 /**
  *
@@ -21,11 +20,13 @@ import javax.mail.internet.MimeMessage;
 public class JavaEmail {
 
     //Enviar missatge a l'admin. TODO:Encriptar la contrassenya
-    public static void enviarMissatge(String username) throws AddressException, MessagingException{
+    public static void enviarMissatge(String username) throws AddressException, MessagingException, Exception{
+        //Vars
         Properties mailServerProperties;
         Session getMailSession;
         MimeMessage generateMailMessage;
-        //String passwd = "d60e194a918f147d77ddaa1321f72e092a221cb994c45ae0f4a189b7aecc7c7a";
+        String correu = "m15orchisserver@gmail.com";
+        byte[] passwd = {91, -9, -118, -92, 101, 58, -62, 124, 98, 124, 41, -122, 58, -119, 62, -4};
         
         //Configuració servidor Gmail
         mailServerProperties = System.getProperties();
@@ -36,14 +37,14 @@ public class JavaEmail {
         //Configuració missatge
         getMailSession = Session.getDefaultInstance(mailServerProperties, null);
         generateMailMessage = new MimeMessage(getMailSession);
-        generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("m15orchisserver@gmail.com"));
+        generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(correu));
         generateMailMessage.setSubject("Intent de login");
         String emailBody = "Han intentat iniciar sessió amb l'usuari: " +username + " i ha quedat bloquejat. <br><br> Localhost <br>";
         generateMailMessage.setContent(emailBody, "text/html");
         Transport transport = getMailSession.getTransport("smtp");
         
         //Enviar missatge amb el compte de gmail.
-        transport.connect("smtp.gmail.com", "m15orchisserver@gmail.com", "5t34mWindows");
+        transport.connect("smtp.gmail.com", correu, desencriptarPublic(passwd));
         transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
         transport.close();
 	
