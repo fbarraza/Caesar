@@ -94,12 +94,12 @@ public class LoginController implements Initializable{
         
         //Programa
         if (intents_n == 0){
-            tfInfo.setText("Has fallat el teu login tres vegades! S'ha informat a l'admin i la app ha quedat bloquejada");
-            enviarMissatge(username);
+            tfInfo.setText("Has fallat el teu login tres vegades! La app ha quedat bloquejada");
+            enviarMissatge("Han intentat fer login amb un usuari no existent");
             bloqueigApp();
         }
         else{
-            tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");
+            tfInfo.setText("Usuari erroni, tens "+intents_n+" intent(s) restants.");
         }            
     }
     
@@ -108,9 +108,6 @@ public class LoginController implements Initializable{
         //Usuari existeix
         if(intents_n == 0){
             tfInfo.setText("L'usuari ha sigut bloquejat ja que has fallat 3 vegades! S'ha informat a l'admin i la app ha quedat bloquejada.");            
-            /*tx.begin();
-            userlist.get(0).setBloquejat(true); 
-            tx.commit();*/
             
             //Creació Entity Manager i del CB
             EntityManager manager = emf.createEntityManager();
@@ -128,11 +125,11 @@ public class LoginController implements Initializable{
             manager.getTransaction().commit();
                      
             //Informar administrador
-            enviarMissatge(username); 
+            enviarMissatge("Han intentat fer login amb l'usuari " + username + " i ha quedat bloquejat"); 
             bloqueigApp();    
         }
         else{
-            tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");              
+            tfInfo.setText("Contrassenya errònia, tens "+intents_n+" intent(s) restants.");              
         }
               
     }
