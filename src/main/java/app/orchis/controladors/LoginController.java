@@ -87,7 +87,7 @@ public class LoginController implements Initializable{
         bloqueigApp();
     }
     
-    //Manager d'intents
+    //Manager d'intents    
     protected void intents(String username) throws MessagingException, Exception{
         //Restar intent
         intents_n--;
@@ -103,6 +103,13 @@ public class LoginController implements Initializable{
         }            
     }
     
+    /**
+     * 
+     * @param username / Nom de l'usuari
+     * @param userlist / Llista del usuaris
+     * @throws MessagingException
+     * @throws Exception 
+     */
     protected void intents(String username, List<Usuari> userlist) throws MessagingException, Exception {
         intents_n--;
         //Usuari existeix
@@ -139,7 +146,7 @@ public class LoginController implements Initializable{
         //Variables del programa
         String username = tfUser.getText();
         String password = encripta(tfPasswd.getText());
-                
+        
         //Manager local
         EntityManager _manager = emf.createEntityManager();
 
@@ -164,7 +171,7 @@ public class LoginController implements Initializable{
                 if(testPassword(password,llista.get(0).getPasswd())){
                     //Passwd OK
                     user = llista.get(0); //Necessari?
-                    //TODO: Obrir app principal
+                    //TODO: Obrir app principal stage.initStyle(StageStyle.UTILITY) stage.ShowAndWait();
                 }
                 else{
                     intents(username,llista);
