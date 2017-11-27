@@ -11,7 +11,7 @@ import javax.persistence.UniqueConstraint;
 
 
 @Entity
-@Table (name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {"login"}))
+@Table (name = "user")
 public class Usuari implements Serializable{
  
 
@@ -30,7 +30,7 @@ public class Usuari implements Serializable{
     @Column(name = "bloquejat")
     private boolean bloquejat;
     
-    @Column(name = "login")
+    @Column(name = "login", unique=true)
     private String login;
 
     //Constructor

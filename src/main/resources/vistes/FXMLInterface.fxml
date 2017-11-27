@@ -12,11 +12,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="480.0" maxWidth="640.0" minHeight="480.0" minWidth="640.0" prefHeight="480.0" prefWidth="640.0" stylesheets="@../app/orchis/recursos/login.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.LoginController">
+<Pane maxHeight="480.0" maxWidth="640.0" minHeight="480.0" minWidth="640.0" prefHeight="480.0" prefWidth="640.0" stylesheets="@../recursos/login.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.LoginController">
    <children>
       <ImageView id="background" fitHeight="480.0" fitWidth="640.0">
          <image>
-            <Image url="@../app/orchis/recursos/background.jpg" />
+            <Image url="@../recursos/background.jpg" />
          </image>
          <viewport>
             <Rectangle2D minX="640.0" minY="480.0" />
@@ -30,7 +30,7 @@
          <font>
             <Font size="16.0" />
          </font></Text>
-      <TextField id="usertext" fx:id="tfUser" layoutX="284.0" layoutY="202.0" onKeyPressed="#keyPress" prefHeight="26.0" prefWidth="184.0" promptText="Nom Usuari" stylesheets="@../app/orchis/recursos/login.css" />
+      <TextField id="usertext" fx:id="tfUser" layoutX="284.0" layoutY="202.0" onKeyPressed="#keyPress" prefHeight="26.0" prefWidth="184.0" promptText="Nom Usuari" stylesheets="@../recursos/login.css" />
       <PasswordField fx:id="tfPasswd" layoutX="284.0" layoutY="252.0" onKeyPressed="#keyPress" prefHeight="26.0" prefWidth="184.0" promptText="Contrassenya" />
       <Button id="login" fx:id="btLogin" layoutX="470.0" layoutY="404.0" mnemonicParsing="false" onAction="#Login" prefHeight="75.0" prefWidth="170.0" text="INICIA SESSIO" />
       <Text id="showerr" fx:id="tfInfo" layoutX="85.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="470.7294921875" />
@@ -40,7 +40,7 @@
                <graphic>
                   <ImageView id="helppng" fitHeight="16.0" fitWidth="16.0">
                      <image>
-                        <Image url="@../app/orchis/recursos/icons/help.png" />
+                        <Image url="@../recursos/icones/help.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -49,7 +49,7 @@
                <graphic>
                   <ImageView id="surtpng" fitHeight="16.0" fitWidth="16.0">
                      <image>
-                        <Image url="@../app/orchis/recursos/icons/surt.png" />
+                        <Image url="@../recursos/icones/surt.png" />
                      </image>
                   </ImageView>
                </graphic>

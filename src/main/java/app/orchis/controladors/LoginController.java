@@ -87,30 +87,34 @@ public class LoginController implements Initializable{
         bloqueigApp();
     }
     
-    //Manager d'intents
+    //Manager d'intents    
     protected void intents(String username) throws MessagingException, Exception{
         //Restar intent
         intents_n--;
         
         //Programa
         if (intents_n == 0){
-            tfInfo.setText("Has fallat el teu login tres vegades! S'ha informat a l'admin i la app ha quedat bloquejada");
-            enviarMissatge(username);
+            tfInfo.setText("Has fallat el teu login tres vegades! La app ha quedat bloquejada");
+            enviarMissatge("Han intentat fer login amb un usuari no existent");
             bloqueigApp();
         }
         else{
-            tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");
+            tfInfo.setText("Usuari erroni, tens "+intents_n+" intent(s) restants.");
         }            
     }
     
+    /**
+     * 
+     * @param username / Nom de l'usuari
+     * @param userlist / Llista del usuaris
+     * @throws MessagingException
+     * @throws Exception 
+     */
     protected void intents(String username, List<Usuari> userlist) throws MessagingException, Exception {
         intents_n--;
         //Usuari existeix
         if(intents_n == 0){
             tfInfo.setText("L'usuari ha sigut bloquejat ja que has fallat 3 vegades! S'ha informat a l'admin i la app ha quedat bloquejada.");            
-            /*tx.begin();
-            userlist.get(0).setBloquejat(true); 
-            tx.commit();*/
             
             //Creació Entity Manager i del CB
             EntityManager manager = emf.createEntityManager();
@@ -128,11 +132,11 @@ public class LoginController implements Initializable{
             manager.getTransaction().commit();
                      
             //Informar administrador
-            enviarMissatge(username); 
+            enviarMissatge("Han intentat fer login amb l'usuari " + username + " i ha quedat bloquejat"); 
             bloqueigApp();    
         }
         else{
-            tfInfo.setText("Usuari o contrassenya errònia, tens "+intents_n+" intent(s) restants.");              
+            tfInfo.setText("Contrassenya errònia, tens "+intents_n+" intent(s) restants.");              
         }
               
     }
@@ -142,7 +146,7 @@ public class LoginController implements Initializable{
         //Variables del programa
         String username = tfUser.getText();
         String password = encripta(tfPasswd.getText());
-                
+        
         //Manager local
         EntityManager _manager = emf.createEntityManager();
 
@@ -167,7 +171,7 @@ public class LoginController implements Initializable{
                 if(testPassword(password,llista.get(0).getPasswd())){
                     //Passwd OK
                     user = llista.get(0); //Necessari?
-                    //TODO: Obrir app principal
+                    //TODO: Obrir app principal stage.initStyle(StageStyle.UTILITY) stage.ShowAndWait();
                 }
                 else{
                     intents(username,llista);

@@ -20,7 +20,7 @@ import static app.orchis.utils.CryptoHelper.desencriptarPublic;
 public class JavaEmail {
 
     //Enviar missatge a l'admin. TODO:Encriptar la contrassenya
-    public static void enviarMissatge(String username) throws AddressException, MessagingException, Exception{
+    public static void enviarMissatge(String missatge) throws AddressException, MessagingException, Exception{
         //Vars
         Properties mailServerProperties;
         Session getMailSession;
@@ -39,7 +39,7 @@ public class JavaEmail {
         generateMailMessage = new MimeMessage(getMailSession);
         generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(correu));
         generateMailMessage.setSubject("Intent de login");
-        String emailBody = "Han intentat iniciar sessió amb l'usuari: " +username + " i ha quedat bloquejat. <br><br> Localhost <br>";
+        String emailBody = missatge;
         generateMailMessage.setContent(emailBody, "text/html");
         Transport transport = getMailSession.getTransport("smtp");
         
