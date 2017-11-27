@@ -50,6 +50,11 @@ public class LoginController implements Initializable{
     //Vars pel programa
     private static Map properties = llegirFitxerPropietats("app.properties");
     
+    /**
+     * Generador de l'arxiu de persistència amb contrassenya encriptada
+     * @return / Retorna null si no pot llegir el fitxer
+     *         / Retorna el EntityManager amb la contrassenya encriptada si troba els fitxers.
+     */
     public static EntityManagerFactory generar(){
         if (properties == null) {
             System.out.println("Error greu. Contacti amb l'administrador");
