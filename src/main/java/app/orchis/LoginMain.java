@@ -16,7 +16,8 @@ public class LoginMain extends Application{
     public void start(Stage stage) throws IOException {
         Parent root = null;
         FXMLLoader loader = new FXMLLoader();
-        root = FXMLLoader.load(getClass().getClassLoader().getResource("vistes/FXMLLogin.fxml"));
+        //root = FXMLLoader.load(getClass().getClassLoader().getResource("vistes/FXMLLogin.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/vistes/FXMLLogin.fxml"));
         LoginController appCtrl = (LoginController) loader.getController();
         Scene scene = new Scene(root);
         stage.initStyle(StageStyle.DECORATED);
