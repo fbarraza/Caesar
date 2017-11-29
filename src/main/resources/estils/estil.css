@@ -16,16 +16,15 @@ and open the template in the editor.
     -fx-fill:#990000;
 }
 
-.helpicon{
+.icon{
     -fx-width: "16px";
     -fx-height: "16px";
 }
 
-.exiticon{
-    -fx-width: "16px";
-    -fx-height: "16px";
-}
-
-.button{   
+.buttonLogin{   
     -fx-background-radius: 75%;
+}
+
+#MainMenu, MainAnchor, MainPane{
+    -fx-background-color: #bbbbbb;
 }

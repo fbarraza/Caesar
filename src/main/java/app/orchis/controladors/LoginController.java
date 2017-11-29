@@ -29,9 +29,16 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Map;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.StageStyle;
 import javax.persistence.criteria.CriteriaUpdate;
+import app.orchis.controladors.MainMenuController;
+import javafx.scene.Parent;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import org.apache.commons.configuration.ConfigurationException;
 
@@ -176,7 +183,20 @@ public class LoginController implements Initializable{
                 if(testPassword(password,llista.get(0).getPasswd())){
                     //Passwd OK
                     user = llista.get(0); //Necessari?
-                    //TODO: Obrir app principal stage.initStyle(StageStyle.UTILITY) stage.ShowAndWait();
+                    //TODO: Obrir app principal
+                    try{
+                          FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("vistes/FXMLMainMenu"));
+                          Parent root1 = (Parent) fxmlLoader.load();
+                          Stage stage = new Stage();
+                          stage.initModality(Modality.APPLICATION_MODAL);
+                          stage.initStyle(StageStyle.UNDECORATED);
+                          stage.setTitle("ABC");
+                          stage.setScene(new Scene(root1));  
+                          stage.show();
+                        }
+                    catch(Exception e){
+                        
+                    }
                 }
                 else{
                     intents(username,llista);
