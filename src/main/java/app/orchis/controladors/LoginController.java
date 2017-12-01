@@ -36,6 +36,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.StageStyle;
 import javax.persistence.criteria.CriteriaUpdate;
 import app.orchis.controladors.MainMenuController;
+import java.io.IOException;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -75,17 +76,28 @@ public class LoginController implements Initializable{
     }
     
     private static final EntityManagerFactory emf = generar();
-    //private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory( "app.orchis.persistencia");
     private static int intents_n = 3;
     private static Usuari user = new Usuari(); //?
-    
-    //Consulta antiga
-    //private static List<Usuari> llista = (List<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
     } 
+    
+    protected void iniciarPrincipal(Usuari user) throws IOException{
+        Stage primaryStage = (Stage)Panel.getScene().getWindow();
+        Parent root;
+        root = FXMLLoader.load(getClass().getResource("/vistes/FXMLMainMenu.fxml"));
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Sobre l'aplicació");
+        stage.initModality(Modality.NONE);
+        // Li passem el pare de l'escena
+        //stage.initOwner(Panel.getScene().getWindow());
+        emf.close();
+        primaryStage.close();
+        stage.showAndWait();        
+    }
     
     //Bloquejar l'aplicació i apagar la connexió EntityManager.
     protected void bloqueigApp(){
@@ -185,29 +197,16 @@ public class LoginController implements Initializable{
                 if(testPassword(password,llista.get(0).getPasswd())){
                     //Passwd OK
                     user = llista.get(0); //Necessari?
-                    //TODO: Obrir app principal
-                try{
-                    Stage primaryStage = (Stage)Panel.getScene().getWindow();
-                    Parent root;
-                    root = FXMLLoader.load(getClass().getResource("/vistes/FXMLMainMenu.fxml"));
-                    Stage stage = new Stage();
-                    stage.setScene(new Scene(root));
-                    stage.setTitle("Sobre l'aplicació");
-                    stage.initModality(Modality.NONE);
-                    // Li passem el pare de l'escena
-                    //stage.initOwner(Panel.getScene().getWindow());
-                    _manager.close();
-                    emf.close();
-                    primaryStage.close();
-                    stage.showAndWait();
                     
-                            
-                            
-                           
-                }catch(Exception e){
-                    System.out.println("No he trobat el fitxer");
-                }
-                      
+                    try{
+                            _manager.close();
+                            iniciarPrincipal(user);
+                    }catch(IOException e){
+                        System.out.println("No s'ha trobat el fitxer de la pantalla principal");
+                    }catch(Exception e){
+                        System.out.println("Error greu de l'aplicació! Comprova que els fitxers FXML tinguin els estils correctes!");
+                        System.out.println(e.getCause());
+                    }                     
                 }
                
                 else{
@@ -238,9 +237,7 @@ public class LoginController implements Initializable{
         } else {
             if (e.getCode().equals(KeyCode.ENTER)) {
                 Login();
-            } else {
-                e.consume();
-            }
+            } 
         }
     }
 }

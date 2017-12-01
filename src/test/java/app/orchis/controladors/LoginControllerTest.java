@@ -6,16 +6,20 @@
 package app.orchis.controladors;
 
 import app.orchis.model.Usuari;
+import static app.orchis.utils.eines.AppPropertiesFileHelper.llegirFitxerPropietats;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -36,6 +40,7 @@ public class LoginControllerTest {
     
     @Before
     public void setUp() {
+        Usuari user = new Usuari(3,"Patatrufen","lol",false,"potato");
     }
     
     @After
@@ -50,9 +55,7 @@ public class LoginControllerTest {
         System.out.println("generar");
         EntityManagerFactory expResult = null;
         EntityManagerFactory result = LoginController.generar();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertThat(result, not(expResult));
     }
 
     /**
@@ -65,8 +68,6 @@ public class LoginControllerTest {
         ResourceBundle resources = null;
         LoginController instance = new LoginController();
         instance.initialize(location, resources);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -77,8 +78,6 @@ public class LoginControllerTest {
         System.out.println("bloqueigApp");
         LoginController instance = new LoginController();
         instance.bloqueigApp();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -87,11 +86,9 @@ public class LoginControllerTest {
     @Test
     public void testUsuariBloquejat() {
         System.out.println("usuariBloquejat");
-        String user = "";
+        String user = "dtrump";
         LoginController instance = new LoginController();
         instance.usuariBloquejat(user);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -100,11 +97,9 @@ public class LoginControllerTest {
     @Test
     public void testIntents_String() throws Exception {
         System.out.println("intents");
-        String username = "";
+        String username = "dtrump";
         LoginController instance = new LoginController();
         instance.intents(username);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -113,12 +108,11 @@ public class LoginControllerTest {
     @Test
     public void testIntents_String_List() throws Exception {
         System.out.println("intents");
-        String username = "";
         List<Usuari> userlist = null;
+        Usuari user = new Usuari(3,"Patatrufen","lol",false,"potato");
+        userlist.add(user);
         LoginController instance = new LoginController();
-        instance.intents(username, userlist);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.intents(userlist.get(0).getLogin(), userlist);
     }
 
     /**
@@ -129,8 +123,6 @@ public class LoginControllerTest {
         System.out.println("Login");
         LoginController instance = new LoginController();
         instance.Login();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

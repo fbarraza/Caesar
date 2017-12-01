@@ -47,8 +47,6 @@ public class LoginMainTest {
         Stage stage = null;
         LoginMain instance = new LoginMain();
         instance.start(stage);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -59,8 +57,6 @@ public class LoginMainTest {
         System.out.println("main");
         String[] args = null;
         LoginMain.main(args);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

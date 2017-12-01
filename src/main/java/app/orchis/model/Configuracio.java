@@ -38,6 +38,10 @@ public class Configuracio implements Serializable {
     @Column(name = "caducitat")
     private Date caducitat;
 
+    public Configuracio() {
+    }
+    
+    
     public Configuracio(int codi, int intents, String nom_admin, String mail, Date caducitat) {
         this.codi = codi;
         this.intents = intents;
@@ -46,8 +50,7 @@ public class Configuracio implements Serializable {
         this.caducitat = caducitat;
     }
 
-    public Configuracio() {
-    }
+
 
     public int getCodi() {
         return codi;
