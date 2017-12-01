@@ -20,7 +20,7 @@ public class LoginMain extends Application{
         root = FXMLLoader.load(getClass().getResource("/vistes/FXMLLogin.fxml"));
         LoginController appCtrl = (LoginController) loader.getController();
         Scene scene = new Scene(root);
-        stage.initStyle(StageStyle.DECORATED);
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(scene);
         stage.show();   
     }

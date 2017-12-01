@@ -21,6 +21,7 @@
       </Text>
       <TextField id="tfUser" fx:id="tfUser" layoutX="202.0" layoutY="103.0" onKeyPressed="#keyPress" prefHeight="26.0" prefWidth="198.0" promptText="Nom Usuari" stylesheets="@../estils/estil.css" />
       <PasswordField fx:id="tfPasswd" layoutX="202.0" layoutY="134.0" onKeyPressed="#keyPress" prefHeight="26.0" prefWidth="198.0" promptText="Contrasenya" />
+      <Button id="buttonLogin" fx:id="btExit" layoutX="58.0" layoutY="170.0" mnemonicParsing="false" onAction="#Surt" prefHeight="73.0" prefWidth="131.0" stylesheets="@../estils/estil.css" text="SURT" />
       <Button id="buttonLogin" fx:id="btLogin" layoutX="335.0" layoutY="170.0" mnemonicParsing="false" onAction="#Login" prefHeight="73.0" prefWidth="131.0" stylesheets="@../estils/estil.css" text="ENTRA" />
       <Text id="showerr" fx:id="tfInfo" layoutX="58.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="PaneLogin" wrappingWidth="374.7294921875" />
       <Text id="corp" layoutX="58.0" layoutY="56.12890625" strokeType="OUTSIDE" strokeWidth="0.0" text="M15" wrappingWidth="95.46875">

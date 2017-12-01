@@ -84,20 +84,22 @@ public class LoginController implements Initializable{
         
     } 
     
-    protected void iniciarPrincipal(Usuari user) throws IOException{
-        Stage primaryStage = (Stage)Panel.getScene().getWindow();
-        Parent root;
-        root = FXMLLoader.load(getClass().getResource("/vistes/FXMLMainMenu.fxml"));
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Sobre l'aplicació");
-        stage.initModality(Modality.NONE);
-        // Li passem el pare de l'escena
-        //stage.initOwner(Panel.getScene().getWindow());
-        emf.close();
-        primaryStage.close();
-        stage.showAndWait();        
-    }
+    //Listener
+    @FXML
+    private void keyPress(KeyEvent e) throws Exception {
+        if (e.getSource().equals(tfUser)) {
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB))
+                if (tfPasswd.getText().isEmpty()) {
+                    tfPasswd.requestFocus();
+                } else {
+                    Login();
+                }            
+        } else {
+            if (e.getCode().equals(KeyCode.ENTER)) {
+                Login();
+            } 
+        }
+    }        
     
     //Bloquejar l'aplicació i apagar la connexió EntityManager.
     protected void bloqueigApp(){
@@ -167,8 +169,37 @@ public class LoginController implements Initializable{
               
     }
     
+    protected void iniciarPrincipal(Usuari user) throws IOException{
+        //Vars
+        Stage primaryStage = (Stage)Panel.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLMainMenu.fxml"));
+        Parent root = (Parent)fxmlLoader.load();
+        MainMenuController controller = fxmlLoader.<MainMenuController>getController();
+        
+        //Passar valors de variables
+        controller.setUser(user);
+        controller.setEntity(emf);
+        
+        //Iniciar nova finestra i RIP login.
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Sobre l'aplicació");
+        stage.initModality(Modality.NONE);
+        emf.close();
+        primaryStage.close();
+        stage.showAndWait();        
+    }
+
+    //Botó Sortir
+    @FXML
+    protected void Surt(){
+        emf.close();
+        System.exit(0);
+    }
+    
     //Botó login
-    @FXML protected void Login() throws ConfigurationException, MessagingException, Exception{
+    @FXML
+    protected void Login() throws ConfigurationException, MessagingException, Exception{
         //Variables del programa
         String username = tfUser.getText();
         String password = encripta(tfPasswd.getText());
@@ -223,21 +254,4 @@ public class LoginController implements Initializable{
         if (_manager.isOpen())
             _manager.close();
     }     
-    
-    //Listener
-    @FXML
-    private void keyPress(KeyEvent e) throws Exception {
-        if (e.getSource().equals(tfUser)) {
-            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB))
-                if (tfPasswd.getText().isEmpty()) {
-                    tfPasswd.requestFocus();
-                } else {
-                    Login();
-                }            
-        } else {
-            if (e.getCode().equals(KeyCode.ENTER)) {
-                Login();
-            } 
-        }
-    }
 }
