@@ -37,6 +37,7 @@ import javafx.stage.StageStyle;
 import javax.persistence.criteria.CriteriaUpdate;
 import app.orchis.controladors.MainMenuController;
 import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -49,6 +50,7 @@ import org.apache.commons.configuration.ConfigurationException;
 public class LoginController implements Initializable{
 
     //Vars elements FXML
+    @FXML private AnchorPane Panel;
     @FXML private TextField tfUser;
     @FXML private PasswordField tfPasswd;
     @FXML private Text tfInfo;
@@ -184,20 +186,30 @@ public class LoginController implements Initializable{
                     //Passwd OK
                     user = llista.get(0); //Necessari?
                     //TODO: Obrir app principal
-                    try{
-                          FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("vistes/FXMLMainMenu"));
-                          Parent root1 = (Parent) fxmlLoader.load();
-                          Stage stage = new Stage();
-                          stage.initModality(Modality.APPLICATION_MODAL);
-                          stage.initStyle(StageStyle.UNDECORATED);
-                          stage.setTitle("ABC");
-                          stage.setScene(new Scene(root1));  
-                          stage.show();
-                        }
-                    catch(Exception e){
-                        
-                    }
+                try{
+                    Stage primaryStage = (Stage)Panel.getScene().getWindow();
+                    Parent root;
+                    root = FXMLLoader.load(getClass().getResource("/vistes/FXMLMainMenu.fxml"));
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(root));
+                    stage.setTitle("Sobre l'aplicació");
+                    stage.initModality(Modality.NONE);
+                    // Li passem el pare de l'escena
+                    //stage.initOwner(Panel.getScene().getWindow());
+                    _manager.close();
+                    emf.close();
+                    primaryStage.close();
+                    stage.showAndWait();
+                    
+                            
+                            
+                           
+                }catch(Exception e){
+                    System.out.println("No he trobat el fitxer");
                 }
+                      
+                }
+               
                 else{
                     intents(username,llista);
                 }
