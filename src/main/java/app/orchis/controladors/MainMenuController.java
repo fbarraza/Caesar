@@ -19,16 +19,19 @@ import javax.persistence.EntityManagerFactory;
  */
 public class MainMenuController implements Initializable{
 
+    //Vars element FXML
     @FXML Button btTest;
     
+    //Vars programa
     private static Usuari user = new Usuari();
     private static EntityManagerFactory emf;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // throw new UnsupportedOperationException("Not supported yet."); //choose Tools | Templates.
     }
     
+    //Setters per passar variables
     public void setUser(Usuari user){
         this.user = user;
     }

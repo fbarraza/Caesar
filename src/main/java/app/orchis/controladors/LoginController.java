@@ -255,3 +255,4 @@ public class LoginController implements Initializable{
             _manager.close();
     }     
 }
+  
