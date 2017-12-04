@@ -56,25 +56,8 @@ public class LoginController implements Initializable{
     @FXML private Text tfInfo;
     @FXML private Button btLogin;
     
-    //Vars pel programa
-    private static Map properties = llegirFitxerPropietats("app.properties");
-    
-    /**
-     * Generador de l'arxiu de persistència amb contrassenya encriptada
-     * @return / Retorna null si no pot llegir el fitxer
-     *         / Retorna el EntityManager amb la contrassenya encriptada si troba els fitxers.
-     */
-    public static EntityManagerFactory generar(){
-        if (properties == null) {
-            System.out.println("Error greu. Contacti amb l'administrador");
-        } else {
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("app.orchis.persistencia", properties);
-            return emf;
-        }
-        return null;
-    }
-    
-    private static final EntityManagerFactory emf = generar();
+    //Vars pel programa    
+    private static EntityManagerFactory emf;
     private static int intents_n = 3;
     private static Usuari user = new Usuari();
     
@@ -274,6 +257,10 @@ public class LoginController implements Initializable{
         //Fi manager
         if (_manager.isOpen())
             _manager.close();
-    }     
+    }    
+    
+    public void setEmf(EntityManagerFactory emf){
+        this.emf = emf;
+    }
 }
   

@@ -7,9 +7,6 @@ package app.orchis.classes;
 import static app.orchis.utils.eines.AppPropertiesFileHelper.llegirFitxerPropietats;
 import java.util.Map;
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  * Patró Singleton
@@ -32,24 +29,20 @@ public class AppConfig {
 
     }
 
-    public EntityManager loadAppConfig(){
+    public EntityManagerFactory loadAppConfig(){
         if (!persistenceUnit.isEmpty()) {
             Map properties = llegirFitxerPropietats("app.properties");
             final EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit,properties);
-            EntityManager manager = emf.createEntityManager();
-
-            manager.close();
-            emf.close();
+            //emf.close();
+            return emf;
+            
         } else {
             System.out.println("Nom de la unitat de persistència incorrecte");
             return null;
-        }
-        return null;
+        }     
     }
 
     // Getters & Setters
-
-
     public String getPersistenceUnit() {
         return persistenceUnit;
     }

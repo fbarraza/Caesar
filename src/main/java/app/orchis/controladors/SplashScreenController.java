@@ -19,6 +19,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javax.persistence.EntityManagerFactory;
 
 
 /**
@@ -30,14 +32,14 @@ public class SplashScreenController implements Initializable{
     @FXML private AnchorPane rootPane;
     
     private final long SLEEP = 3000;
+    private static EntityManagerFactory emf;
 
     private void obteDadesApp() {
         AppConfig appConfig = AppConfig.getInstance();
         appConfig.setPersistenceUnit("app.orchis.persistencia");
 
         try {
-            appConfig.loadAppConfig();
-            System.out.println(appConfig.toString());
+            emf = appConfig.loadAppConfig();
         } catch (Exception e){
             
         }
@@ -72,18 +74,22 @@ public class SplashScreenController implements Initializable{
                 Platform.runLater(() -> {
                     Parent root = null;
                     try {
-                        root = FXMLLoader.load(getClass().getResource("/view/MainFXML.fxml"));
+                        Stage primaryStage = (Stage)rootPane.getScene().getWindow();
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLLogin.fxml"));
+                        root = (Parent)fxmlLoader.load();
+                        LoginController controller = fxmlLoader.<LoginController>getController();
+                        
+                        controller.setEmf(emf);
+                        Scene scene = new Scene(root);
+                        Stage stage = new Stage();
+                        stage.initStyle(StageStyle.UNDECORATED);
+                        stage.setScene(scene);
 
+                        stage.show();
+                        primaryStage.close();                        
                     } catch (IOException ex) {
                         Logger.getLogger(SplashScreenController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
-                    Scene scene = new Scene(root);
-                    Stage stage = new Stage();
-                    stage.setScene(scene);
-                    
-                    stage.show();
-                    rootPane.getScene().getWindow().hide();                    
                 });
             } catch (InterruptedException ex) {
                 Logger.getLogger(SplashScreenController.class.getName()).log(Level.SEVERE, null, ex);
