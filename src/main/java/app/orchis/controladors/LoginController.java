@@ -263,9 +263,12 @@ public class LoginController implements Initializable{
                    intents(user);
                 }
             }            
-        }
-        catch(NoResultException ex){
+        }catch(NoResultException ex){
              intents(username);
+        }catch(Exception Ex){
+            System.out.println("Error fatal en l'execució de l'aplicacio!");
+            System.err.println(Ex.getCause());
+            System.err.println(Ex.getMessage());
         }
         
         //Fi manager
