@@ -40,8 +40,9 @@ public class MainMenuController implements Initializable{
         this.emf = emf;
     }
     
+    
+    
     @FXML public void test(){
         System.out.println(user.getNom());
     }
-    
 }

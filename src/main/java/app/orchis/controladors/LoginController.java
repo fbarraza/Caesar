@@ -33,14 +33,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.StageStyle;
 import javax.persistence.criteria.CriteriaUpdate;
-import app.orchis.controladors.MainMenuController;
 import java.io.IOException;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javax.persistence.NoResultException;
 
 import org.apache.commons.configuration.ConfigurationException;
 
@@ -77,14 +76,18 @@ public class LoginController implements Initializable{
     
     private static final EntityManagerFactory emf = generar();
     private static int intents_n = 3;
-    private static Usuari user = new Usuari(); //?
+    private static Usuari user = new Usuari();
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
     } 
     
-    //Listener
+    /**
+     * Listener dels TextFields del Login.
+     * @param e /Tecla premuda
+     * @throws Exception 
+     */
     @FXML
     private void keyPress(KeyEvent e) throws Exception {
         if (e.getSource().equals(tfUser)) {
@@ -101,7 +104,9 @@ public class LoginController implements Initializable{
         }
     }        
     
-    //Bloquejar l'aplicació i apagar la connexió EntityManager.
+    /**
+     * Bloqueja l'aplicació i no permet que el client segueixi intentant.
+     */
     protected void bloqueigApp(){
         tfUser.setEditable(false);
         tfPasswd.setEditable(false);
@@ -109,13 +114,21 @@ public class LoginController implements Initializable{
         emf.close();
     }    
     
-    //Missatge a monstrar si l'usuari està bloquejat
+    /**
+     * Notifica el client que l'usuari introduït està bloquejat.
+     * @param user /Usuari introduït
+     */
     protected void usuariBloquejat(String user){
         tfInfo.setText("L'usuari està bloquejat! No el pots fer servir fins que l'admin el desbloquegi.");
         bloqueigApp();
     }
     
-    //Manager d'intents    
+    /**
+     * Manager d'intents a executar si l'usuari introduït no existeix
+     * @param username /Nom usuari
+     * @throws MessagingException
+     * @throws Exception 
+     */
     protected void intents(String username) throws MessagingException, Exception{
         //Restar intent
         intents_n--;
@@ -132,13 +145,12 @@ public class LoginController implements Initializable{
     }
     
     /**
-     * 
-     * @param username / Nom de l'usuari
-     * @param userlist / Llista del usuaris
+     * Manager d'intents a executar si l'usuari introduït existeix
+     * @param usuari / Nom de l'usuari
      * @throws MessagingException
      * @throws Exception 
      */
-    protected void intents(String username, List<Usuari> userlist) throws MessagingException, Exception {
+    protected void intents(Usuari usuari) throws MessagingException, Exception {
         intents_n--;
         //Usuari existeix
         if(intents_n == 0){
@@ -152,7 +164,7 @@ public class LoginController implements Initializable{
             
             //Sentència SQL
             update.set("bloquejat", true);
-            update.where(cb.equal(c.get("login"), username));  
+            update.where(cb.equal(c.get("login"), usuari.getLogin()));  
             
             //Actualitzar BBDD
             manager.getTransaction().begin();
@@ -160,7 +172,7 @@ public class LoginController implements Initializable{
             manager.getTransaction().commit();
                      
             //Informar administrador
-            enviarMissatge("Han intentat fer login amb l'usuari " + username + " i ha quedat bloquejat"); 
+            enviarMissatge("Han intentat fer login amb l'usuari " + usuari.getLogin() + " i ha quedat bloquejat"); 
             bloqueigApp();    
         }
         else{
@@ -169,6 +181,11 @@ public class LoginController implements Initializable{
               
     }
     
+    /**
+     * Carreguem l'interfície principal del programa
+     * @param user /Usuari que ha iniciat sessió
+     * @throws IOException 
+     */
     protected void iniciarPrincipal(Usuari user) throws IOException{
         //Vars
         Stage primaryStage = (Stage)Panel.getScene().getWindow();
@@ -190,14 +207,21 @@ public class LoginController implements Initializable{
         stage.showAndWait();        
     }
 
-    //Botó Sortir
+    /**
+     * Apagar l'aplicació
+     */
     @FXML
     protected void Surt(){
         emf.close();
         System.exit(0);
     }
     
-    //Botó login
+    /**
+     * Funció per iniciar sessió amb l'usuari que el client ha introduït
+     * @throws ConfigurationException
+     * @throws MessagingException
+     * @throws Exception 
+     */
     @FXML
     protected void Login() throws ConfigurationException, MessagingException, Exception{
         //Variables del programa
@@ -215,23 +239,18 @@ public class LoginController implements Initializable{
         cbQuery.where(cb.equal(c.get("login"), username));
         Query query = _manager.createQuery(cbQuery);                       
         
-        List<Usuari> llista = query.getResultList();
-        
-        //Mirar si hi han usuaris en la llista      
-        if(!llista.isEmpty()){
-            //L'usuari introduit existeix
-            if(llista.get(0).isBloquejat()){
+        try{
+            user = (Usuari) query.getSingleResult();
+            if(user.isBloquejat()){
                 usuariBloquejat(username);
             }
             else{
                 //Usuari introduit OK
-                if(testPassword(password,llista.get(0).getPasswd())){
-                    //Passwd OK
-                    user = llista.get(0); //Necessari?
-                    
+                if(testPassword(password,user.getPasswd())){
                     try{
-                            _manager.close();
-                            iniciarPrincipal(user);
+                        //Iniciar app principal
+                        _manager.close();
+                        iniciarPrincipal(user);
                     }catch(IOException e){
                         System.out.println("No s'ha trobat el fitxer de la pantalla principal");
                     }catch(Exception e){
@@ -241,13 +260,12 @@ public class LoginController implements Initializable{
                 }
                
                 else{
-                    intents(username,llista);
+                   intents(user);
                 }
-            }
+            }            
         }
-        //No s'ha trobat l'usuari,
-        else{
-            intents(username);
+        catch(NoResultException ex){
+             intents(username);
         }
         
         //Fi manager
