@@ -10,7 +10,6 @@ import app.orchis.model.Usuari;
 import static app.orchis.utils.CryptoHelper.encripta;
 import static app.orchis.utils.CryptoHelper.testPassword;
 import static app.orchis.utils.JavaEmail.enviarMissatge;
-import static app.orchis.utils.eines.AppPropertiesFileHelper.llegirFitxerPropietats;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -22,24 +21,21 @@ import javafx.scene.text.Text;
 import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.List;
-import java.util.Map;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.StageStyle;
 import javax.persistence.criteria.CriteriaUpdate;
-import app.orchis.controladors.MainMenuController;
+import java.io.IOException;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javax.persistence.NoResultException;
 
 import org.apache.commons.configuration.ConfigurationException;
 
@@ -55,39 +51,42 @@ public class LoginController implements Initializable{
     @FXML private PasswordField tfPasswd;
     @FXML private Text tfInfo;
     @FXML private Button btLogin;
+    @FXML private Button btExit;
     
-    //Vars pel programa
-    private static Map properties = llegirFitxerPropietats("app.properties");
-    
-    /**
-     * Generador de l'arxiu de persistència amb contrassenya encriptada
-     * @return / Retorna null si no pot llegir el fitxer
-     *         / Retorna el EntityManager amb la contrassenya encriptada si troba els fitxers.
-     */
-    public static EntityManagerFactory generar(){
-        if (properties == null) {
-            System.out.println("Error greu. Contacti amb l'administrador");
-        } else {
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("app.orchis.persistencia", properties);
-            return emf;
-        }
-        return null;
-    }
-    
-    private static final EntityManagerFactory emf = generar();
-    //private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory( "app.orchis.persistencia");
+    //Vars pel programa    
+    private static EntityManagerFactory emf;
     private static int intents_n = 3;
-    private static Usuari user = new Usuari(); //?
-    
-    //Consulta antiga
-    //private static List<Usuari> llista = (List<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
+    private static Usuari user = new Usuari();
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
     } 
     
-    //Bloquejar l'aplicació i apagar la connexió EntityManager.
+    /**
+     * Listener dels TextFields del Login.
+     * @param e /Tecla premuda
+     * @throws Exception 
+     */
+    @FXML
+    private void keyPress(KeyEvent e) throws Exception {
+        if (e.getSource().equals(tfUser)) {
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB))
+                if (tfPasswd.getText().isEmpty()) {
+                    tfPasswd.requestFocus();
+                } else {
+                    Login();
+                }            
+        } else {
+            if (e.getCode().equals(KeyCode.ENTER)) {
+                Login();
+            } 
+        }
+    }        
+    
+    /**
+     * Bloqueja l'aplicació i no permet que el client segueixi intentant.
+     */
     protected void bloqueigApp(){
         tfUser.setEditable(false);
         tfPasswd.setEditable(false);
@@ -95,13 +94,21 @@ public class LoginController implements Initializable{
         emf.close();
     }    
     
-    //Missatge a monstrar si l'usuari està bloquejat
+    /**
+     * Notifica el client que l'usuari introduït està bloquejat.
+     * @param user /Usuari introduït
+     */
     protected void usuariBloquejat(String user){
         tfInfo.setText("L'usuari està bloquejat! No el pots fer servir fins que l'admin el desbloquegi.");
         bloqueigApp();
     }
     
-    //Manager d'intents    
+    /**
+     * Manager d'intents a executar si l'usuari introduït no existeix
+     * @param username /Nom usuari
+     * @throws MessagingException
+     * @throws Exception 
+     */
     protected void intents(String username) throws MessagingException, Exception{
         //Restar intent
         intents_n--;
@@ -118,13 +125,12 @@ public class LoginController implements Initializable{
     }
     
     /**
-     * 
-     * @param username / Nom de l'usuari
-     * @param userlist / Llista del usuaris
+     * Manager d'intents a executar si l'usuari introduït existeix
+     * @param usuari / Nom de l'usuari
      * @throws MessagingException
      * @throws Exception 
      */
-    protected void intents(String username, List<Usuari> userlist) throws MessagingException, Exception {
+    protected void intents(Usuari usuari) throws MessagingException, Exception {
         intents_n--;
         //Usuari existeix
         if(intents_n == 0){
@@ -138,7 +144,7 @@ public class LoginController implements Initializable{
             
             //Sentència SQL
             update.set("bloquejat", true);
-            update.where(cb.equal(c.get("login"), username));  
+            update.where(cb.equal(c.get("login"), usuari.getLogin()));  
             
             //Actualitzar BBDD
             manager.getTransaction().begin();
@@ -146,7 +152,7 @@ public class LoginController implements Initializable{
             manager.getTransaction().commit();
                      
             //Informar administrador
-            enviarMissatge("Han intentat fer login amb l'usuari " + username + " i ha quedat bloquejat"); 
+            enviarMissatge("Han intentat fer login amb l'usuari " + usuari.getLogin() + " i ha quedat bloquejat"); 
             bloqueigApp();    
         }
         else{
@@ -155,8 +161,49 @@ public class LoginController implements Initializable{
               
     }
     
-    //Botó login
-    @FXML protected void Login() throws ConfigurationException, MessagingException, Exception{
+    /**
+     * Carreguem l'interfície principal del programa
+     * @param user /Usuari que ha iniciat sessió
+     * @throws IOException 
+     */
+    protected void iniciarPrincipal(Usuari user) throws IOException{
+        //Vars
+        Stage primaryStage = (Stage)Panel.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLMainMenu.fxml"));
+        Parent root = (Parent)fxmlLoader.load();
+        MainMenuController controller = fxmlLoader.<MainMenuController>getController();
+        
+        //Passar valors de variables
+        controller.setUser(user);
+        controller.setEntity(emf);
+        
+        //Iniciar nova finestra i RIP login.
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Sobre l'aplicació");
+        stage.initModality(Modality.NONE);
+        emf.close();
+        primaryStage.close();
+        stage.showAndWait();        
+    }
+
+    /**
+     * Apagar l'aplicació
+     */
+    @FXML
+    protected void Surt(){
+        emf.close();
+        System.exit(0);
+    }
+    
+    /**
+     * Funció per iniciar sessió amb l'usuari que el client ha introduït
+     * @throws ConfigurationException
+     * @throws MessagingException
+     * @throws Exception 
+     */
+    @FXML
+    protected void Login() throws ConfigurationException, MessagingException, Exception{
         //Variables del programa
         String username = tfUser.getText();
         String password = encripta(tfPasswd.getText());
@@ -172,75 +219,45 @@ public class LoginController implements Initializable{
         cbQuery.where(cb.equal(c.get("login"), username));
         Query query = _manager.createQuery(cbQuery);                       
         
-        List<Usuari> llista = query.getResultList();
-        
-        //Mirar si hi han usuaris en la llista      
-        if(!llista.isEmpty()){
-            //L'usuari introduit existeix
-            if(llista.get(0).isBloquejat()){
+        try{
+            user = (Usuari) query.getSingleResult();
+            if(user.isBloquejat()){
                 usuariBloquejat(username);
             }
             else{
                 //Usuari introduit OK
-                if(testPassword(password,llista.get(0).getPasswd())){
-                    //Passwd OK
-                    user = llista.get(0); //Necessari?
-                    //TODO: Obrir app principal
-                try{
-                    Stage primaryStage = (Stage)Panel.getScene().getWindow();
-                    Parent root;
-                    root = FXMLLoader.load(getClass().getResource("/vistes/FXMLMainMenu.fxml"));
-                    Stage stage = new Stage();
-                    stage.setScene(new Scene(root));
-                    stage.setTitle("Sobre l'aplicació");
-                    stage.initModality(Modality.NONE);
-                    // Li passem el pare de l'escena
-                    //stage.initOwner(Panel.getScene().getWindow());
-                    _manager.close();
-                    emf.close();
-                    primaryStage.close();
-                    stage.showAndWait();
-                    
-                            
-                            
-                           
-                }catch(Exception e){
-                    System.out.println("No he trobat el fitxer");
-                }
-                      
+                if(testPassword(password,user.getPasswd())){
+                    try{
+                        //Iniciar app principal
+                        _manager.close();
+                        iniciarPrincipal(user);
+                    }catch(IOException e){
+                        System.out.println("No s'ha trobat el fitxer de la pantalla principal");
+                    }catch(Exception e){
+                        System.out.println("Error greu de l'aplicació! Comprova que els fitxers FXML tinguin els estils correctes!");
+                        System.out.println(e.getCause());
+                    }                     
                 }
                
                 else{
-                    intents(username,llista);
+                   intents(user);
                 }
-            }
-        }
-        //No s'ha trobat l'usuari,
-        else{
-            intents(username);
+            }            
+        }catch(NoResultException ex){
+             intents(username);
+        }catch(Exception Ex){
+            System.out.println("Error fatal en l'execució de l'aplicacio!");
+            System.err.println(Ex.getCause());
+            System.err.println(Ex.getMessage());
         }
         
         //Fi manager
         if (_manager.isOpen())
             _manager.close();
-    }     
+    }    
     
-    //Listener
-    @FXML
-    private void keyPress(KeyEvent e) throws Exception {
-        if (e.getSource().equals(tfUser)) {
-            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB))
-                if (tfPasswd.getText().isEmpty()) {
-                    tfPasswd.requestFocus();
-                } else {
-                    Login();
-                }            
-        } else {
-            if (e.getCode().equals(KeyCode.ENTER)) {
-                Login();
-            } else {
-                e.consume();
-            }
-        }
+    public void setEmf(EntityManagerFactory emf){
+        this.emf = emf;
     }
 }
+  

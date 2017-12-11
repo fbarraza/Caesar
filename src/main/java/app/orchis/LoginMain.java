@@ -17,10 +17,10 @@ public class LoginMain extends Application{
         Parent root = null;
         FXMLLoader loader = new FXMLLoader();
         //root = FXMLLoader.load(getClass().getClassLoader().getResource("vistes/FXMLLogin.fxml"));
-        root = FXMLLoader.load(getClass().getResource("/vistes/FXMLLogin.fxml"));
-        LoginController appCtrl = (LoginController) loader.getController();
+        root = FXMLLoader.load(getClass().getResource("/vistes/FXMLSplash.fxml"));
+        //LoginController appCtrl = (LoginController) loader.getController();
         Scene scene = new Scene(root);
-        stage.initStyle(StageStyle.DECORATED);
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(scene);
         stage.show();   
     }
