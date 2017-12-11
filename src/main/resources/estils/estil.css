@@ -8,23 +8,48 @@ and open the template in the editor.
     Author     : m15
 */
 
+#MainAnchor, #MainPane{
+    -fx-background-color: #bbbbbb;
+}
+
+MenuBarButton:hover{
+    -fx-background-color: #ababab;
+}
+
+MenuBarButton:pressed{
+    -fx-background-color: #dcdcdc;
+}
+
+MenuItem:hover{
+    -fx-background-color: #ababab;
+}
+
+MenuItem:pressed{
+    -fx-background-color: #dcdcdc;
+}
+
 .text{
     -fx-align-content: "center";
 }
 
-#showerr{
+.logo{ /* TEXT 'M15'*/
+    -fx-font-size: "42px";
+    -fx-opacity:0.7;
+}
+
+#showerr{ /*LOGIN */
     -fx-fill:#990000;
 }
 
-.icon{
+.icon{ /*TOTES LES ICONES */
     -fx-width: "16px";
     -fx-height: "16px";
-}
-
-.buttonLogin{   
-    -fx-background-radius: 75%;
-}
-
-#MainMenu, MainAnchor, MainPane{
-    -fx-background-color: #bbbbbb;
+    -fx-fit-width:"16px";
+    -fx-fit-height:"16px";
+    -fx-pref-width:"16px";
+    -fx-pref-height:"16px";
+    -fx-min-width:"16px";
+    -fx-min-height:"16px";
+    -fx-max-width:"16px";
+    -fx-max-height:"16px";
 }

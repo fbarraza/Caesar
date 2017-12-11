@@ -9,8 +9,6 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -24,7 +22,7 @@ public class Configuracio implements Serializable {
 
     private static final long serialVersionUID = 2;
 
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
     @Column(name = "ID", unique = true)
     private int codi;
 
@@ -40,10 +38,6 @@ public class Configuracio implements Serializable {
     @Column(name = "caducitat")
     private Date caducitat;
 
-    public Configuracio() {
-    }
-    
-    
     public Configuracio(int codi, int intents, String nom_admin, String mail, Date caducitat) {
         this.codi = codi;
         this.intents = intents;
@@ -52,7 +46,8 @@ public class Configuracio implements Serializable {
         this.caducitat = caducitat;
     }
 
-
+    public Configuracio() {
+    }
 
     public int getCodi() {
         return codi;
