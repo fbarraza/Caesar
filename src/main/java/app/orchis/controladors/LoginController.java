@@ -6,6 +6,7 @@
 package app.orchis.controladors;
 
 
+import app.orchis.model.Configuracio;
 import app.orchis.model.Usuari;
 import static app.orchis.utils.CryptoHelper.encripta;
 import static app.orchis.utils.CryptoHelper.testPassword;
@@ -31,6 +32,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javax.persistence.criteria.CriteriaUpdate;
 import java.io.IOException;
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -54,12 +56,17 @@ public class LoginController implements Initializable{
     
     //Vars pel programa    
     private static EntityManagerFactory emf;
-    private static int intents_n = 3;
+    private static int intents_n;
+    private static int intents_m;
     private static Usuari user = new Usuari();
+    private static Configuracio config = new Configuracio();
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
+        Platform.runLater(() -> {
+            intents_n = config.obtenirIntents(emf);
+            intents_m = intents_n;
+        });        
     } 
     
     /**
@@ -114,7 +121,7 @@ public class LoginController implements Initializable{
         
         //Programa
         if (intents_n == 0){
-            tfInfo.setText("Has fallat el teu login tres vegades! La app ha quedat bloquejada");
+            tfInfo.setText("Has fallat el teu login "+intents_m+" vegades! La app ha quedat bloquejada");
             enviarMissatge("Han intentat fer login amb un usuari no existent");
             bloqueigApp();
         }
@@ -130,10 +137,11 @@ public class LoginController implements Initializable{
      * @throws Exception 
      */
     protected void intents(Usuari usuari) throws MessagingException, Exception {
+        //Restart intent
         intents_n--;
-        //Usuari existeix
+        
         if(intents_n == 0){
-            tfInfo.setText("L'usuari ha sigut bloquejat ja que has fallat 3 vegades! S'ha informat a l'admin i la app ha quedat bloquejada.");            
+            tfInfo.setText("L'usuari ha sigut bloquejat ja que has fallat " +intents_m+ " vegades! S'ha informat a l'admin i la app ha quedat bloquejada.");            
             
             //Creació Entity Manager i del CB
             EntityManager manager = emf.createEntityManager();
@@ -181,6 +189,7 @@ public class LoginController implements Initializable{
         stage.setScene(new Scene(root));
         stage.setTitle("Sobre l'aplicació");
         stage.initModality(Modality.NONE);
+        stage.setOnHiding( event -> {emf.close();} );
         //emf.close();
         primaryStage.close();
         stage.showAndWait();        

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -37,19 +38,16 @@ public class MainMenuController implements Initializable{
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // throw new UnsupportedOperationException("Not supported yet."); //choose Tools | Templates.
+        Platform.runLater(() -> {
+            adminTool();
+        });
     }
     
-    //Setters per passar variables
-    public void setUser(Usuari user){
-        this.user = user;
+    private void adminTool(){
+        
     }
     
-    public void setEntity(EntityManagerFactory emf){
-        this.emf = emf;
-    }
-    
-    public void obrirConfig() throws IOException{
+    private void obrirConfig() throws IOException{
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLSettingsAdmin.fxml"));
             Parent root = (Parent) fxmlLoader.load();
@@ -69,4 +67,13 @@ public class MainMenuController implements Initializable{
         }
         
     }
+    
+    //Setters per passar variables
+    public void setUser(Usuari user){
+        this.user = user;
+    }
+    
+    public void setEntity(EntityManagerFactory emf){
+        this.emf = emf;
+    }    
 }
