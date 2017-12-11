@@ -6,11 +6,20 @@
 package app.orchis.controladors;
 
 import app.orchis.model.Usuari;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javax.persistence.EntityManagerFactory;
 
 /**
@@ -20,7 +29,7 @@ import javax.persistence.EntityManagerFactory;
 public class MainMenuController implements Initializable{
 
     //Vars element FXML
-    @FXML Button btTest;
+    @FXML private MenuItem adminConfig;
     
     //Vars programa
     private static Usuari user = new Usuari();
@@ -40,9 +49,19 @@ public class MainMenuController implements Initializable{
         this.emf = emf;
     }
     
-    
-    
-    @FXML public void test(){
-        System.out.println(user.getNom());
+    public void obrirConfig() throws IOException{
+        //try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistes/FXMLSettingsAdmin.fxml"));
+            Parent root = (Parent) loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.DECORATED);
+            stage.setScene(new Scene(root));
+            stage.show();
+
+      //  } catch (IOException ex) {
+            System.out.println("Error en l'execució del fitxer!");
+      //  }
+        
     }
 }

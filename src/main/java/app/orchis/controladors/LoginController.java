@@ -51,7 +51,6 @@ public class LoginController implements Initializable{
     @FXML private PasswordField tfPasswd;
     @FXML private Text tfInfo;
     @FXML private Button btLogin;
-    @FXML private Button btExit;
     
     //Vars pel programa    
     private static EntityManagerFactory emf;
