@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 //import java.util.Date;
@@ -33,17 +34,21 @@ public class Usuari implements Serializable{
     
     @Column(name = "login", unique=true)
     private String login;
+    
+    @Column(name ="data")
+    private Date data;
 
     //Constructor
     public Usuari() {
     }
 
-    public Usuari(int codi, String nom, String passwd, boolean bloquejat, String login) {
+    public Usuari(int codi, String nom, String passwd, boolean bloquejat, String login, Date data) {
         this.codi = codi;
         this.nom = nom;
         this.passwd = passwd;
         this.bloquejat = bloquejat;
         this.login = login;
+        this.data = data;
     }
 
     public long getCodi() {

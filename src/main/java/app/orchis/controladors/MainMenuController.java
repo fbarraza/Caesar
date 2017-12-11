@@ -50,18 +50,23 @@ public class MainMenuController implements Initializable{
     }
     
     public void obrirConfig() throws IOException{
-        //try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistes/FXMLSettingsAdmin.fxml"));
-            Parent root = (Parent) loader.load();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLSettingsAdmin.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            SettingsAdminController controller = fxmlLoader.<SettingsAdminController>getController();
+            
+            //Vars
+            controller.setEntity(emf);
+            
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.DECORATED);
             stage.setScene(new Scene(root));
             stage.show();
 
-      //  } catch (IOException ex) {
-            System.out.println("Error en l'execució del fitxer!");
-      //  }
+        } catch (IOException ex) {
+              System.out.println("Error en l'execució del fitxer!");
+        }
         
     }
 }

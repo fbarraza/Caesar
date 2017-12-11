@@ -6,11 +6,8 @@
 package app.orchis.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -24,7 +21,7 @@ public class Configuracio implements Serializable {
 
     private static final long serialVersionUID = 2;
 
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
     @Column(name = "ID", unique = true)
     private int codi;
 
@@ -38,13 +35,9 @@ public class Configuracio implements Serializable {
     private String mail;
 
     @Column(name = "caducitat")
-    private Date caducitat;
+    private int caducitat;
 
-    public Configuracio() {
-    }
-    
-    
-    public Configuracio(int codi, int intents, String nom_admin, String mail, Date caducitat) {
+    public Configuracio(int codi, int intents, String nom_admin, String mail, int caducitat) {
         this.codi = codi;
         this.intents = intents;
         this.nom_admin = nom_admin;
@@ -52,7 +45,8 @@ public class Configuracio implements Serializable {
         this.caducitat = caducitat;
     }
 
-
+    public Configuracio() {
+    }
 
     public int getCodi() {
         return codi;
@@ -86,11 +80,11 @@ public class Configuracio implements Serializable {
         this.mail = mail;
     }
 
-    public Date getCaducitat() {
+    public int getCaducitat() {
         return caducitat;
     }
 
-    public void setCaducitat(Date caducitat) {
+    public void setCaducitat(int caducitat) {
         this.caducitat = caducitat;
     }
 

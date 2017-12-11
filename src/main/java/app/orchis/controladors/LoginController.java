@@ -181,7 +181,7 @@ public class LoginController implements Initializable{
         stage.setScene(new Scene(root));
         stage.setTitle("Sobre l'aplicació");
         stage.initModality(Modality.NONE);
-        emf.close();
+        //emf.close();
         primaryStage.close();
         stage.showAndWait();        
     }
