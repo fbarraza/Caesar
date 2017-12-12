@@ -1,8 +1,3 @@
-/*
- * Somebody
- * once
- * told me
- */
 package app.orchis.controladors;
 
 

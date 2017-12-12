@@ -5,23 +5,28 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.Configuracio;
 import app.orchis.model.Usuari;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -31,9 +36,11 @@ public class MainMenuController implements Initializable{
 
     //Vars element FXML
     @FXML private MenuItem adminConfig;
+    @FXML private Menu adminSettings;
     
     //Vars programa
     private static Usuari user = new Usuari();
+    private static Configuracio config;
     private static EntityManagerFactory emf;
     
     @Override
@@ -44,7 +51,22 @@ public class MainMenuController implements Initializable{
     }
     
     private void adminTool(){
+        //Crear EntityManager i CriteriaBuilder
+        EntityManager em = emf.createEntityManager();
+        CriteriaBuilder cb = emf.getCriteriaBuilder();
         
+        //Obtenir dades fitxer configuració 
+        CriteriaQuery<Configuracio> cbQuery = cb.createQuery(Configuracio.class);
+        Root<Configuracio> c = cbQuery.from(Configuracio.class);
+        cbQuery.select(c);
+        cbQuery.where(cb.equal(c.get("id"), 1));
+        Query query = em.createQuery(cbQuery);  
+        config = (Configuracio) query.getSingleResult();
+        
+        //Comprovar si l'usuari és admin
+        if(!config.getNom_admin().equals(user.getLogin())){
+            adminSettings.setDisable(true);
+        }
     }
     
     private void obrirConfig() throws IOException{
