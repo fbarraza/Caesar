@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -9,7 +13,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane id="mainMenu" prefHeight="480.0" prefWidth="640.0" style="-fx-background-color=#BBBBBB" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.LoginController">
+<BorderPane id="mainMenu" prefHeight="480.0" prefWidth="640.0" style="-fx-background-color=#BBBBBB" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.MainMenuController">
    <center>
       <Pane id="MainPane" stylesheets="@../estils/estil.css" BorderPane.alignment="CENTER">
          <children>
@@ -161,7 +165,7 @@
                   </MenuItem>
                </items>
             </Menu>
-            <Menu id="MenuBarButton" mnemonicParsing="false" text="ADMIN">
+            <Menu id="MenuBarButton" fx:id="adminSettings" mnemonicParsing="false" text="ADMIN">
                <items>
                   <MenuItem id="MenuItem" mnemonicParsing="false" text="Alta d'usuaris">
                      <graphic>
@@ -172,7 +176,7 @@
                         </ImageView>
                      </graphic>
                   </MenuItem>
-                  <MenuItem id="MenuItem" mnemonicParsing="false" text="Gestionar configuració">
+                  <MenuItem id="MenuItem" fx:id="adminConfig" mnemonicParsing="false" onAction="#obrirConfig" text="Gestionar configuració">
                      <graphic>
                         <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
                            <image>

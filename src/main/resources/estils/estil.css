@@ -8,48 +8,49 @@ and open the template in the editor.
     Author     : m15
 */
 
+/*INICI PANELLS PRINCIPALS*/
 #MainAnchor, #MainPane{
-    -fx-background-color: #bbbbbb;
+ -fx-background-color: #bbbbbb;
 }
+/* FI PANELLS PRINCIPALS */
 
-MenuBarButton:hover{
+/* INICI COMPORTAMENT BARRA DE MENÚS, BOTONS, I MENÚS DE INTERFÍCIE */
+MenuBarButton:active, MenuBarButton:hover, MenuBarButton:pressed, MenuBarButton:focus, MenuBarButton:showing{
     -fx-background-color: #ababab;
 }
-
-MenuBarButton:pressed{
-    -fx-background-color: #dcdcdc;
+#MenuItem:active, #MenuItem:hover, #MenuItem:pressed, #MenuItem:focus, #MenuItem:showing{
+    -fx-background-color: #bababa;
 }
+/* FI COMPORTAMENT BARRA DE MENÚS, BOTONS, I MENÚS DE INTERFÍCIE */
 
-MenuItem:hover{
-    -fx-background-color: #ababab;
-}
-
-MenuItem:pressed{
-    -fx-background-color: #dcdcdc;
-}
-
-.text{
+/* ALINEACIÓ TEXT BOTONS LOGIN */
+#buttonLogin{
     -fx-align-content: "center";
 }
 
-.logo{ /* TEXT 'M15'*/
-    -fx-font-size: "42px";
-    -fx-opacity:0.7;
+/* TEXT CORPORATIU 'M15'*/
+.corp{ 
+    -fx-font-size: "40px";
+    -fx-style: "Bold";
+    -fx-font-family: "DejaVu Sans";
+    -fx-opacity: 0.7;
 }
 
-#showerr{ /*LOGIN */
+/* TEXT D'ERROR, LOGIN */
+#showerr{ 
     -fx-fill:#990000;
 }
 
+/* MIDA DE TOTES LES ICONES */
 .icon{ /*TOTES LES ICONES */
     -fx-width: "16px";
     -fx-height: "16px";
-    -fx-fit-width:"16px";
-    -fx-fit-height:"16px";
-    -fx-pref-width:"16px";
-    -fx-pref-height:"16px";
-    -fx-min-width:"16px";
-    -fx-min-height:"16px";
-    -fx-max-width:"16px";
-    -fx-max-height:"16px";
+    -fx-fit-width: "16px";
+    -fx-fit-height: "16px";
+    -fx-pref-width: "16px";
+    -fx-pref-height: "16px";
+    -fx-min-width: "16px";
+    -fx-min-height: "16px";
+    -fx-max-width: "16px";
+    -fx-max-height: "16px";
 }

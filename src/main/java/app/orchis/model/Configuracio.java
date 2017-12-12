@@ -6,11 +6,16 @@
 package app.orchis.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Id;
+import javax.persistence.Query;
 import javax.persistence.Table;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -36,9 +41,10 @@ public class Configuracio implements Serializable {
     private String mail;
 
     @Column(name = "caducitat")
-    private Date caducitat;
-
-    public Configuracio(int codi, int intents, String nom_admin, String mail, Date caducitat) {
+    private int caducitat;
+    
+    //Constructors
+    public Configuracio(int codi, int intents, String nom_admin, String mail, int caducitat) {
         this.codi = codi;
         this.intents = intents;
         this.nom_admin = nom_admin;
@@ -49,6 +55,24 @@ public class Configuracio implements Serializable {
     public Configuracio() {
     }
 
+    
+    //Funcions
+    public int obtenirIntents(EntityManagerFactory emf){
+        //Manager local
+        EntityManager _manager = emf.createEntityManager();
+
+        //Obtenir dades de l'usuari introduit
+        CriteriaBuilder cb = emf.getCriteriaBuilder();
+        CriteriaQuery<Configuracio> cbQuery = cb.createQuery(Configuracio.class);
+        Root<Configuracio> c = cbQuery.from(Configuracio.class);
+        cbQuery.select(c);
+        Query query = _manager.createQuery(cbQuery);  
+        
+        Configuracio config = (Configuracio) query.getSingleResult();
+        return config.getIntents();
+    }    
+    
+    //GETTERS AND SETTERS
     public int getCodi() {
         return codi;
     }
@@ -81,11 +105,11 @@ public class Configuracio implements Serializable {
         this.mail = mail;
     }
 
-    public Date getCaducitat() {
+    public int getCaducitat() {
         return caducitat;
     }
 
-    public void setCaducitat(Date caducitat) {
+    public void setCaducitat(int caducitat) {
         this.caducitat = caducitat;
     }
 

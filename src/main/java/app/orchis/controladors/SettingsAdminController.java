@@ -7,26 +7,23 @@ package app.orchis.controladors;
 
 import app.orchis.model.Configuracio;
 import app.orchis.model.Usuari;
-import static app.orchis.utils.eines.AppPropertiesFileHelper.llegirFitxerPropietats;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -53,35 +50,17 @@ public class SettingsAdminController implements Initializable {
     @FXML
     private Button btnModificar;
     @FXML
-    private Button btnSortir;
-
+    private Button btnSortir;  
     // @FXML private Button btLogin;
-    //Crear un map per agafar les dades del arxiu properties
-    private static Map properties = llegirFitxerPropietats("app.properties");
 
-    /**
-     * Generador de l'arxiu de persistència amb contrassenya encriptada
-     *
-     * @return / Retorna null si no pot llegir el fitxer / Retorna el
-     * EntityManager amb la contrassenya encriptada si troba els fitxers.
-     */
-    public static EntityManagerFactory generar() {
-        if (properties == null) {
-            System.out.println("Error greu. Contacti amb l'administrador");
-        } else {
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("app.orchis.persistencia", properties);
-            return emf;
-        }
-        return null;
-    }
-
-    //Crea el EntityManager q7ue utilitzarem a l'aplicacció
-    private static final EntityManagerFactory emf = generar();
-
+    //Vars programa
+    private static EntityManagerFactory emf;
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        omplirText();
+        Platform.runLater(() -> {
+            omplirText();
+        });
 
     }
 
@@ -99,24 +78,27 @@ public class SettingsAdminController implements Initializable {
 
         update.set("mail", tfMailAdmin.getText());
         update.set("intents", Integer.parseInt(tfMaxIntents.getText()));
-
-        //  String dataString = tfDataCaducitat.getText();
-        //  Date data = new SimpleDateFormat("dd/MM/yyyy").parse(dataString); 
-        //  update.set("caducitat", data);
-        //   update.set("caducitat", df.parse(tfDataCaducitat.getText()).toString());
+        update.set("nom_admin", cmbNomAdmin.getSelectionModel().getSelectedItem());
+        update.set("caducitat", Integer.parseInt(tfDataCaducitat.getText()));
+      
         //Efectuar el commit a la base de dades
         manager.getTransaction().begin();
         manager.createQuery(update).executeUpdate();
         manager.getTransaction().commit();
         manager.close();
 
-        omplirText();
+    }
+
+    @FXML
+    protected void sortirAction() {
+        //Tanca la finestra actual
+        Stage stage = (Stage) btnSortir.getScene().getWindow();
+        stage.close();
+     
 
     }
 
     private void omplirText() {
-
-        netejarText();
 
         //Creació Entity Manager i del CB
         EntityManager manager = emf.createEntityManager();
@@ -130,10 +112,13 @@ public class SettingsAdminController implements Initializable {
         Configuracio configuracio = (Configuracio) query.getSingleResult();
         //Omplir tots els textField amb el seu valor corresponent
         tfID.setText(Integer.toString(configuracio.getCodi()));
-
+        omplirCombo();
+        //Assignar per defecte al combobox l'usuari actual
+        cmbNomAdmin.getSelectionModel().select(configuracio.getNom_admin());
         tfMailAdmin.setText(String.valueOf(configuracio.getMail()));
         tfMaxIntents.setText(String.valueOf(configuracio.getIntents()));
         tfDataCaducitat.setText(String.valueOf(configuracio.getCaducitat()));
+        manager.close();
 
     }
 
@@ -148,23 +133,25 @@ public class SettingsAdminController implements Initializable {
         Query query = manager.createQuery(cbQuery);
 
         List<Usuari> llista = query.getResultList();
+        ObservableList<String> data = FXCollections.observableArrayList();
 
         for (int i = 0; i < llista.size(); i++) {
-            
-            cmbNomAdmin.setItems(llista);
+
+            data.add(llista.get(i).getLogin());
 
         }
 
-    }
+        cmbNomAdmin.setItems(data);
 
-    private void netejarText() {
-
-        tfID.clear();
-
-        tfMailAdmin.clear();
-        tfMaxIntents.clear();
-        tfDataCaducitat.clear();
+        manager.close();
 
     }
+
+    //Setter
+    public void setEntity(EntityManagerFactory emf){
+        this.emf = emf;
+    }
+    
+    
 
 }
