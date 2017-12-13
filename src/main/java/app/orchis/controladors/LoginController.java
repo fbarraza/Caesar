@@ -250,7 +250,7 @@ public class LoginController implements Initializable{
              intents(username);
         }catch(Exception Ex){
             System.out.println("Error fatal en l'execució de l'aplicacio!");
-            System.err.println(Ex.getCause());
+                System.err.println(Ex.getCause());
             System.err.println(Ex.getMessage());
         }
         

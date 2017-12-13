@@ -59,7 +59,7 @@ public class MainMenuController implements Initializable{
         CriteriaQuery<Configuracio> cbQuery = cb.createQuery(Configuracio.class);
         Root<Configuracio> c = cbQuery.from(Configuracio.class);
         cbQuery.select(c);
-        cbQuery.where(cb.equal(c.get("id"), 1));
+        cbQuery.where(cb.equal(c.get("codi"), 1));
         Query query = em.createQuery(cbQuery);  
         config = (Configuracio) query.getSingleResult();
         
@@ -68,7 +68,7 @@ public class MainMenuController implements Initializable{
             adminSettings.setDisable(true);
         }
     }
-    
+    @FXML
     private void obrirConfig() throws IOException{
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLSettingsAdmin.fxml"));

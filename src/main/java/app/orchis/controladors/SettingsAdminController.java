@@ -54,8 +54,7 @@ public class SettingsAdminController implements Initializable {
     private Button btnModificar;
     @FXML
     private Button btnSortir;  
-    // @FXML private Button btLogin;
-
+    
     //Vars programa
     private static EntityManagerFactory emf;
     
@@ -73,14 +72,14 @@ public class SettingsAdminController implements Initializable {
         alert.setHeaderText(null);
         alert.setTitle("Informació");
 
-        //DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
 
         //Creació Entity Manager i del CB
         EntityManager manager = emf.createEntityManager();
         CriteriaBuilder cb = emf.getCriteriaBuilder();
         //Criteria per el update
         CriteriaUpdate<Configuracio> update = cb.createCriteriaUpdate(Configuracio.class);
-        //Root<Configuracio> consultaUpdate = update.from(Configuracio.class);
+        Root<Configuracio> consultaUpdate = update.from(Configuracio.class);
 
         update.set("mail", tfMailAdmin.getText());
         update.set("intents", Integer.parseInt(tfMaxIntents.getText()));
