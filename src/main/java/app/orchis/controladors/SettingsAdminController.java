@@ -18,7 +18,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -51,8 +54,7 @@ public class SettingsAdminController implements Initializable {
     private Button btnModificar;
     @FXML
     private Button btnSortir;  
-    // @FXML private Button btLogin;
-
+    
     //Vars programa
     private static EntityManagerFactory emf;
     
@@ -66,6 +68,9 @@ public class SettingsAdminController implements Initializable {
 
     @FXML
     protected void modificarAction() throws ParseException {
+        Alert alert = new Alert(AlertType.INFORMATION, "Fitxer modificat", ButtonType.OK);
+        alert.setHeaderText(null);
+        alert.setTitle("Informació");
 
         DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
 
@@ -86,14 +91,23 @@ public class SettingsAdminController implements Initializable {
         manager.createQuery(update).executeUpdate();
         manager.getTransaction().commit();
         manager.close();
-
+        
+        alert.showAndWait();
     }
 
     @FXML
     protected void sortirAction() {
-        //Tanca la finestra actual
-        Stage stage = (Stage) btnSortir.getScene().getWindow();
-        stage.close();
+        //Alerta
+        Alert alert = new Alert(AlertType.CONFIRMATION, "Segur que vols sortir?", ButtonType.YES, ButtonType.NO);
+        alert.setHeaderText(null);
+        alert.setTitle("Sortir");
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.YES) {
+            //Tanca la finestra actual
+            Stage stage = (Stage) btnSortir.getScene().getWindow();
+            stage.close();
+        }
      
 
     }
