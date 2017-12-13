@@ -37,18 +37,22 @@ public class Usuari implements Serializable{
     
     @Column(name ="data")
     private Date data;
+    
+    @Column(name = "admin")
+    private boolean admin;    
 
     //Constructor
     public Usuari() {
     }
 
-    public Usuari(int codi, String nom, String passwd, boolean bloquejat, String login, Date data) {
+    public Usuari(int codi, String nom, String passwd, boolean bloquejat, String login, Date data, boolean admin) {
         this.codi = codi;
         this.nom = nom;
         this.passwd = passwd;
         this.bloquejat = bloquejat;
         this.login = login;
         this.data = data;
+        this.admin = admin;
     }
 
     public long getCodi() {
@@ -90,6 +94,24 @@ public class Usuari implements Serializable{
     public void setPasswd(String passwd) {
         this.passwd = passwd;
     }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+    
+    
 
     @Override
     public String toString() {
