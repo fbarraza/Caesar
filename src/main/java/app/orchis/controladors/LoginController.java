@@ -233,7 +233,12 @@ public class LoginController implements Initializable{
                     try{
                         //Iniciar app principal
                         _manager.close();
-                        iniciarPrincipal(user);
+                        if(config.checkMonth(user)){
+                            
+                        }
+                        else{
+                            iniciarPrincipal(user);
+                        }
                     }catch(IOException e){
                         System.out.println("No s'ha trobat el fitxer de la pantalla principal");
                     }catch(Exception e){
