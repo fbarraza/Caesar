@@ -7,6 +7,11 @@ and open the template in the editor.
     Created on : 03/11/2017, 16:38:18
     Author     : m15
 */
+/* FONT DE L'APLICACIÓ */
+@font-face{
+    -fx-font-family: Quesha;
+    -fx-src: url(../fonts/quesha.ttf);
+}
 
 /*INICI PANELLS PRINCIPALS*/
 #MainAnchor, #MainPane{
@@ -15,34 +20,45 @@ and open the template in the editor.
 /* FI PANELLS PRINCIPALS */
 
 /* INICI COMPORTAMENT BARRA DE MENÚS, BOTONS, I MENÚS DE INTERFÍCIE */
-MenuBarButton:active, MenuBarButton:hover, MenuBarButton:pressed, MenuBarButton:focus, MenuBarButton:showing{
-    -fx-background-color: #ababab;
-}
-#MenuItem:active, #MenuItem:hover, #MenuItem:pressed, #MenuItem:focus, #MenuItem:showing{
+#MenuBarButton:active, #MenuBarButton:hover, #MenuBarButton:pressed, #MenuBarButton:focus, #MenuBarButton:showing, #MenuBarButton:inactive, MenuBarButton:armed{
     -fx-background-color: #bababa;
+    -fx-font-family: Quesha;
+}
+
+#MenuItem{
+   -fx-font-family: Quesha;
+   -fx-background-color: #ededed;
+   -fx-text-fill: #000000;
+}
+
+#MenuItem:active, #MenuItem:hover, #MenuItem:pressed, #MenuItem:focus, #MenuItem:showing, #MenuItem:inactive, #MenuItem:armed{
+    -fx-background-color: #bababa;
+    -fx-text-fill: black;
 }
 /* FI COMPORTAMENT BARRA DE MENÚS, BOTONS, I MENÚS DE INTERFÍCIE */
 
 /* ALINEACIÓ TEXT BOTONS LOGIN */
 #buttonLogin{
     -fx-align-content: "center";
+    -fx-font-family: Quesha;
 }
 
 /* TEXT CORPORATIU 'M15'*/
 .corp{ 
-    -fx-font-size: "40px";
-    -fx-style: "Bold";
-    -fx-font-family: "DejaVu Sans";
+    -fx-font-size: 40px;
+    -fx-style: Bold;
+    -fx-font-family: Quesha;
     -fx-opacity: 0.7;
 }
 
 /* TEXT D'ERROR, LOGIN */
 #showerr{ 
     -fx-fill:#990000;
+    -fx-font-family: url('resources/fonts/quesha.ttf');
 }
 
 /* MIDA DE TOTES LES ICONES */
-.icon{ /*TOTES LES ICONES */
+#icon{
     -fx-width: "16px";
     -fx-height: "16px";
     -fx-fit-width: "16px";
