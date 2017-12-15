@@ -82,6 +82,7 @@ public class MainMenuController implements Initializable{
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.DECORATED);
             stage.setScene(new Scene(root));
+            stage.setTitle("Configuració Admin");
             stage.show();
 
         } catch (IOException ex) {

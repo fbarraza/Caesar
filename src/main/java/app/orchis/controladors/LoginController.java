@@ -182,7 +182,7 @@ public class LoginController implements Initializable{
         //Iniciar nova finestra i RIP login.
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
-        stage.setTitle("Sobre l'aplicació");
+        stage.setTitle("Menú Principal");
         stage.initModality(Modality.NONE);
         stage.setOnHiding( event -> {emf.close();} );
         //emf.close();
