@@ -38,6 +38,9 @@ public class MainMenuController implements Initializable{
     @FXML private MenuItem adminConfig;
     @FXML private Menu adminSettings;
     
+    //@FXML private Label usuariActual;
+    //@FXML private Label server;
+        
     //Vars programa
     private static Usuari user = new Usuari();
     private static Configuracio config;
@@ -47,6 +50,7 @@ public class MainMenuController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
             adminTool();
+            
         });
     }
     
@@ -82,6 +86,7 @@ public class MainMenuController implements Initializable{
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.DECORATED);
             stage.setScene(new Scene(root));
+            stage.setTitle("Configuració Admin");
             stage.show();
 
         } catch (IOException ex) {

@@ -6,6 +6,9 @@
 package app.orchis.model;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -16,6 +19,8 @@ import javax.persistence.Table;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -71,6 +76,31 @@ public class Configuracio implements Serializable {
         Configuracio config = (Configuracio) query.getSingleResult();
         return config.getIntents();
     }    
+    
+    public boolean checkMonth(Usuari user){
+        //Variables
+        int diffYear;
+        int mesos;
+        Date date = new Date();
+        
+        //Programa
+        //Càlcul de mesos
+        Calendar startCalendar = new GregorianCalendar();
+        startCalendar.setTime(user.getData());
+        Calendar endCalendar = new GregorianCalendar();
+        endCalendar.setTime(date);
+        
+        diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+        mesos = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+        
+        //Retornar si han passat més de 6 mesos
+        if(mesos>this.caducitat){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     
     //GETTERS AND SETTERS
     public int getCodi() {
