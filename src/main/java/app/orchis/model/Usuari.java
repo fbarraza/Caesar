@@ -5,7 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 //import java.util.Date;
@@ -111,6 +115,15 @@ public class Usuari implements Serializable{
         this.admin = admin;
     }
     
+    public Date getAvui() throws ParseException{
+        Date data = Calendar.getInstance().getTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String avui = format.format(data);     
+
+        data = format.parse(avui);
+        
+        return data;
+    }
     
 
     @Override
