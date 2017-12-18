@@ -84,12 +84,15 @@ public class Configuracio implements Serializable {
         Date date = new Date();
         
         //Programa
-        //Càlcul de mesos
+        //Càlcul de mesos - Data usuari
         Calendar startCalendar = new GregorianCalendar();
         startCalendar.setTime(user.getData());
+        
+        //Data avui
         Calendar endCalendar = new GregorianCalendar();
         endCalendar.setTime(date);
         
+        //Càlcul data
         diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
         mesos = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
         
