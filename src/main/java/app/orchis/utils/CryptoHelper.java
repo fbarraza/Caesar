@@ -19,7 +19,6 @@ public class CryptoHelper {
     }
 
     public static boolean testPassword (String bbdd, String encriptat) {
-
         if (encriptat.equals(bbdd))
             return true;
         else
