@@ -14,10 +14,16 @@ and open the template in the editor.
 }
 
 /*INICI PANELLS PRINCIPALS*/
-#MainAnchor, #MainPane{
- -fx-background-color: #bbbbbb;
+#MainAnchor, #MainPane, #MainTPanel{
+ -fx-background-color: #cccccc;
 }
 /* FI PANELLS PRINCIPALS */
+
+/* INICI PANELLS SECUNDARIS */
+#MainHBox, #MainSplit{
+ -fx-background-color: #dddddd;
+}
+
 
 /* INICI COMPORTAMENT BARRA DE MENÚS, BOTONS, I MENÚS DE INTERFÍCIE */
 #MenuBarButton:active, #MenuBarButton:hover, #MenuBarButton:pressed, #MenuBarButton:focus, #MenuBarButton:showing, #MenuBarButton:inactive, MenuBarButton:armed{
