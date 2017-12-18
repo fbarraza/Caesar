@@ -5,7 +5,6 @@
  */
 package app.orchis.controladors;
 
-import app.orchis.model.Configuracio;
 import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.CryptoHelper.encripta;
@@ -32,9 +31,9 @@ import javax.persistence.criteria.Root;
 public class AltaGenericController implements Initializable{
     
     //Vars Controller
-    Usuari user = new Usuari();
-    EntityManagerFactory emf;
-    char opc;
+    private Usuari user = new Usuari();
+    private EntityManagerFactory emf;
+    private char opc;
     
     //Vars FXML
     @FXML Button btAfegir;
@@ -102,14 +101,14 @@ public class AltaGenericController implements Initializable{
         manager.getTransaction().commit();        
     }
     
-    private void inserirUsuari() throws ParseException{
+    private void crearUsuari() throws ParseException{
         //Variables
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
 
         //Obtenim les dades de l'usuari
         Usuari user = new Usuari();
-        user.setCodi(Integer.parseInt(tfId.getText()));
+        //user.setCodi(Integer.parseInt(tfId.getText()));
         user.setNom(tfNom.getText());
         user.setPasswd(encripta(tfPasswd.getText()));
         user.setBloquejat(cbBloqueig.isSelected());
@@ -121,7 +120,7 @@ public class AltaGenericController implements Initializable{
         em.persist(user);
         em.getTransaction().commit();   
         
-        info("Usuari introduit satisfactòriament");
+        info("Usuari introduït satisfactòriament");
         
     }
     
