@@ -72,6 +72,23 @@ public class MainMenuController implements Initializable{
             adminSettings.setDisable(true);
         }
     }
+    
+    @FXML private void obrirAltaUsuari() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaUsuaris.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaUsuarisController controller = fxmlLoader.<AltaUsuarisController>getController();
+
+        //Vars
+        controller.setEntity(emf);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Usuaris");
+        stage.show();        
+        
+    }
     @FXML
     private void obrirConfig() throws IOException{
         try {
