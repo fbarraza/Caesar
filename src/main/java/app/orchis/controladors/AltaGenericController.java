@@ -5,7 +5,9 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.Configuracio;
 import app.orchis.model.Usuari;
+import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.CryptoHelper.encripta;
 import java.net.URL;
 import java.text.ParseException;
@@ -19,6 +21,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -59,6 +64,7 @@ public class AltaGenericController implements Initializable{
             case 'm':
                 btModificar.setVisible(true);
                 btModificar.setDisable(false);
+                carregarUsuari();
                 break;
                 
             default:
@@ -77,7 +83,23 @@ public class AltaGenericController implements Initializable{
     }
     
     private void modificarUsuari(){
-        
+        //Creació Entity Manager i del CB
+        EntityManager manager = emf.createEntityManager();
+        CriteriaBuilder cb = emf.getCriteriaBuilder();
+        CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
+        Root<Usuari> c = update.from(Usuari.class);
+
+        //Sentència SQL        
+        update.set("nom", tfNom.getText());
+        update.set("bloquejat", cbBloqueig.isSelected());
+        update.set("login", tfLogin.getText());
+        update.set("admin", cbAdmin.isSelected());
+        update.where(cb.equal(c.get("id"), Integer.parseInt(tfId.getText())));  
+
+        //Actualitzar BBDD
+        manager.getTransaction().begin();
+        manager.createQuery(update).executeUpdate();
+        manager.getTransaction().commit();        
     }
     
     private void inserirUsuari() throws ParseException{
@@ -97,7 +119,9 @@ public class AltaGenericController implements Initializable{
 
         //Afegim usuari a la base de dades
         em.persist(user);
-        em.getTransaction().commit();    
+        em.getTransaction().commit();   
+        
+        info("Usuari introduit satisfactòriament");
         
     }
     
@@ -117,5 +141,12 @@ public class AltaGenericController implements Initializable{
     public void setEmf(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    
+
+    public char getOpc() {
+        return opc;
+    }
+
+    public void setOpc(char opc) {
+        this.opc = opc;
+    }
 }

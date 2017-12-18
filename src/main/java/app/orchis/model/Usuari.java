@@ -125,6 +125,10 @@ public class Usuari implements Serializable{
         return data;
     }
     
+    public void actualitzarBloqueig(){
+        
+    }
+    
 
     @Override
     public String toString() {

@@ -38,9 +38,8 @@ import javax.persistence.EntityManagerFactory;
  */
 public class AltaUsuarisController implements Initializable{
     
-    //Variables
+    //Variables FXML
     @FXML private TextField tfNom;
-
     @FXML private TableView<Usuari> tvUsuaris;
     @FXML private TableColumn<Usuari, Integer> colId;
     @FXML private TableColumn<Usuari, String> colNom;
@@ -49,7 +48,9 @@ public class AltaUsuarisController implements Initializable{
     @FXML private TableColumn<Usuari, Boolean> colBloqueig;
     @FXML private TableColumn<Usuari, Boolean> colAdmin;
 
+    //Variables Programa
     private EntityManagerFactory emf;
+    private Usuari user;
     
     
     @Override
@@ -88,9 +89,7 @@ public class AltaUsuarisController implements Initializable{
             tvUsuaris.getItems().clear();
         tvUsuaris.getItems().setAll(getUsuaris());
         inicialitzaTaula();
-    }
-    
-    
+    } 
     
     private void inicialitzaTaula() {
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).
@@ -149,22 +148,49 @@ public class AltaUsuarisController implements Initializable{
         if (emf.isOpen())
             emf.close();
     }    
+    
+    private void obrirCrear() throws IOException{
+        char opt = 'c';
+        obrirGeneric(opt);
+    }    
+    
+    private void obrirModif() throws IOException{
+        char opt = 'm';
+        obrirGeneric(opt);
+    }
+    
+    private void obrirGeneric(char opt) throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaGeneric.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaGenericController controller = fxmlLoader.<AltaGenericController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        controller.setOpc(opt);
+        if(opt == 'm') controller.setUser(user);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Usuaris");
+        stage.show();    
+    }    
 
     /**
      * Getters & Setters
      **/
-
     private List<Usuari> getUsuaris() {
         EntityManager manager = emf.createEntityManager();
         List<Usuari> llista = (List<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
         manager.close();
         return llista;
     }
-    public EntityManagerFactory getEmf() {
+    public EntityManagerFactory getEntity() {
         return emf;
     }
 
-    public void setEmf(EntityManagerFactory emf) {
+    public void setEntity(EntityManagerFactory emf) {
         this.emf = emf;
     }
     
