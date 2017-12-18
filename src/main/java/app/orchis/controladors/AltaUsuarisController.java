@@ -167,7 +167,10 @@ public class AltaUsuarisController implements Initializable{
         //Vars
         controller.setEmf(emf);
         controller.setOpc(opt);
-        if(opt == 'm') controller.setUser(user);
+        if(opt == 'm'){
+            user = tvUsuaris.getSelectionModel().getSelectedItem();
+            controller.setUser(user);
+        }
 
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
