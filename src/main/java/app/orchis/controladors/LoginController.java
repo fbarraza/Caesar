@@ -104,6 +104,11 @@ public class LoginController implements Initializable{
         bloqueigApp();
     }
     
+    protected void canviarContrasenya(Usuari user){
+        /*tfInfo.setText("L'usuari està bloquejat! No el pots fer servir fins que l'admin el desbloquegi.");
+        bloqueigApp();*/
+    }    
+    
     /**
      * Manager d'intents a executar si l'usuari introduït no existeix
      * @param username /Nom usuari
@@ -234,7 +239,7 @@ public class LoginController implements Initializable{
                         //Iniciar app principal
                         _manager.close();
                         if(config.checkMonth(user)){
-                            
+                            canviarContrasenya(user);
                         }
                         else{
                             iniciarPrincipal(user);

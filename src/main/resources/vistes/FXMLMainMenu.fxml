@@ -167,7 +167,7 @@
             </Menu>
             <Menu id="MenuBarButton" fx:id="adminSettings" mnemonicParsing="false" text="ADMIN">
                <items>
-                  <MenuItem id="MenuItem" mnemonicParsing="false" text="Alta d'usuaris">
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaUsuari" text="Alta d'usuaris">
                      <graphic>
                         <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
                            <image>

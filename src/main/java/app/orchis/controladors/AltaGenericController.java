@@ -36,14 +36,14 @@ public class AltaGenericController implements Initializable{
     private char opc;
     
     //Vars FXML
-    @FXML Button btAfegir;
-    @FXML Button btModificar;
-    @FXML TextField tfId;
-    @FXML TextField tfNom;
-    @FXML PasswordField tfPasswd;
-    @FXML CheckBox cbBloqueig;
-    @FXML TextField tfLogin;
-    @FXML CheckBox cbAdmin;
+    @FXML private Button btAfegir;
+    @FXML private Button btModificar;
+    @FXML private TextField tfId;
+    @FXML private TextField tfNom;
+    @FXML private PasswordField tfPasswd;
+    @FXML private CheckBox cbBloqueig;
+    @FXML private TextField tfLogin;
+    @FXML private CheckBox cbAdmin;
     
     
     @Override

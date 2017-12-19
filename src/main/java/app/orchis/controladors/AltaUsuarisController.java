@@ -6,6 +6,7 @@
 package app.orchis.controladors;
 
 import app.orchis.model.Usuari;
+import static app.orchis.utils.Alertes.info;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
@@ -31,6 +32,10 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -41,25 +46,24 @@ public class AltaUsuarisController implements Initializable{
     //Variables FXML
     @FXML private TextField tfNom;
     @FXML private TableView<Usuari> tvUsuaris;
-    @FXML private TableColumn<Usuari, Integer> colId;
+    @FXML private TableColumn<Usuari, Integer> colCodi;
     @FXML private TableColumn<Usuari, String> colNom;
     @FXML private TableColumn<Usuari, String> colLogin;
     @FXML private TableColumn<Usuari, Date> colData;
-    @FXML private TableColumn<Usuari, Boolean> colBloqueig;
+    @FXML private TableColumn<Usuari, Boolean> colBloquejat;
     @FXML private TableColumn<Usuari, Boolean> colAdmin;
 
     //Variables Programa
     private EntityManagerFactory emf;
-    private Usuari user;
+    private Usuari usuari;
     
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         configuraColumnes();
-        /*Platform.runLater(() -> {
-            adminTool();
-            For later
-        });*/
+        Platform.runLater(() -> {
+            actualitzaTaula();   
+        });
     }   
     
     @FXML
@@ -68,21 +72,7 @@ public class AltaUsuarisController implements Initializable{
         goTableItem(0);
     }
     
-    @FXML
-    protected void mnuSobreOnAction (ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SobreFXML.fxml"));
-            Parent root = (Parent) loader.load();
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.DECORATED);
-            stage.setScene(new Scene(root));
-            stage.show();
 
-        } catch (IOException ex) {
-            //Logger.getLogger(DataGridLayoutController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     private void actualitzaTaula() {
         if (!tvUsuaris.getItems().isEmpty())
@@ -128,11 +118,11 @@ public class AltaUsuarisController implements Initializable{
     
     
     private void configuraColumnes() {
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colCodi.setCellValueFactory(new PropertyValueFactory<>("codi"));
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
         colLogin.setCellValueFactory(new PropertyValueFactory<>("login"));
         colData.setCellValueFactory(new PropertyValueFactory<>("data"));
-        colBloqueig.setCellValueFactory(new PropertyValueFactory<>("bloqueig"));
+        colBloquejat.setCellValueFactory(new PropertyValueFactory<>("bloquejat"));
         colAdmin.setCellValueFactory(new PropertyValueFactory<>("admin"));
     }
 
@@ -141,22 +131,42 @@ public class AltaUsuarisController implements Initializable{
         tvUsuaris.scrollTo(row);
         tvUsuaris.getSelectionModel().select(row);
         tvUsuaris.getFocusModel().focus(row);
-    }
+    }  
     
-    
-    private void tancaBBDD() {
-        if (emf.isOpen())
-            emf.close();
-    }    
-    
+    @FXML
     private void obrirCrear() throws IOException{
         char opt = 'c';
         obrirGeneric(opt);
     }    
     
+    @FXML
     private void obrirModif() throws IOException{
         char opt = 'm';
         obrirGeneric(opt);
+    }
+    
+    @FXML
+    private void eliminarUsuari(){
+            //Creació Entity Manager i del CB
+            EntityManager manager = emf.createEntityManager();
+            CriteriaBuilder cb = emf.getCriteriaBuilder();
+            CriteriaDelete<Usuari> delete = cb.createCriteriaDelete(Usuari.class);                        
+            Root<Usuari> c = delete.from(Usuari.class);
+            
+            //Sentència SQL
+            getSeleccionat();
+            delete.where(cb.equal(c.get("codi"), usuari.getCodi()));
+            
+            //Actualitzar BBDD
+            manager.getTransaction().begin();
+            manager.createQuery(delete).executeUpdate();
+            manager.getTransaction().commit();  
+            
+            //Notificar
+            info("Usuari eliminat!");
+            
+            //Recarregar taula
+            actualitzaTaula();
     }
     
     private void obrirGeneric(char opt) throws IOException{
@@ -168,8 +178,8 @@ public class AltaUsuarisController implements Initializable{
         controller.setEmf(emf);
         controller.setOpc(opt);
         if(opt == 'm'){
-            user = tvUsuaris.getSelectionModel().getSelectedItem();
-            controller.setUser(user);
+            getSeleccionat();
+            controller.setUser(usuari);
         }
 
         Stage stage = new Stage();
@@ -195,6 +205,10 @@ public class AltaUsuarisController implements Initializable{
 
     public void setEntity(EntityManagerFactory emf) {
         this.emf = emf;
+    }
+    
+    private void getSeleccionat(){
+        this.usuari = tvUsuaris.getSelectionModel().getSelectedItem();
     }
     
     

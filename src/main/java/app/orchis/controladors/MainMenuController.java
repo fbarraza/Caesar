@@ -101,7 +101,7 @@ public class MainMenuController implements Initializable{
             
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.DECORATED);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root));
             stage.setTitle("Configuració Admin");
             stage.show();
