@@ -44,6 +44,7 @@ public class AltaGenericController implements Initializable{
     private Usuari user = new Usuari();
     private EntityManagerFactory emf;
     private char opc;
+    private String passwd;
     
     //Vars FXML
     @FXML private Button btAfegir;
@@ -138,7 +139,12 @@ public class AltaGenericController implements Initializable{
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root));
             stage.setTitle("Introduir contrasenya");
+            
+            stage.setOnHiding(event -> {
+                user.setPasswd(controller.getPasswd());
+            });
             stage.showAndWait();
+            
     }
     
     @FXML
@@ -148,10 +154,11 @@ public class AltaGenericController implements Initializable{
         em.getTransaction().begin();
 
         //Obtenim les dades de l'usuari
-        Usuari user = new Usuari();
+        //Usuari user = new Usuari();
         //user.setCodi(Integer.parseInt(tfId.getText()));
         
         if(!comprovaCamp(tfNom)){
+            
             user.setNom(tfNom.getText());
             carregaPasswd();
             user.setBloquejat(cbBloqueig.isSelected());
@@ -162,10 +169,12 @@ public class AltaGenericController implements Initializable{
                 user.setAdmin(cbAdmin.isSelected());
                 
                 //Afegim usuari a la base de dades
+                
                 em.persist(user);
                 em.getTransaction().commit();   
-        
-        info("Usuari introduït satisfactòriament");                
+                
+                
+                info("Usuari introduït satisfactòriament");                
             }
             else{
                 lbInfo.setText("Falta el nom de l'usuari! (login) ");    
@@ -211,5 +220,7 @@ public class AltaGenericController implements Initializable{
         this.opc = opc;
     }
     
-    
+    public void setPasswd(String passwd){
+        this.passwd = passwd;
+    }
 }

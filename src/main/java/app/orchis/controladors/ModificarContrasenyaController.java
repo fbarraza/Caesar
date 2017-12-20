@@ -49,6 +49,12 @@ public class ModificarContrasenyaController implements Initializable{
     private Usuari user;
     private EntityManagerFactory emf;
     private char opc;
+    
+    private String passwd;
+
+    public String getPasswd() {
+        return passwd;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -82,15 +88,19 @@ public class ModificarContrasenyaController implements Initializable{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaGeneric.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AltaGenericController controller = fxmlLoader.<AltaGenericController>getController();
-        
-        controller.getUser().setPasswd(encripta(pfNou.getText()));
+        System.out.println();
+        controller.setPasswd(encripta(pfNou2.getText()));
         info("Contrasenya afegida!");
     }
     
     @FXML
     private void tencarFinestra(){
         Stage secondaryStage = (Stage)Panel.getScene().getWindow();
+        
+        this.passwd = pfNou2.getText();
+        
         secondaryStage.close();
+        
     }
     
     @FXML
