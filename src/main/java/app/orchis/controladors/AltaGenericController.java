@@ -7,6 +7,7 @@ package app.orchis.controladors;
 
 import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
+import static app.orchis.utils.Alertes.sortir;
 import static app.orchis.utils.CryptoHelper.encripta;
 import java.io.IOException;
 import java.net.URL;
@@ -19,6 +20,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -46,12 +48,14 @@ public class AltaGenericController implements Initializable{
     //Vars FXML
     @FXML private Button btAfegir;
     @FXML private Button btModificar;
+    @FXML private Button btSortir;
     @FXML private TextField tfId;
     @FXML private TextField tfNom;
     @FXML private PasswordField tfPasswd;
     @FXML private CheckBox cbBloqueig;
     @FXML private TextField tfLogin;
     @FXML private CheckBox cbAdmin;
+    @FXML private Label lbId;
     @FXML private Label lbInfo;
     
     
@@ -67,6 +71,8 @@ public class AltaGenericController implements Initializable{
             case 'c':
                 btAfegir.setVisible(true);
                 btAfegir.setDisable(false);
+                tfId.setVisible(false);
+                lbId.setVisible(false);
                 break;
             
             case 'm':
@@ -121,17 +127,22 @@ public class AltaGenericController implements Initializable{
     
     private void carregaPasswd() throws IOException{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
-            Parent root = (Parent) fxmlLoader.load();                        
+            Parent root = (Parent) fxmlLoader.load();   
+            ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
+            
+            //
+            controller.setOpc('a');
             
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root));
             stage.setTitle("Introduir contrasenya");
-            stage.show();
+            stage.showAndWait();
     }
     
-    private void crearUsuari() throws ParseException{
+    @FXML
+    private void crearUsuari() throws ParseException, IOException{
         //Variables
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
@@ -140,28 +151,40 @@ public class AltaGenericController implements Initializable{
         Usuari user = new Usuari();
         //user.setCodi(Integer.parseInt(tfId.getText()));
         
-        if(comprovaCamp(tfNom)){
-            lbInfo.setText("T'has oblidat del nom d'usuari!");
-        }
-        
-        else{
+        if(!comprovaCamp(tfNom)){
             user.setNom(tfNom.getText());
+            carregaPasswd();
+            user.setBloquejat(cbBloqueig.isSelected());
             
+            if(!comprovaCamp(tfLogin)){
+                user.setLogin(tfLogin.getText());
+                user.setData(user.getAvui());
+                user.setAdmin(cbAdmin.isSelected());
+                
+                //Afegim usuari a la base de dades
+                em.persist(user);
+                em.getTransaction().commit();   
+        
+        info("Usuari introduït satisfactòriament");                
+            }
+            else{
+                lbInfo.setText("Falta el nom de l'usuari! (login) ");    
+            }
+        }       
+        else{
+            lbInfo.setText("Falta el nom real de l'usuari!");            
         }
-        
-        user.setPasswd(encripta(tfPasswd.getText()));
-        user.setBloquejat(cbBloqueig.isSelected());
-        user.setLogin(tfLogin.getText());
-        user.setData(user.getAvui());
-        user.setAdmin(cbAdmin.isSelected());
-
-        //Afegim usuari a la base de dades
-        em.persist(user);
-        em.getTransaction().commit();   
-        
-        info("Usuari introduït satisfactòriament");
         
     }
+    
+    @FXML
+    protected void sortirAction() {
+        if (sortir() == ButtonType.YES) {
+            //Tanca la finestra actual
+            Stage stage = (Stage) btSortir.getScene().getWindow();
+            stage.close();
+        }
+    }    
     
     
     //Getters and Setters
@@ -187,4 +210,6 @@ public class AltaGenericController implements Initializable{
     public void setOpc(char opc) {
         this.opc = opc;
     }
+    
+    
 }

@@ -184,7 +184,8 @@ public class AltaUsuarisController implements Initializable{
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(new Scene(root));
         stage.setTitle("Alta Usuaris");
-        stage.show();    
+        stage.showAndWait();
+        actualitzaTaula();
     }    
 
     /**

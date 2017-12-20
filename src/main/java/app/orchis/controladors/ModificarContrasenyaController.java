@@ -37,9 +37,9 @@ public class ModificarContrasenyaController implements Initializable{
     
     //Vars FXML
     @FXML private AnchorPane Panel;
-    @FXML private PasswordField tfOld;
-    @FXML private PasswordField tfNou;
-    @FXML private PasswordField tfNou2;
+    @FXML private PasswordField pfAnterior;
+    @FXML private PasswordField pfNou;
+    @FXML private PasswordField pfNou2;
     @FXML private Button btAfegir;
     @FXML private Button btModificar;
     @FXML private Label lbNotif;
@@ -59,16 +59,18 @@ public class ModificarContrasenyaController implements Initializable{
     
     private void inicialitzaGeneric(){
         if(opc=='a'){
-            tfOld.setVisible(false);
-            btModificar.setVisible(false);
+            btAfegir.setVisible(true);
+            pfAnterior.setVisible(false);
+            lbAnterior.setVisible(false);
         }
         else{
-            btAfegir.setVisible(true);
+            btModificar.setVisible(true);
         }
     }
     
+    @FXML
     private void comprovaVella() throws IOException{
-        if(encripta(tfOld.getText()).equals(user.getPasswd())){
+        if(encripta(pfAnterior.getText()).equals(user.getPasswd())){
            comprovaNoves(); 
         }
         else{
@@ -79,19 +81,21 @@ public class ModificarContrasenyaController implements Initializable{
     private void retornaContrassenya() throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaGeneric.fxml"));
         Parent root = (Parent) fxmlLoader.load();
-        AltaUsuarisController controller = fxmlLoader.<AltaUsuarisController>getController();
+        AltaGenericController controller = fxmlLoader.<AltaGenericController>getController();
         
-        controller.getUsuari().setPasswd(encripta(tfNou.getText()));
+        controller.getUser().setPasswd(encripta(pfNou.getText()));
         info("Contrasenya afegida!");
     }
     
+    @FXML
     private void tencarFinestra(){
         Stage secondaryStage = (Stage)Panel.getScene().getWindow();
         secondaryStage.close();
     }
     
+    @FXML
     private void comprovaNoves() throws IOException{
-        if(tfNou.getText().equals(tfNou2.getText())){
+        if(pfNou.getText().equals(pfNou2.getText())){
             if(opc == 'a'){
                 retornaContrassenya();
                 tencarFinestra();
@@ -114,7 +118,7 @@ public class ModificarContrasenyaController implements Initializable{
             
             
             //Sentència SQL
-            update.set("password", encripta(tfNou2.getText()));
+            update.set("password", encripta(pfNou2.getText()));
             update.where(cb.equal(c.get("login"), user.getLogin()));  
             
             //Actualitzar BBDD
@@ -122,7 +126,7 @@ public class ModificarContrasenyaController implements Initializable{
             manager.createQuery(update).executeUpdate();
             manager.getTransaction().commit();     
             
-            info("Conteasenya actualitzada!");
+            info("Contrasenya actualitzada!");
     }
 
     //Getters and Setters
