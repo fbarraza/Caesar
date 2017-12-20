@@ -8,10 +8,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="MainAnchor" fx:id="Panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="374.0" prefWidth="393.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.SettingsAdminController">
+<AnchorPane id="MainAnchor" fx:id="Panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="374.0" prefWidth="393.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.SettingsAdminController">
    <children>
       <TextField id="tfID" fx:id="tfID" layoutX="164.0" layoutY="110.0" prefHeight="26.0" prefWidth="192.0" promptText="Número d'indentificació" stylesheets="@../estils/estil.css" />
-      <Button id="buttonLogin" fx:id="btAccio" layoutX="43.0" layoutY="301.0" mnemonicParsing="false" onAction="#accioAction" prefHeight="32.0" prefWidth="131.0" stylesheets="@../estils/estil.css" text="Accio" />
+      <Button id="buttonLogin" fx:id="btAfegir" layoutX="43.0" layoutY="301.0" mnemonicParsing="false" onAction="#crearUsuari" prefHeight="32.0" prefWidth="131.0" stylesheets="@../estils/estil.css" text="Afegir" />
+      <Button id="buttonLogin" fx:id="btAccio1" layoutX="43.0" layoutY="301.0" mnemonicParsing="false" onAction="#accioAction" prefHeight="32.0" prefWidth="131.0" stylesheets="@../estils/estil.css" text="Modificar" />
       <Button id="buttonLogin" fx:id="btSortir" layoutX="222.0" layoutY="301.0" mnemonicParsing="false" onAction="#sortirAction" prefHeight="32.0" prefWidth="131.0" stylesheets="@../estils/estil.css" text="Sortir" />
       <Label layoutX="128.0" layoutY="115.0" text="ID" />
       <Label layoutX="112.0" layoutY="156.0" text="Nom" />
@@ -25,5 +26,6 @@
       <CheckBox fx:id="cbBloquejat" layoutX="165.0" layoutY="195.0" mnemonicParsing="false" />
       <CheckBox fx:id="cbAdmin" layoutX="165.0" layoutY="234.0" mnemonicParsing="false" />
       <Label layoutX="104.0" layoutY="234.0" text="Admin" />
+      <Label fx:id="lbInfo" layoutX="94.0" layoutY="271.0" />
    </children>
 </AnchorPane>

@@ -7,14 +7,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="MainAnchor" fx:id="Panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="454.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.LoginController">
+<AnchorPane id="MainAnchor" fx:id="Panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="454.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.LoginController">
    <children>
       <Text id="corp" layoutX="43.0" layoutY="59.12890625" strokeType="OUTSIDE" strokeWidth="0.0" text="M15" wrappingWidth="95.46875">
          <font>
             <Font name="DejaVu Sans Bold" size="40.0" />
          </font>
       </Text>
-      <Label layoutX="34.0" layoutY="111.0" text="Contrasenya anterior">
+      <Label fx:id="lbAnterior" layoutX="34.0" layoutY="111.0" text="Contrasenya anterior">
          <font>
             <Font size="15.0" />
          </font>
@@ -32,7 +32,9 @@
          </font>
       </Label>
       <TextField layoutX="211.0" layoutY="201.0" prefHeight="26.0" prefWidth="212.0" promptText="Modificar Contrassenya" />
-      <Button fx:id="btCanviar" layoutX="52.0" layoutY="279.0" mnemonicParsing="false" prefHeight="69.0" prefWidth="108.0" text="Canviar" />
-      <Button fx:id="btSortir" layoutX="263.0" layoutY="279.0" mnemonicParsing="false" prefHeight="69.0" prefWidth="108.0" text="Sortir" />
+      <Button fx:id="btModificar" layoutX="52.0" layoutY="279.0" mnemonicParsing="false" onAction="#comprovaVella" prefHeight="69.0" prefWidth="108.0" text="Canviar" />
+      <Button fx:id="btAfegir" layoutX="52.0" layoutY="279.0" mnemonicParsing="false" onAction="#comprovaNoves" prefHeight="69.0" prefWidth="108.0" text="Afegir" />
+      <Button fx:id="btSortir" layoutX="263.0" layoutY="279.0" mnemonicParsing="false" onAction="#sortir" prefHeight="69.0" prefWidth="108.0" text="Sortir" />
+      <Label fx:id="lbInfo" layoutX="96.0" layoutY="242.0" />
    </children>
 </AnchorPane>

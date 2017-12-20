@@ -8,16 +8,24 @@ package app.orchis.controladors;
 import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.CryptoHelper.encripta;
+import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -44,6 +52,7 @@ public class AltaGenericController implements Initializable{
     @FXML private CheckBox cbBloqueig;
     @FXML private TextField tfLogin;
     @FXML private CheckBox cbAdmin;
+    @FXML private Label lbInfo;
     
     
     @Override
@@ -101,6 +110,27 @@ public class AltaGenericController implements Initializable{
         manager.getTransaction().commit();        
     }
     
+    private boolean comprovaCamp(TextField field){
+        if(field.getText().isEmpty()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    private void carregaPasswd() throws IOException{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
+            Parent root = (Parent) fxmlLoader.load();                        
+            
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(root));
+            stage.setTitle("Introduir contrasenya");
+            stage.show();
+    }
+    
     private void crearUsuari() throws ParseException{
         //Variables
         EntityManager em = emf.createEntityManager();
@@ -109,7 +139,16 @@ public class AltaGenericController implements Initializable{
         //Obtenim les dades de l'usuari
         Usuari user = new Usuari();
         //user.setCodi(Integer.parseInt(tfId.getText()));
-        user.setNom(tfNom.getText());
+        
+        if(comprovaCamp(tfNom)){
+            lbInfo.setText("T'has oblidat del nom d'usuari!");
+        }
+        
+        else{
+            user.setNom(tfNom.getText());
+            
+        }
+        
         user.setPasswd(encripta(tfPasswd.getText()));
         user.setBloquejat(cbBloqueig.isSelected());
         user.setLogin(tfLogin.getText());

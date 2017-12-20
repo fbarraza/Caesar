@@ -6,15 +6,23 @@
 package app.orchis.controladors;
 
 import app.orchis.model.Usuari;
+import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.CryptoHelper.encripta;
+import java.awt.Panel;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -28,34 +36,72 @@ import javax.persistence.criteria.Root;
 public class ModificarContrasenyaController implements Initializable{
     
     //Vars FXML
-    @FXML PasswordField tfOld;
-    @FXML PasswordField tfNou;
-    @FXML PasswordField tfNou2;
-    @FXML Label notif;
+    @FXML private AnchorPane Panel;
+    @FXML private PasswordField tfOld;
+    @FXML private PasswordField tfNou;
+    @FXML private PasswordField tfNou2;
+    @FXML private Button btAfegir;
+    @FXML private Button btModificar;
+    @FXML private Label lbNotif;
+    @FXML private Label lbAnterior;
     
     //Vars
     private Usuari user;
     private EntityManagerFactory emf;
+    private char opc;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        Platform.runLater(() -> {
+            inicialitzaGeneric();
+        });        
     }      
     
-    private void comprovaVella(){
+    private void inicialitzaGeneric(){
+        if(opc=='a'){
+            tfOld.setVisible(false);
+            btModificar.setVisible(false);
+        }
+        else{
+            btAfegir.setVisible(true);
+        }
+    }
+    
+    private void comprovaVella() throws IOException{
         if(encripta(tfOld.getText()).equals(user.getPasswd())){
            comprovaNoves(); 
         }
         else{
-            notif.setText("La contrassenya antiga no coincideix!");
+            lbNotif.setText("La contrasenya antiga no coincideix!");
         }
     }
     
-    private void comprovaNoves(){
+    private void retornaContrassenya() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaGeneric.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaUsuarisController controller = fxmlLoader.<AltaUsuarisController>getController();
+        
+        controller.getUsuari().setPasswd(encripta(tfNou.getText()));
+        info("Contrasenya afegida!");
+    }
+    
+    private void tencarFinestra(){
+        Stage secondaryStage = (Stage)Panel.getScene().getWindow();
+        secondaryStage.close();
+    }
+    
+    private void comprovaNoves() throws IOException{
         if(tfNou.getText().equals(tfNou2.getText())){
-            actualitzaPasswd();
+            if(opc == 'a'){
+                retornaContrassenya();
+                tencarFinestra();
+            }
+            else{
+                actualitzaPasswd();
+            }
         }
         else{
-            notif.setText("La nova contrassenya no coincideix!");
+            lbNotif.setText("Les contrasenyes no coincideixen!");
         }
     }
     
@@ -74,7 +120,9 @@ public class ModificarContrasenyaController implements Initializable{
             //Actualitzar BBDD
             manager.getTransaction().begin();
             manager.createQuery(update).executeUpdate();
-            manager.getTransaction().commit();        
+            manager.getTransaction().commit();     
+            
+            info("Conteasenya actualitzada!");
     }
 
     //Getters and Setters
@@ -94,5 +142,11 @@ public class ModificarContrasenyaController implements Initializable{
         this.emf = emf;
     }
     
-    
+    public char getOpc() {
+        return opc;
+    }
+
+    public void setOpc(char opc) {
+        this.opc = opc;
+    }    
 }

@@ -12,8 +12,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -34,7 +32,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
 /**
@@ -210,7 +207,13 @@ public class AltaUsuarisController implements Initializable{
     private void getSeleccionat(){
         this.usuari = tvUsuaris.getSelectionModel().getSelectedItem();
     }
-    
-    
+
+    public Usuari getUsuari() {
+        return usuari;
+    }
+
+    public void setUsuari(Usuari usuari) {
+        this.usuari = usuari;
+    }
     
 }
