@@ -9,10 +9,13 @@ import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
@@ -53,13 +56,15 @@ public class AltaUsuarisController implements Initializable{
     //Variables Programa
     private EntityManagerFactory emf;
     private Usuari usuari;
+    private ObservableList<Usuari> dades;
     
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         configuraColumnes();
         Platform.runLater(() -> {
-            actualitzaTaula();   
+            dades = getUsuaris();
+            actualitzaTaula();  
         });
     }   
     
@@ -72,9 +77,11 @@ public class AltaUsuarisController implements Initializable{
 
 
     private void actualitzaTaula() {
-        if (!tvUsuaris.getItems().isEmpty())
-            tvUsuaris.getItems().clear();
-        tvUsuaris.getItems().setAll(getUsuaris());
+        if (!tvUsuaris.getItems().isEmpty()){
+            dades = getUsuaris();
+        }
+        tvUsuaris.setItems(dades);
+
         inicialitzaTaula();
     } 
     
@@ -145,7 +152,7 @@ public class AltaUsuarisController implements Initializable{
     @FXML
     private void eliminarUsuari(){
             //Creació Entity Manager i del CB
-            EntityManager manager = emf.createEntityManager();
+            EntityManager em = emf.createEntityManager();
             CriteriaBuilder cb = emf.getCriteriaBuilder();
             CriteriaDelete<Usuari> delete = cb.createCriteriaDelete(Usuari.class);                        
             Root<Usuari> c = delete.from(Usuari.class);
@@ -155,15 +162,18 @@ public class AltaUsuarisController implements Initializable{
             delete.where(cb.equal(c.get("codi"), usuari.getCodi()));
             
             //Actualitzar BBDD
-            manager.getTransaction().begin();
-            manager.createQuery(delete).executeUpdate();
-            manager.getTransaction().commit();  
+            em.getTransaction().begin();
+            em.createQuery(delete).executeUpdate();
+            em.getTransaction().commit();  
             
             //Notificar
             info("Usuari eliminat!");
             
             //Recarregar taula
             actualitzaTaula();
+            
+            //Tencar Entity
+            em.close();
     }
     
     private void obrirGeneric(char opt) throws IOException{
@@ -181,7 +191,7 @@ public class AltaUsuarisController implements Initializable{
 
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initStyle(StageStyle.DECORATED);
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(new Scene(root));
         stage.setTitle("Alta Usuaris");
         stage.showAndWait();
@@ -191,12 +201,14 @@ public class AltaUsuarisController implements Initializable{
     /**
      * Getters & Setters
      **/
-    private List<Usuari> getUsuaris() {
+    private ObservableList<Usuari> getUsuaris() {
         EntityManager manager = emf.createEntityManager();
-        List<Usuari> llista = (List<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
+        ArrayList<Usuari> llista = (ArrayList<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
+        ObservableList<Usuari> llistaUs = FXCollections.observableArrayList(llista);
         manager.close();
-        return llista;
+        return llistaUs;
     }
+    
     public EntityManagerFactory getEntity() {
         return emf;
     }

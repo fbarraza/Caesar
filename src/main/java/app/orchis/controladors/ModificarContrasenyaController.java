@@ -52,10 +52,6 @@ public class ModificarContrasenyaController implements Initializable{
     
     private String passwd;
 
-    public String getPasswd() {
-        return passwd;
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
@@ -84,21 +80,10 @@ public class ModificarContrasenyaController implements Initializable{
         }
     }
     
-    private void retornaContrassenya() throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaGeneric.fxml"));
-        Parent root = (Parent) fxmlLoader.load();
-        AltaGenericController controller = fxmlLoader.<AltaGenericController>getController();
-        System.out.println();
-        controller.setPasswd(encripta(pfNou2.getText()));
-        info("Contrasenya afegida!");
-    }
-    
     @FXML
     private void tencarFinestra(){
-        Stage secondaryStage = (Stage)Panel.getScene().getWindow();
-        
-        this.passwd = pfNou2.getText();
-        
+        Stage secondaryStage = (Stage)Panel.getScene().getWindow();    
+        this.passwd = encripta(pfNou2.getText());        
         secondaryStage.close();
         
     }
@@ -107,7 +92,6 @@ public class ModificarContrasenyaController implements Initializable{
     private void comprovaNoves() throws IOException{
         if(pfNou.getText().equals(pfNou2.getText())){
             if(opc == 'a'){
-                retornaContrassenya();
                 tencarFinestra();
             }
             else{
@@ -162,5 +146,10 @@ public class ModificarContrasenyaController implements Initializable{
 
     public void setOpc(char opc) {
         this.opc = opc;
-    }    
+    }
+
+    public String getPasswd() {
+        return passwd;
+    }
+    
 }

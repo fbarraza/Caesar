@@ -6,6 +6,7 @@
 package app.orchis.controladors;
 
 import app.orchis.model.Usuari;
+import static app.orchis.utils.Alertes.avis;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.Alertes.sortir;
 import static app.orchis.utils.CryptoHelper.encripta;
@@ -33,6 +34,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
+import org.hibernate.HibernateException;
 
 /**
  *
@@ -97,6 +99,7 @@ public class AltaGenericController implements Initializable{
         
     }
     
+    @FXML
     private void modificarUsuari(){
         //Creació Entity Manager i del CB
         EntityManager manager = emf.createEntityManager();
@@ -109,7 +112,7 @@ public class AltaGenericController implements Initializable{
         update.set("bloquejat", cbBloqueig.isSelected());
         update.set("login", tfLogin.getText());
         update.set("admin", cbAdmin.isSelected());
-        update.where(cb.equal(c.get("id"), Integer.parseInt(tfId.getText())));  
+        update.where(cb.equal(c.get("codi"), Integer.parseInt(tfId.getText())));  
 
         //Actualitzar BBDD
         manager.getTransaction().begin();
@@ -143,8 +146,7 @@ public class AltaGenericController implements Initializable{
             stage.setOnHiding(event -> {
                 user.setPasswd(controller.getPasswd());
             });
-            stage.showAndWait();
-            
+            stage.showAndWait();            
     }
     
     @FXML
@@ -169,12 +171,16 @@ public class AltaGenericController implements Initializable{
                 user.setAdmin(cbAdmin.isSelected());
                 
                 //Afegim usuari a la base de dades
-                
-                em.persist(user);
-                em.getTransaction().commit();   
-                
-                
-                info("Usuari introduït satisfactòriament");                
+                try{
+                    em.persist(user);
+                    em.getTransaction().commit();   
+                    info("Usuari introduït satisfactòriament");      
+                }
+                catch(HibernateException ex){
+                    avis("Error a la hora d'inserir l'usuari! Nom d'usuari ja existeix!");
+                    em.getTransaction().rollback();
+                    System.out.println(ex.getMessage());
+                }                         
             }
             else{
                 lbInfo.setText("Falta el nom de l'usuari! (login) ");    
@@ -182,6 +188,10 @@ public class AltaGenericController implements Initializable{
         }       
         else{
             lbInfo.setText("Falta el nom real de l'usuari!");            
+        }
+        
+        if(em.isOpen()){
+            em.close();
         }
         
     }

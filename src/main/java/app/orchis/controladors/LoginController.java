@@ -3,6 +3,7 @@ package app.orchis.controladors;
 
 import app.orchis.model.Configuracio;
 import app.orchis.model.Usuari;
+import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.CryptoHelper.encripta;
 import static app.orchis.utils.CryptoHelper.testPassword;
 import static app.orchis.utils.JavaEmail.enviarMissatge;
@@ -32,6 +33,7 @@ import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javax.persistence.NoResultException;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -83,7 +85,13 @@ public class LoginController implements Initializable{
                 Login();
             } 
         }
-    }        
+    }    
+
+    protected void actualitzaBD(EntityManager manager, CriteriaUpdate<Usuari> update){
+        manager.getTransaction().begin();
+        manager.createQuery(update).executeUpdate();
+        manager.getTransaction().commit();        
+    }
     
     /**
      * Bloqueja l'aplicació i no permet que el client segueixi intentant.
@@ -104,9 +112,44 @@ public class LoginController implements Initializable{
         bloqueigApp();
     }
     
-    protected void canviarContrasenya(Usuari user){
-        /*tfInfo.setText("L'usuari està bloquejat! No el pots fer servir fins que l'admin el desbloquegi.");
-        bloqueigApp();*/
+    protected void carregaCanvi()throws IOException{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
+            Parent root = (Parent) fxmlLoader.load();   
+            ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
+            
+            //
+            controller.setOpc('a');
+            
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(root));
+            stage.setTitle("Introduir contrasenya");
+            
+            stage.setOnHiding(event -> {
+                user.setPasswd(encripta(controller.getPasswd()));                
+            });
+            stage.showAndWait();  
+    }    
+    
+    protected void canviarContrasenya(EntityManager em) throws IOException{
+        //Avisem a l'usuari    
+        info("La contrasenya té més de " +config.getCaducitat()+" i s'ha de canviar!");
+            
+        //Interfície canviar contrasenya
+        carregaCanvi();
+        
+        //Variables per actualitzar
+        CriteriaBuilder cb = emf.getCriteriaBuilder();
+        CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
+        Root<Usuari> c = update.from(Usuari.class);     
+
+        //Sentència SQL        
+        update.set("password", user.getPasswd());     
+        
+        //Actualitzar BBDD
+        actualitzaBD(em, update);        
+        
     }    
     
     /**
@@ -154,9 +197,7 @@ public class LoginController implements Initializable{
             update.where(cb.equal(c.get("login"), usuari.getLogin()));  
             
             //Actualitzar BBDD
-            manager.getTransaction().begin();
-            manager.createQuery(update).executeUpdate();
-            manager.getTransaction().commit();
+            actualitzaBD(manager, update);
                      
             //Informar administrador
             enviarMissatge("Han intentat fer login amb l'usuari " + usuari.getLogin() + " i ha quedat bloquejat"); 
@@ -239,7 +280,7 @@ public class LoginController implements Initializable{
                         //Iniciar app principal
                         _manager.close();
                         if(config.checkMonth(user)){
-                            canviarContrasenya(user);
+                            canviarContrasenya(_manager);
                         }
                         else{
                             iniciarPrincipal(user);

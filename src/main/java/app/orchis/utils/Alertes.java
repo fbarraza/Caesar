@@ -22,6 +22,13 @@ public class Alertes {
         alert.showAndWait();
     }
     
+    public static void avis(String text){
+        Alert alert = new Alert(Alert.AlertType.WARNING, text, ButtonType.OK);
+        alert.setHeaderText(null);
+        alert.setTitle("ERROR");
+        alert.showAndWait();
+    }    
+    
     public static ButtonType sortir(){
         //Alerta
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Segur que vols sortir?", ButtonType.YES, ButtonType.NO);

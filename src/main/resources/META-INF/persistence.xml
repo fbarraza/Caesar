@@ -5,7 +5,10 @@
              version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
 
     <persistence-unit name="app.orchis.persistencia">
-        <!-- Classes del model -->
+        <!-- Classes del model 
+        10.0.207.114
+        192.168.1.114-->
+        
         <class>app.orchis.model.Usuari</class>
         <class>app.orchis.model.Configuracio</class>
         <properties>
