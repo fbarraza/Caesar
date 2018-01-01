@@ -88,11 +88,6 @@ public class LoginController implements Initializable{
         }
     }    
 
-    /*protected void actualitzaBD(EntityManager manager, CriteriaUpdate<Usuari> update){
-        manager.getTransaction().begin();
-        manager.createQuery(update).executeUpdate();
-        manager.getTransaction().commit();        
-    }*/
     
     /**
      * Bloqueja l'aplicació i no permet que el client segueixi intentant.
@@ -232,6 +227,7 @@ public class LoginController implements Initializable{
         Parent root = (Parent)fxmlLoader.load();
         MainMenuController controller = fxmlLoader.<MainMenuController>getController();
         
+        //TODO: RNB - 18/12/2017 - dehabilitat per compilar. En procés.
         //Passar valors de variables
         controller.setUser(user);
         controller.setEntity(emf);
