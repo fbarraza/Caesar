@@ -28,6 +28,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javax.persistence.criteria.CriteriaUpdate;
 import java.io.IOException;
+import java.text.ParseException;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
@@ -87,11 +88,11 @@ public class LoginController implements Initializable{
         }
     }    
 
-    protected void actualitzaBD(EntityManager manager, CriteriaUpdate<Usuari> update){
+    /*protected void actualitzaBD(EntityManager manager, CriteriaUpdate<Usuari> update){
         manager.getTransaction().begin();
         manager.createQuery(update).executeUpdate();
         manager.getTransaction().commit();        
-    }
+    }*/
     
     /**
      * Bloqueja l'aplicació i no permet que el client segueixi intentant.
@@ -116,6 +117,7 @@ public class LoginController implements Initializable{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
             Parent root = (Parent) fxmlLoader.load();   
             ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
+            String passwd;
             
             //
             controller.setOpc('a');
@@ -127,12 +129,14 @@ public class LoginController implements Initializable{
             stage.setTitle("Introduir contrasenya");
             
             stage.setOnHiding(event -> {
-                user.setPasswd(encripta(controller.getPasswd()));                
+                user.setPasswd(controller.getPasswd());                
             });
             stage.showAndWait();  
     }    
     
-    protected void canviarContrasenya(EntityManager em) throws IOException{
+    protected void canviarContrasenya() throws IOException, ParseException{
+        EntityManager manager = emf.createEntityManager();
+        
         //Avisem a l'usuari    
         info("La contrasenya té més de " +config.getCaducitat()+" i s'ha de canviar!");
             
@@ -144,11 +148,16 @@ public class LoginController implements Initializable{
         CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
         Root<Usuari> c = update.from(Usuari.class);     
 
-        //Sentència SQL        
-        update.set("password", user.getPasswd());     
-        
+        //Vars a actualitzar      
+        update.set("passwd", user.getPasswd());   
+        update.set("data", user.getAvui());
+        update.where(cb.equal(c.get("codi"), user.getCodi()));  
         //Actualitzar BBDD
-        actualitzaBD(em, update);        
+        //actualitzaBD(em, update);        
+        
+        manager.getTransaction().begin();
+        manager.createQuery(update).executeUpdate();
+        manager.getTransaction().commit();     
         
     }    
     
@@ -197,7 +206,9 @@ public class LoginController implements Initializable{
             update.where(cb.equal(c.get("login"), usuari.getLogin()));  
             
             //Actualitzar BBDD
-            actualitzaBD(manager, update);
+        manager.getTransaction().begin();
+        manager.createQuery(update).executeUpdate();
+        manager.getTransaction().commit();   
                      
             //Informar administrador
             enviarMissatge("Han intentat fer login amb l'usuari " + usuari.getLogin() + " i ha quedat bloquejat"); 
@@ -275,12 +286,14 @@ public class LoginController implements Initializable{
             }
             else{
                 //Usuari introduit OK
+                System.out.println(password);
+                System.out.println(user.getPasswd());
                 if(testPassword(password,user.getPasswd())){
                     try{
                         //Iniciar app principal
-                        _manager.close();
                         if(config.checkMonth(user)){
-                            canviarContrasenya(_manager);
+                            canviarContrasenya();
+                            tfPasswd.clear();
                         }
                         else{
                             iniciarPrincipal(user);
@@ -290,7 +303,7 @@ public class LoginController implements Initializable{
                     }catch(Exception e){
                         System.out.println("Error greu de l'aplicació! Comprova que els fitxers FXML tinguin els estils correctes!");
                         System.out.println(e.getCause());
-                    }                     
+                    }                   
                 }
                
                 else{

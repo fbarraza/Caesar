@@ -14,24 +14,24 @@
 
 <AnchorPane id="MainAnchor" fx:id="Panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="374.0" prefWidth="393.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.AltaGenericController">
    <children>
-      <TextField id="tfID" fx:id="tfId" disable="true" layoutX="164.0" layoutY="83.0" prefHeight="26.0" prefWidth="192.0" promptText="Número d'indentificació" stylesheets="@../estils/estil.css" />
-      <Label fx:id="lbId" layoutX="128.0" layoutY="88.0" text="ID" />
-      <Label layoutX="112.0" layoutY="156.0" text="Nom" />
+      <TextField id="tfID" fx:id="tfId" disable="true" layoutX="164.0" layoutY="83.0" prefHeight="26.0" prefWidth="43.0" promptText="Número d'indentificació" stylesheets="@../estils/estil.css" />
+      <Label fx:id="lbId" layoutX="133.0" layoutY="88.0" text="ID" />
+      <Label layoutX="84.0" layoutY="156.0" text="Nom login" />
       <Text id="logo" layoutX="44.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="M15">
          <font>
             <Font name="System Bold" size="40.0" />
          </font>
       </Text>
-      <Label layoutX="86.0" layoutY="196.0" text="Bloquejat" />
-      <TextField fx:id="tfNom" layoutX="165.0" layoutY="151.0" prefHeight="26.0" prefWidth="192.0" promptText="Nom real del usuari" />
+      <Label layoutX="95.0" layoutY="196.0" text="Bloquejat" />
+      <TextField fx:id="tfLogin" layoutX="165.0" layoutY="151.0" prefHeight="26.0" prefWidth="192.0" promptText="Nom login usuari" />
       <CheckBox fx:id="cbBloqueig" layoutX="165.0" layoutY="195.0" mnemonicParsing="false" />
       <CheckBox fx:id="cbAdmin" layoutX="165.0" layoutY="234.0" mnemonicParsing="false" />
-      <Label layoutX="104.0" layoutY="234.0" text="Admin" />
+      <Label layoutX="111.0" layoutY="234.0" text="Admin" />
       <Label fx:id="lbInfo" layoutX="94.0" layoutY="271.0" />
-      <TextField fx:id="tfLogin" layoutX="165.0" layoutY="116.0" prefHeight="26.0" prefWidth="192.0" promptText="Nom login usuari" />
+      <TextField fx:id="tfNom" layoutX="165.0" layoutY="116.0" prefHeight="26.0" prefWidth="192.0" promptText="Nom real usuari" />
       <Button id="buttonLogin" fx:id="btAfegir" layoutX="43.0" layoutY="301.0" mnemonicParsing="false" onAction="#crearUsuari" prefHeight="32.0" prefWidth="131.0" stylesheets="@../estils/estil.css" text="Afegir" visible="false" />
       <Button id="buttonLogin" fx:id="btModificar" layoutX="43.0" layoutY="301.0" mnemonicParsing="false" onAction="#modificarUsuari" prefHeight="32.0" prefWidth="131.0" stylesheets="@../estils/estil.css" text="Modificar" visible="false" />
       <Button id="buttonLogin" fx:id="btSortir" layoutX="222.0" layoutY="301.0" mnemonicParsing="false" onAction="#sortirAction" prefHeight="32.0" prefWidth="131.0" stylesheets="@../estils/estil.css" text="Sortir" />
-      <Label layoutX="114.0" layoutY="121.0" text="Nom" />
+      <Label layoutX="97.0" layoutY="121.0" text="Nom real" />
    </children>
 </AnchorPane>
