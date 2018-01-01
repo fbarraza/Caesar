@@ -3,6 +3,7 @@ package app.orchis.controladors;
 
 import app.orchis.model.Configuracio;
 import app.orchis.model.Usuari;
+import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.CryptoHelper.encripta;
 import static app.orchis.utils.CryptoHelper.testPassword;
 import static app.orchis.utils.JavaEmail.enviarMissatge;
@@ -27,11 +28,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javax.persistence.criteria.CriteriaUpdate;
 import java.io.IOException;
+import java.text.ParseException;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javax.persistence.NoResultException;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -83,7 +86,8 @@ public class LoginController implements Initializable{
                 Login();
             } 
         }
-    }        
+    }    
+
     
     /**
      * Bloqueja l'aplicació i no permet que el client segueixi intentant.
@@ -103,6 +107,54 @@ public class LoginController implements Initializable{
         tfInfo.setText("L'usuari està bloquejat! No el pots fer servir fins que l'admin el desbloquegi.");
         bloqueigApp();
     }
+    
+    protected void carregaCanvi()throws IOException{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
+            Parent root = (Parent) fxmlLoader.load();   
+            ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
+            String passwd;
+            
+            //
+            controller.setOpc('a');
+            
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(root));
+            stage.setTitle("Introduir contrasenya");
+            
+            stage.setOnHiding(event -> {
+                user.setPasswd(controller.getPasswd());                
+            });
+            stage.showAndWait();  
+    }    
+    
+    protected void canviarContrasenya() throws IOException, ParseException{
+        EntityManager manager = emf.createEntityManager();
+        
+        //Avisem a l'usuari    
+        info("La contrasenya té més de " +config.getCaducitat()+" i s'ha de canviar!");
+            
+        //Interfície canviar contrasenya
+        carregaCanvi();
+        
+        //Variables per actualitzar
+        CriteriaBuilder cb = emf.getCriteriaBuilder();
+        CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
+        Root<Usuari> c = update.from(Usuari.class);     
+
+        //Vars a actualitzar      
+        update.set("passwd", user.getPasswd());   
+        update.set("data", user.getAvui());
+        update.where(cb.equal(c.get("codi"), user.getCodi()));  
+        //Actualitzar BBDD
+        //actualitzaBD(em, update);        
+        
+        manager.getTransaction().begin();
+        manager.createQuery(update).executeUpdate();
+        manager.getTransaction().commit();     
+        
+    }    
     
     /**
      * Manager d'intents a executar si l'usuari introduït no existeix
@@ -149,9 +201,9 @@ public class LoginController implements Initializable{
             update.where(cb.equal(c.get("login"), usuari.getLogin()));  
             
             //Actualitzar BBDD
-            manager.getTransaction().begin();
-            manager.createQuery(update).executeUpdate();
-            manager.getTransaction().commit();
+        manager.getTransaction().begin();
+        manager.createQuery(update).executeUpdate();
+        manager.getTransaction().commit();   
                      
             //Informar administrador
             enviarMissatge("Han intentat fer login amb l'usuari " + usuari.getLogin() + " i ha quedat bloquejat"); 
@@ -175,6 +227,7 @@ public class LoginController implements Initializable{
         Parent root = (Parent)fxmlLoader.load();
         MainMenuController controller = fxmlLoader.<MainMenuController>getController();
         
+        //TODO: RNB - 18/12/2017 - dehabilitat per compilar. En procés.
         //Passar valors de variables
         controller.setUser(user);
         controller.setEntity(emf);
@@ -229,12 +282,14 @@ public class LoginController implements Initializable{
             }
             else{
                 //Usuari introduit OK
+                System.out.println(password);
+                System.out.println(user.getPasswd());
                 if(testPassword(password,user.getPasswd())){
                     try{
                         //Iniciar app principal
-                        _manager.close();
                         if(config.checkMonth(user)){
-                            
+                            canviarContrasenya();
+                            tfPasswd.clear();
                         }
                         else{
                             iniciarPrincipal(user);
@@ -244,7 +299,7 @@ public class LoginController implements Initializable{
                     }catch(Exception e){
                         System.out.println("Error greu de l'aplicació! Comprova que els fitxers FXML tinguin els estils correctes!");
                         System.out.println(e.getCause());
-                    }                     
+                    }                   
                 }
                
                 else{

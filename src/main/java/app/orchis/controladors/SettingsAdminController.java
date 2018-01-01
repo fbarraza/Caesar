@@ -7,6 +7,8 @@ package app.orchis.controladors;
 
 import app.orchis.model.Configuracio;
 import app.orchis.model.Usuari;
+import static app.orchis.utils.Alertes.info;
+import static app.orchis.utils.Alertes.sortir;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -68,10 +70,7 @@ public class SettingsAdminController implements Initializable {
 
     @FXML
     protected void modificarAction() throws ParseException {
-        Alert alert = new Alert(AlertType.INFORMATION, "Fitxer modificat", ButtonType.OK);
-        alert.setHeaderText(null);
-        alert.setTitle("Informació");
-
+        //Vars
         DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
 
         //Creació Entity Manager i del CB
@@ -92,24 +91,17 @@ public class SettingsAdminController implements Initializable {
         manager.getTransaction().commit();
         manager.close();
         
-        alert.showAndWait();
+        info("La configuració ha sigut modificada");
+
     }
 
     @FXML
     protected void sortirAction() {
-        //Alerta
-        Alert alert = new Alert(AlertType.CONFIRMATION, "Segur que vols sortir?", ButtonType.YES, ButtonType.NO);
-        alert.setHeaderText(null);
-        alert.setTitle("Sortir");
-        alert.showAndWait();
-
-        if (alert.getResult() == ButtonType.YES) {
+        if (sortir() == ButtonType.YES) {
             //Tanca la finestra actual
             Stage stage = (Stage) btnSortir.getScene().getWindow();
             stage.close();
         }
-     
-
     }
 
     private void omplirText() {

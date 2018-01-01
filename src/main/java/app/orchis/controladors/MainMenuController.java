@@ -7,6 +7,7 @@ package app.orchis.controladors;
 
 import app.orchis.model.Configuracio;
 import app.orchis.model.Usuari;
+import app.orchis.utils.Connexio;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -16,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Modality;
@@ -36,7 +38,10 @@ public class MainMenuController implements Initializable{
 
     //Vars element FXML
     @FXML private MenuItem adminConfig;
-    @FXML private Menu adminSettings;
+    @FXML private Menu mnAdminSettings;
+    @FXML private Label lbUserActual;
+    @FXML private Label lbServer;
+    
     
     //@FXML private Label usuariActual;
     //@FXML private Label server;
@@ -45,12 +50,14 @@ public class MainMenuController implements Initializable{
     private static Usuari user = new Usuari();
     private static Configuracio config;
     private static EntityManagerFactory emf;
+    private static Iterable<String> IP_HEADER_CANDIDATES;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
             adminTool();
-            
+            lbServer.setText(Connexio.obteIPConnexio(this.emf));
+            lbUserActual.setText(user.getNom());      
         });
     }
     
@@ -69,8 +76,25 @@ public class MainMenuController implements Initializable{
         
         //Comprovar si l'usuari és admin
         if(!config.getNom_admin().equals(user.getLogin())){
-            adminSettings.setDisable(true);
+            mnAdminSettings.setDisable(true);
         }
+    }
+    
+    @FXML private void obrirAltaUsuari() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaUsuaris.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaUsuarisController controller = fxmlLoader.<AltaUsuarisController>getController();
+
+        //Vars
+        controller.setEntity(emf);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Usuaris");
+        stage.show();        
+        
     }
     @FXML
     private void obrirConfig() throws IOException{
@@ -84,7 +108,7 @@ public class MainMenuController implements Initializable{
             
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.DECORATED);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root));
             stage.setTitle("Configuració Admin");
             stage.show();
@@ -95,10 +119,10 @@ public class MainMenuController implements Initializable{
         
     }
     
-    //Setters per passar variables
+    //Getters and Setters per passar variables
     public void setUser(Usuari user){
         this.user = user;
-    }
+    }  
     
     public void setEntity(EntityManagerFactory emf){
         this.emf = emf;
