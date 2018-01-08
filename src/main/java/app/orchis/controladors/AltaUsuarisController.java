@@ -9,25 +9,33 @@ import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -35,7 +43,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
+
 
 /**
  *
@@ -58,14 +68,57 @@ public class AltaUsuarisController implements Initializable{
     private Usuari usuari;
     private ObservableList<Usuari> dades;
     
+    ContextMenu contextMenu = new ContextMenu();
+    MenuItem miModificar = new MenuItem("Modificar Usuari");    
+    MenuItem miModificarp = new MenuItem("Modificar Contrasenya");
+    
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         configuraColumnes();
         Platform.runLater(() -> {
+            //Obtenim els usuaris
             dades = getUsuaris();
-            actualitzaTaula();  
+            
+            //Inicialitzem i omplim la taula
+            actualitzaTaula();                         
         });
+        
+        //Accions dels submenus
+        miModificar.setOnAction(e -> {
+            try {
+                obrirModif();
+            } catch (IOException ex) {
+                Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        miModificarp.setOnAction(e -> {
+            try {
+                canviarContrasenya('b');
+            } catch (IOException ex) {
+                Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        contextMenu.getItems().addAll(miModificar, miModificarp);
+        tvUsuaris.setContextMenu(contextMenu);
+        
+        //Listener dobleclic
+        tvUsuaris.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                    if(mouseEvent.getClickCount() == 2){
+                        try {
+                            obrirModif();
+                        } catch (IOException ex) {
+                            Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });        
     }   
     
     @FXML
@@ -80,8 +133,7 @@ public class AltaUsuarisController implements Initializable{
         if (!tvUsuaris.getItems().isEmpty()){
             dades = getUsuaris();
         }
-        tvUsuaris.setItems(dades);
-
+        tvUsuaris.setItems(dades);        
         inicialitzaTaula();
     } 
     
@@ -158,7 +210,7 @@ public class AltaUsuarisController implements Initializable{
             Root<Usuari> c = delete.from(Usuari.class);
             
             //Sentència SQL
-            getSeleccionat();
+            setSeleccionat();
             delete.where(cb.equal(c.get("codi"), usuari.getCodi()));
             
             //Actualitzar BBDD
@@ -185,7 +237,7 @@ public class AltaUsuarisController implements Initializable{
         controller.setEmf(emf);
         controller.setOpc(opt);
         if(opt == 'm'){
-            getSeleccionat();
+            setSeleccionat();
             controller.setUser(usuari);
         }
 
@@ -197,7 +249,39 @@ public class AltaUsuarisController implements Initializable{
         stage.showAndWait();
         actualitzaTaula();
     }    
-
+    
+    protected void carregaCanvi(char opc)throws IOException{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
+            Parent root = (Parent) fxmlLoader.load();   
+            ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
+            
+            //
+            controller.setOpc(opc);
+            controller.setUser(usuari);
+            controller.setEmf(emf);
+            
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(root));
+            stage.setTitle("Introduir contrasenya");
+            
+            stage.setOnHiding(event -> {
+                usuari.setPasswd(controller.getPasswd());                
+            });
+            stage.showAndWait();  
+    }      
+    
+    
+    protected void canviarContrasenya(char opc) throws IOException, ParseException{
+        //Obtenir Usuari
+        setSeleccionat();
+        
+        //Interfície canviar contrasenya
+        carregaCanvi(opc);         
+        
+    }      
+    
     /**
      * Getters & Setters
      **/
@@ -217,7 +301,7 @@ public class AltaUsuarisController implements Initializable{
         this.emf = emf;
     }
     
-    private void getSeleccionat(){
+    private void setSeleccionat(){
         this.usuari = tvUsuaris.getSelectionModel().getSelectedItem();
     }
 

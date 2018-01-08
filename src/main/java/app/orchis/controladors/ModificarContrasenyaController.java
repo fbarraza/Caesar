@@ -112,8 +112,8 @@ public class ModificarContrasenyaController implements Initializable{
             
             
             //Sentència SQL
-            update.set("password", encripta(pfNou2.getText()));
-            update.where(cb.equal(c.get("login"), user.getLogin()));  
+            update.set("passwd", encripta(pfNou2.getText()));
+            update.where(cb.equal(c.get("codi"), user.getCodi())); 
             
             //Actualitzar BBDD
             manager.getTransaction().begin();

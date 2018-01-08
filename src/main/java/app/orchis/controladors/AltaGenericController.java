@@ -12,6 +12,8 @@ import static app.orchis.utils.Alertes.sortir;
 import static app.orchis.utils.CryptoHelper.encripta;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.ParseException;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -117,7 +119,10 @@ public class AltaGenericController implements Initializable{
         //Actualitzar BBDD
         manager.getTransaction().begin();
         manager.createQuery(update).executeUpdate();
-        manager.getTransaction().commit();        
+        manager.getTransaction().commit();  
+        
+        //Notificar Usuari
+        info("Usuari modificat!");
     }
     
     private boolean comprovaCamp(TextField field){
@@ -129,13 +134,13 @@ public class AltaGenericController implements Initializable{
         }
     }
     
-    private void carregaPasswd() throws IOException{
+    private void carregaPasswd(char opc) throws IOException{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
             Parent root = (Parent) fxmlLoader.load();   
             ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
             
             //
-            controller.setOpc('a');
+            controller.setOpc(opc);
             
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -150,11 +155,7 @@ public class AltaGenericController implements Initializable{
     }
     
     @FXML
-    private void crearUsuari() throws ParseException, IOException{
-        //Variables
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-
+    private void crearUsuari() throws ParseException, IOException {
         //Obtenim les dades de l'usuari
         //Usuari user = new Usuari();
         //user.setCodi(Integer.parseInt(tfId.getText()));
@@ -162,7 +163,7 @@ public class AltaGenericController implements Initializable{
         if(!comprovaCamp(tfNom)){
             
             user.setNom(tfNom.getText());
-            carregaPasswd();
+            carregaPasswd('a');
             user.setBloquejat(cbBloqueig.isSelected());
             
             if(!comprovaCamp(tfLogin)){
@@ -170,17 +171,32 @@ public class AltaGenericController implements Initializable{
                 user.setData(user.getAvui());
                 user.setAdmin(cbAdmin.isSelected());
                 
+                //Variables
+                EntityManager em = emf.createEntityManager();
+                em.getTransaction().begin();
                 //Afegim usuari a la base de dades
-                try{
-                    em.persist(user);
-                    em.getTransaction().commit();   
-                    info("Usuari introduït satisfactòriament");      
+                try {
+                em.persist(user);
+                em.getTransaction().commit();   
+                info("Usuari introduït satisfactòriament");      
+                }catch (HibernateException ex) {                    
+                    
+                    
+                        avis("Error a la hora d'inserir l'usuari! Nom d'usuari ja existeix!");
+                        em.getTransaction().rollback();
+                        System.out.println(ex.getMessage());
+                    
                 }
-                catch(HibernateException ex){
+
+                if(em.isOpen())
+                    em.close();
+                
+                
+                /*catch(HibernateException ex){
                     avis("Error a la hora d'inserir l'usuari! Nom d'usuari ja existeix!");
                     em.getTransaction().rollback();
                     System.out.println(ex.getMessage());
-                }                         
+                }*/                        
             }
             else{
                 lbInfo.setText("Falta el nom de l'usuari! (login) ");    
@@ -188,12 +204,7 @@ public class AltaGenericController implements Initializable{
         }       
         else{
             lbInfo.setText("Falta el nom real de l'usuari!");            
-        }
-        
-        if(em.isOpen()){
-            em.close();
-        }
-        
+        }        
     }
     
     @FXML

@@ -112,7 +112,6 @@ public class LoginController implements Initializable{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
             Parent root = (Parent) fxmlLoader.load();   
             ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
-            String passwd;
             
             //
             controller.setOpc('a');
@@ -201,9 +200,9 @@ public class LoginController implements Initializable{
             update.where(cb.equal(c.get("login"), usuari.getLogin()));  
             
             //Actualitzar BBDD
-        manager.getTransaction().begin();
-        manager.createQuery(update).executeUpdate();
-        manager.getTransaction().commit();   
+            manager.getTransaction().begin();
+            manager.createQuery(update).executeUpdate();
+            manager.getTransaction().commit();   
                      
             //Informar administrador
             enviarMissatge("Han intentat fer login amb l'usuari " + usuari.getLogin() + " i ha quedat bloquejat"); 
@@ -282,8 +281,6 @@ public class LoginController implements Initializable{
             }
             else{
                 //Usuari introduit OK
-                System.out.println(password);
-                System.out.println(user.getPasswd());
                 if(testPassword(password,user.getPasswd())){
                     try{
                         //Iniciar app principal
