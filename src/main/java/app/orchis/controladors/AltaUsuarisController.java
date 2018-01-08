@@ -203,30 +203,39 @@ public class AltaUsuarisController implements Initializable{
     
     @FXML
     private void eliminarUsuari(){
-            //Creació Entity Manager i del CB
-            EntityManager em = emf.createEntityManager();
-            CriteriaBuilder cb = emf.getCriteriaBuilder();
-            CriteriaDelete<Usuari> delete = cb.createCriteriaDelete(Usuari.class);                        
-            Root<Usuari> c = delete.from(Usuari.class);
-            
-            //Sentència SQL
-            setSeleccionat();
-            delete.where(cb.equal(c.get("codi"), usuari.getCodi()));
-            
-            //Actualitzar BBDD
-            em.getTransaction().begin();
-            em.createQuery(delete).executeUpdate();
-            em.getTransaction().commit();  
-            
-            //Notificar
-            info("Usuari eliminat!");
-            
-            //Recarregar taula
-            actualitzaTaula();
-            
-            //Tencar Entity
-            em.close();
+        //Creació Entity Manager i del CB
+        EntityManager em = emf.createEntityManager();
+        CriteriaBuilder cb = emf.getCriteriaBuilder();
+        CriteriaDelete<Usuari> delete = cb.createCriteriaDelete(Usuari.class);                        
+        Root<Usuari> c = delete.from(Usuari.class);
+
+        //Sentència SQL
+        setSeleccionat();
+        delete.where(cb.equal(c.get("codi"), usuari.getCodi()));
+
+        //Actualitzar BBDD
+        em.getTransaction().begin();
+        em.createQuery(delete).executeUpdate();
+        em.getTransaction().commit();  
+
+        //Notificar
+        info("Usuari eliminat!");
+
+        //Recarregar taula
+        actualitzaTaula();
+
+        //Tencar Entity
+        em.close();
     }
+    
+    protected void canviarContrasenya(char opc) throws IOException, ParseException{
+        //Obtenir Usuari
+        setSeleccionat();
+        
+        //Interfície canviar contrasenya
+        carregaCanvi(opc);         
+        
+    }        
     
     private void obrirGeneric(char opt) throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaGeneric.fxml"));
@@ -270,17 +279,7 @@ public class AltaUsuarisController implements Initializable{
                 usuari.setPasswd(controller.getPasswd());                
             });
             stage.showAndWait();  
-    }      
-    
-    
-    protected void canviarContrasenya(char opc) throws IOException, ParseException{
-        //Obtenir Usuari
-        setSeleccionat();
-        
-        //Interfície canviar contrasenya
-        carregaCanvi(opc);         
-        
-    }      
+    }        
     
     /**
      * Getters & Setters

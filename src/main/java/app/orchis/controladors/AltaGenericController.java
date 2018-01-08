@@ -37,6 +37,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import org.hibernate.HibernateException;
+import org.hibernate.exception.ConstraintViolationException;
 
 /**
  *
@@ -177,15 +178,15 @@ public class AltaGenericController implements Initializable{
                 //Afegim usuari a la base de dades
                 try {
                 em.persist(user);
+                //em.flush();
                 em.getTransaction().commit();   
                 info("Usuari introduït satisfactòriament");      
-                }catch (HibernateException ex) {                    
-                    
-                    
-                        avis("Error a la hora d'inserir l'usuari! Nom d'usuari ja existeix!");
+                }catch (Exception ex) {                    
+                    if (ex.getCause() instanceof ConstraintViolationException){
                         em.getTransaction().rollback();
+                        avis("Error a la hora d'inserir l'usuari! Nom d'usuari ja existeix!");                        
                         System.out.println(ex.getMessage());
-                    
+                    }
                 }
 
                 if(em.isOpen())

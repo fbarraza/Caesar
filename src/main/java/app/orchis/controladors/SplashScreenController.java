@@ -41,7 +41,7 @@ public class SplashScreenController implements Initializable{
         try {
             emf = appConfig.loadAppConfig();
         } catch (Exception e){
-            
+            System.out.println("No s'ha pogut inicialitzar l'EMF!");
         }
     }
     
