@@ -109,23 +109,23 @@ public class LoginController implements Initializable{
     }
     
     protected void carregaCanvi()throws IOException{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
-            Parent root = (Parent) fxmlLoader.load();   
-            ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
-            
-            //
-            controller.setOpc('a');
-            
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.setScene(new Scene(root));
-            stage.setTitle("Introduir contrasenya");
-            
-            stage.setOnHiding(event -> {
-                user.setPasswd(controller.getPasswd());                
-            });
-            stage.showAndWait();  
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
+        Parent root = (Parent) fxmlLoader.load();   
+        ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
+
+        //
+        controller.setOpc('a');
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Introduir contrasenya");
+
+        stage.setOnHiding(event -> {
+            user.setPasswd(controller.getPasswd());                
+        });
+        stage.showAndWait();  
     }    
     
     protected void canviarContrasenya() throws IOException, ParseException{
@@ -135,7 +135,7 @@ public class LoginController implements Initializable{
         //Interfície canviar contrasenya
         carregaCanvi();
         
-        //
+        //Actualitzar contrasenya
         user.actualitzarUsuari(emf);
         
     }    
@@ -215,15 +215,6 @@ public class LoginController implements Initializable{
         primaryStage.close();
         stage.showAndWait();        
     }
-
-    /**
-     * Apagar l'aplicació
-     */
-    @FXML
-    protected void Surt(){
-        emf.close();
-        System.exit(0);
-    }
     
     /**
      * Funció per iniciar sessió amb l'usuari que el client ha introduït
@@ -235,21 +226,10 @@ public class LoginController implements Initializable{
     protected void Login() throws ConfigurationException, MessagingException, Exception{
         //Variables del programa
         String username = tfUser.getText();
-        String password = encripta(tfPasswd.getText());
-        
-        //Manager local
-        EntityManager _manager = emf.createEntityManager();
-
-        //Obtenir dades de l'usuari introduit
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        CriteriaQuery<Usuari> cbQuery = cb.createQuery(Usuari.class);
-        Root<Usuari> c = cbQuery.from(Usuari.class);
-        cbQuery.select(c);
-        cbQuery.where(cb.equal(c.get("login"), username));
-        Query query = _manager.createQuery(cbQuery);                       
-        
+        String password = encripta(tfPasswd.getText());                    
+                
         try{
-            user = (Usuari) query.getSingleResult();
+            user = Usuari.obtenirUsuari(emf, username);
             if(user.isBloquejat()){
                 usuariBloquejat(username);
             }
@@ -284,10 +264,15 @@ public class LoginController implements Initializable{
                 System.err.println(Ex.getCause());
             System.err.println(Ex.getMessage());
         }
-        
-        //Fi manager
-        if (_manager.isOpen())
-            _manager.close();
+    }  
+    
+    /**
+     * Apagar l'aplicació
+     */
+    @FXML
+    protected void Surt(){
+        emf.close();
+        System.exit(0);
     }    
     
     public void setEmf(EntityManagerFactory emf){

@@ -15,8 +15,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import org.hibernate.exception.ConstraintViolationException;
@@ -131,6 +133,26 @@ public class Usuari implements Serializable{
         data = format.parse(avui);
         
         return data;
+    }
+    
+    public static Usuari obtenirUsuari(EntityManagerFactory emf, String username){
+        //Variables
+        EntityManager em = emf.createEntityManager();
+        Usuari user;
+        
+        //Obtenir dades de l'usuari introduit
+        CriteriaBuilder cb = emf.getCriteriaBuilder();
+        CriteriaQuery<Usuari> cbQuery = cb.createQuery(Usuari.class);
+        Root<Usuari> c = cbQuery.from(Usuari.class);
+        cbQuery.select(c);
+        cbQuery.where(cb.equal(c.get("login"), username));
+        Query query = em.createQuery(cbQuery);           
+        
+        //Obtenir usuari
+        user = (Usuari) query.getSingleResult();
+        em.close();
+        
+        return  user;
     }
     
     public void afegirUsuari(EntityManagerFactory emf){
