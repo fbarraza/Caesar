@@ -68,28 +68,6 @@ public class LoginController implements Initializable{
     } 
     
     /**
-     * Listener dels TextFields del Login.
-     * @param e /Tecla premuda
-     * @throws Exception 
-     */
-    @FXML
-    private void keyPress(KeyEvent e) throws Exception {
-        if (e.getSource().equals(tfUser)) {
-            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB))
-                if (tfPasswd.getText().isEmpty()) {
-                    tfPasswd.requestFocus();
-                } else {
-                    Login();
-                }            
-        } else {
-            if (e.getCode().equals(KeyCode.ENTER)) {
-                Login();
-            } 
-        }
-    }    
-
-    
-    /**
      * Bloqueja l'aplicació i no permet que el client segueixi intentant.
      */
     protected void bloqueigApp(){
@@ -100,7 +78,7 @@ public class LoginController implements Initializable{
     }    
     
     /**
-     * Notifica el client que l'usuari introduït està bloquejat.
+     * Notifica el client que l'usuari introduït està bloquejat i bloquegem l'aplicació
      * @param user /Usuari introduït
      */
     protected void usuariBloquejat(String user){
@@ -108,6 +86,10 @@ public class LoginController implements Initializable{
         bloqueigApp();
     }
     
+    /**
+     * Carreguem la interfície per canviar la contrasenya
+     * @throws IOException 
+     */
     protected void carregaCanvi()throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
         Parent root = (Parent) fxmlLoader.load();   
@@ -211,10 +193,32 @@ public class LoginController implements Initializable{
         stage.setTitle("Menú Principal");
         stage.initModality(Modality.NONE);
         stage.setOnHiding( event -> {emf.close();} );
+        
         //emf.close();
         primaryStage.close();
         stage.showAndWait();        
     }
+    
+    /**
+     * Listener dels TextFields del Login.
+     * @param e /Tecla premuda
+     * @throws Exception 
+     */
+    @FXML
+    private void keyPress(KeyEvent e) throws Exception {
+        if (e.getSource().equals(tfUser)) {
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB))
+                if (tfPasswd.getText().isEmpty()) {
+                    tfPasswd.requestFocus();
+                } else {
+                    Login();
+                }            
+        } else {
+            if (e.getCode().equals(KeyCode.ENTER)) {
+                Login();
+            } 
+        }
+    }        
     
     /**
      * Funció per iniciar sessió amb l'usuari que el client ha introduït
@@ -275,6 +279,7 @@ public class LoginController implements Initializable{
         System.exit(0);
     }    
     
+    //GETTERS AND SETTERS
     public void setEmf(EntityManagerFactory emf){
         this.emf = emf;
     }

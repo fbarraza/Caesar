@@ -214,9 +214,7 @@ public class Usuari implements Serializable{
         
         //Tencar Entity
         em.close();
-    }
-    
-
+    }    
 
     @Override
     public String toString() {

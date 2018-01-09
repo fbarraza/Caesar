@@ -102,19 +102,6 @@ public class AltaGenericController implements Initializable{
         
     }
     
-    @FXML
-    private void modificarUsuari(){        
-        //Sentència SQL        
-        user.setNom(tfNom.getText());
-        user.setBloquejat(cbBloqueig.isSelected());
-        user.setLogin(tfLogin.getText());
-        user.setAdmin(cbAdmin.isSelected());
-        user.actualitzarUsuari(emf);
-        
-        //Notificar Usuari
-        info("Usuari modificat!");
-    }
-    
     private boolean comprovaCamp(TextField field){
         if(field.getText().isEmpty()){
             return true;
@@ -122,7 +109,7 @@ public class AltaGenericController implements Initializable{
         else{
             return false;
         }
-    }
+    } 
     
     private void carregaPasswd(char opc) throws IOException{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
@@ -142,7 +129,7 @@ public class AltaGenericController implements Initializable{
                 user.setPasswd(controller.getPasswd());
             });
             stage.showAndWait();            
-    }
+    }    
     
     @FXML
     private void crearUsuari() throws ParseException, IOException {
@@ -157,7 +144,7 @@ public class AltaGenericController implements Initializable{
                 user.setAdmin(cbAdmin.isSelected());
                 
                 user.afegirUsuari(emf);
-                info("Usuari introduït satisfactòriament");                             
+                info("Usuari creat satisfactòriament");                             
             }
             else{
                 lbInfo.setText("Falta el nom de l'usuari! (login) ");    
@@ -166,7 +153,20 @@ public class AltaGenericController implements Initializable{
         else{
             lbInfo.setText("Falta el nom real de l'usuari!");            
         }        
-    }
+    }    
+    
+    @FXML
+    private void modificarUsuari(){        
+        //Sentència SQL        
+        user.setNom(tfNom.getText());
+        user.setBloquejat(cbBloqueig.isSelected());
+        user.setLogin(tfLogin.getText());
+        user.setAdmin(cbAdmin.isSelected());
+        user.actualitzarUsuari(emf);
+        
+        //Notificar Usuari
+        info("Usuari modificat!");
+    }    
     
     @FXML
     protected void sortirAction() {

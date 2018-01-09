@@ -121,14 +121,9 @@ public class AltaUsuarisController implements Initializable{
         });        
     }   
     
-    @FXML
-    protected void mnuConnectaOnAction (ActionEvent actionEvent) {
-        actualitzaTaula();
-        goTableItem(0);
-    }
-    
-
-
+    /**
+     * Actualitza la taula mitjançant un ObservableList.
+     */
     private void actualitzaTaula() {
         if (!tvUsuaris.getItems().isEmpty()){
             dades = getUsuaris();
@@ -137,6 +132,9 @@ public class AltaUsuarisController implements Initializable{
         inicialitzaTaula();
     } 
     
+    /**
+     * Inicialitzem la taula i afegim listener per filtrar els usuaris.
+     */
     private void inicialitzaTaula() {
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Usuari> filteredData = new FilteredList<>(tvUsuaris.getItems(), p -> true);
@@ -172,7 +170,9 @@ public class AltaUsuarisController implements Initializable{
         tvUsuaris.setItems(sortedData);
     }
     
-    
+    /**
+     * Configura les columnes per indicar a quines variables de l'objecte pertanyen.
+     */
     private void configuraColumnes() {
         colCodi.setCellValueFactory(new PropertyValueFactory<>("codi"));
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -182,6 +182,7 @@ public class AltaUsuarisController implements Initializable{
         colAdmin.setCellValueFactory(new PropertyValueFactory<>("admin"));
     }
 
+    
     private void goTableItem(int row) {
         tvUsuaris.requestFocus();
         tvUsuaris.scrollTo(row);
@@ -189,18 +190,29 @@ public class AltaUsuarisController implements Initializable{
         tvUsuaris.getFocusModel().focus(row);
     }  
     
+    /**
+     * Obre l'interfície genèrica amb la opció de crear.
+     * @throws IOException 
+     */
     @FXML
     private void obrirCrear() throws IOException{
         char opt = 'c';
         obrirGeneric(opt);
     }    
     
+    /**
+     * Obre l'interfície genèrica amb la opció de modificar.
+     * @throws IOException 
+     */    
     @FXML
     private void obrirModif() throws IOException{
         char opt = 'm';
         obrirGeneric(opt);
     }
     
+    /**
+     * Obté l'usuari seleccionat i l'elimina.
+     */
     @FXML
     private void eliminarUsuari(){
         //Eliminar Usuari de la BBDD
@@ -267,9 +279,14 @@ public class AltaUsuarisController implements Initializable{
             stage.showAndWait();  
     }        
     
-    /**
+    /*
      * Getters & Setters
-     **/
+     */
+    
+    /**
+     * Obtené una llista completa de tots els usuaris.
+     * @return 
+     */
     private ObservableList<Usuari> getUsuaris() {
         EntityManager manager = emf.createEntityManager();
         ArrayList<Usuari> llista = (ArrayList<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
