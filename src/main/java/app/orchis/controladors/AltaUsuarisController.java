@@ -203,29 +203,15 @@ public class AltaUsuarisController implements Initializable{
     
     @FXML
     private void eliminarUsuari(){
-        //Creació Entity Manager i del CB
-        EntityManager em = emf.createEntityManager();
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        CriteriaDelete<Usuari> delete = cb.createCriteriaDelete(Usuari.class);                        
-        Root<Usuari> c = delete.from(Usuari.class);
-
-        //Sentència SQL
+        //Eliminar Usuari de la BBDD
         setSeleccionat();
-        delete.where(cb.equal(c.get("codi"), usuari.getCodi()));
-
-        //Actualitzar BBDD
-        em.getTransaction().begin();
-        em.createQuery(delete).executeUpdate();
-        em.getTransaction().commit();  
+        usuari.eliminarUsuari(emf);
 
         //Notificar
         info("Usuari eliminat!");
 
         //Recarregar taula
         actualitzaTaula();
-
-        //Tencar Entity
-        em.close();
     }
     
     protected void canviarContrasenya(char opc) throws IOException, ParseException{

@@ -129,29 +129,14 @@ public class LoginController implements Initializable{
     }    
     
     protected void canviarContrasenya() throws IOException, ParseException{
-        EntityManager manager = emf.createEntityManager();
-        
         //Avisem a l'usuari    
         info("La contrasenya té més de " +config.getCaducitat()+" i s'ha de canviar!");
             
         //Interfície canviar contrasenya
         carregaCanvi();
         
-        //Variables per actualitzar
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
-        Root<Usuari> c = update.from(Usuari.class);     
-
-        //Vars a actualitzar      
-        update.set("passwd", user.getPasswd());   
-        update.set("data", user.getAvui());
-        update.where(cb.equal(c.get("codi"), user.getCodi()));  
-        //Actualitzar BBDD
-        //actualitzaBD(em, update);        
-        
-        manager.getTransaction().begin();
-        manager.createQuery(update).executeUpdate();
-        manager.getTransaction().commit();     
+        //
+        user.actualitzarUsuari(emf);
         
     }    
     
@@ -189,20 +174,9 @@ public class LoginController implements Initializable{
         if(intents_n == 0){
             tfInfo.setText("L'usuari ha sigut bloquejat ja que has fallat " +intents_m+ " vegades! S'ha informat a l'admin i la app ha quedat bloquejada.");            
             
-            //Creació Entity Manager i del CB
-            EntityManager manager = emf.createEntityManager();
-            CriteriaBuilder cb = emf.getCriteriaBuilder();
-            CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
-            Root<Usuari> c = update.from(Usuari.class);
-            
-            //Sentència SQL
-            update.set("bloquejat", true);
-            update.where(cb.equal(c.get("login"), usuari.getLogin()));  
-            
-            //Actualitzar BBDD
-            manager.getTransaction().begin();
-            manager.createQuery(update).executeUpdate();
-            manager.getTransaction().commit();   
+            //Actualitzar usuari
+            user.setBloquejat(true);
+            user.actualitzarUsuari(emf);
                      
             //Informar administrador
             enviarMissatge("Han intentat fer login amb l'usuari " + usuari.getLogin() + " i ha quedat bloquejat"); 

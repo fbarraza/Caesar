@@ -103,24 +103,13 @@ public class AltaGenericController implements Initializable{
     }
     
     @FXML
-    private void modificarUsuari(){
-        //Creació Entity Manager i del CB
-        EntityManager manager = emf.createEntityManager();
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
-        Root<Usuari> c = update.from(Usuari.class);
-
+    private void modificarUsuari(){        
         //Sentència SQL        
-        update.set("nom", tfNom.getText());
-        update.set("bloquejat", cbBloqueig.isSelected());
-        update.set("login", tfLogin.getText());
-        update.set("admin", cbAdmin.isSelected());
-        update.where(cb.equal(c.get("codi"), Integer.parseInt(tfId.getText())));  
-
-        //Actualitzar BBDD
-        manager.getTransaction().begin();
-        manager.createQuery(update).executeUpdate();
-        manager.getTransaction().commit();  
+        user.setNom(tfNom.getText());
+        user.setBloquejat(cbBloqueig.isSelected());
+        user.setLogin(tfLogin.getText());
+        user.setAdmin(cbAdmin.isSelected());
+        user.actualitzarUsuari(emf);
         
         //Notificar Usuari
         info("Usuari modificat!");
@@ -157,47 +146,18 @@ public class AltaGenericController implements Initializable{
     
     @FXML
     private void crearUsuari() throws ParseException, IOException {
-        //Obtenim les dades de l'usuari
-        //Usuari user = new Usuari();
-        //user.setCodi(Integer.parseInt(tfId.getText()));
         
         if(!comprovaCamp(tfNom)){
-            
-            user.setNom(tfNom.getText());
-            carregaPasswd('a');
-            user.setBloquejat(cbBloqueig.isSelected());
-            
             if(!comprovaCamp(tfLogin)){
+                user.setNom(tfNom.getText());
+                carregaPasswd('a');
+                user.setBloquejat(cbBloqueig.isSelected());
                 user.setLogin(tfLogin.getText());
                 user.setData(user.getAvui());
                 user.setAdmin(cbAdmin.isSelected());
                 
-                //Variables
-                EntityManager em = emf.createEntityManager();
-                em.getTransaction().begin();
-                //Afegim usuari a la base de dades
-                try {
-                em.persist(user);
-                //em.flush();
-                em.getTransaction().commit();   
-                info("Usuari introduït satisfactòriament");      
-                }catch (Exception ex) {                    
-                    if (ex.getCause() instanceof ConstraintViolationException){
-                        em.getTransaction().rollback();
-                        avis("Error a la hora d'inserir l'usuari! Nom d'usuari ja existeix!");                        
-                        System.out.println(ex.getMessage());
-                    }
-                }
-
-                if(em.isOpen())
-                    em.close();
-                
-                
-                /*catch(HibernateException ex){
-                    avis("Error a la hora d'inserir l'usuari! Nom d'usuari ja existeix!");
-                    em.getTransaction().rollback();
-                    System.out.println(ex.getMessage());
-                }*/                        
+                user.afegirUsuari(emf);
+                info("Usuari introduït satisfactòriament");                             
             }
             else{
                 lbInfo.setText("Falta el nom de l'usuari! (login) ");    
