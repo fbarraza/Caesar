@@ -13,7 +13,7 @@
         <class>app.orchis.model.Configuracio</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://192.168.1.114:3306/OrchisDB?zeroDateTimeBehavior=convertToNull"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://10.0.207.114:3306/OrchisDB?zeroDateTimeBehavior=convertToNull"/>
 
 
             <!-- Propietats Hibernate -->

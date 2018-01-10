@@ -5,11 +5,8 @@
  */
 package app.orchis.controladors;
 
-import app.orchis.model.Usuari;
-import static app.orchis.utils.Alertes.avis;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.Alertes.sortir;
-import static app.orchis.utils.CryptoHelper.encripta;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
@@ -29,24 +26,12 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
-import org.hibernate.HibernateException;
 
 /**
  *
  * @author m15
  */
-public class AltaGenericController implements Initializable{
-    
-    //Vars Controller
-    private Usuari user = new Usuari();
-    private EntityManagerFactory emf;
-    private char opc;
-    private String passwd;
+public class AltaGenericController extends MasterController implements Initializable{   
     
     //Vars FXML
     @FXML private Button btAfegir;
@@ -61,6 +46,9 @@ public class AltaGenericController implements Initializable{
     @FXML private Label lbId;
     @FXML private Label lbInfo;
     
+    //Vars Controller
+    private char opc;
+    private String passwd;         
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -99,27 +87,6 @@ public class AltaGenericController implements Initializable{
         
     }
     
-    @FXML
-    private void modificarUsuari(){
-        //Creació Entity Manager i del CB
-        EntityManager manager = emf.createEntityManager();
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
-        Root<Usuari> c = update.from(Usuari.class);
-
-        //Sentència SQL        
-        update.set("nom", tfNom.getText());
-        update.set("bloquejat", cbBloqueig.isSelected());
-        update.set("login", tfLogin.getText());
-        update.set("admin", cbAdmin.isSelected());
-        update.where(cb.equal(c.get("codi"), Integer.parseInt(tfId.getText())));  
-
-        //Actualitzar BBDD
-        manager.getTransaction().begin();
-        manager.createQuery(update).executeUpdate();
-        manager.getTransaction().commit();        
-    }
-    
     private boolean comprovaCamp(TextField field){
         if(field.getText().isEmpty()){
             return true;
@@ -127,15 +94,15 @@ public class AltaGenericController implements Initializable{
         else{
             return false;
         }
-    }
+    } 
     
-    private void carregaPasswd() throws IOException{
+    private void carregaPasswd(char opc) throws IOException{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
             Parent root = (Parent) fxmlLoader.load();   
             ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
             
             //
-            controller.setOpc('a');
+            controller.setOpc(opc);
             
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -147,40 +114,22 @@ public class AltaGenericController implements Initializable{
                 user.setPasswd(controller.getPasswd());
             });
             stage.showAndWait();            
-    }
+    }    
     
     @FXML
-    private void crearUsuari() throws ParseException, IOException{
-        //Variables
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-
-        //Obtenim les dades de l'usuari
-        //Usuari user = new Usuari();
-        //user.setCodi(Integer.parseInt(tfId.getText()));
+    private void crearUsuari() throws ParseException, IOException {
         
         if(!comprovaCamp(tfNom)){
-            
-            user.setNom(tfNom.getText());
-            carregaPasswd();
-            user.setBloquejat(cbBloqueig.isSelected());
-            
             if(!comprovaCamp(tfLogin)){
+                user.setNom(tfNom.getText());
+                carregaPasswd('a');
+                user.setBloquejat(cbBloqueig.isSelected());
                 user.setLogin(tfLogin.getText());
                 user.setData(user.getAvui());
                 user.setAdmin(cbAdmin.isSelected());
                 
-                //Afegim usuari a la base de dades
-                try{
-                    em.persist(user);
-                    em.getTransaction().commit();   
-                    info("Usuari introduït satisfactòriament");      
-                }
-                catch(HibernateException ex){
-                    avis("Error a la hora d'inserir l'usuari! Nom d'usuari ja existeix!");
-                    em.getTransaction().rollback();
-                    System.out.println(ex.getMessage());
-                }                         
+                user.afegirUsuari(emf);
+                info("Usuari creat satisfactòriament");                             
             }
             else{
                 lbInfo.setText("Falta el nom de l'usuari! (login) ");    
@@ -188,13 +137,21 @@ public class AltaGenericController implements Initializable{
         }       
         else{
             lbInfo.setText("Falta el nom real de l'usuari!");            
-        }
+        }        
+    }    
+    
+    @FXML
+    private void modificarUsuari(){        
+        //Sentència SQL        
+        user.setNom(tfNom.getText());
+        user.setBloquejat(cbBloqueig.isSelected());
+        user.setLogin(tfLogin.getText());
+        user.setAdmin(cbAdmin.isSelected());
+        user.actualitzarUsuari(emf);
         
-        if(em.isOpen()){
-            em.close();
-        }
-        
-    }
+        //Notificar Usuari
+        info("Usuari modificat!");
+    }    
     
     @FXML
     protected void sortirAction() {
@@ -207,21 +164,6 @@ public class AltaGenericController implements Initializable{
     
     
     //Getters and Setters
-    public Usuari getUser() {
-        return user;
-    }
-    public void setUser(Usuari user) {
-        this.user = user;
-    }
-
-    public EntityManagerFactory getEmf() {
-        return emf;
-    }
-
-    public void setEmf(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-
     public char getOpc() {
         return opc;
     }

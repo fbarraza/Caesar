@@ -9,39 +9,44 @@ import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.Root;
+
+
 
 /**
  *
  * @author m15
  */
-public class AltaUsuarisController implements Initializable{
+public class AltaUsuarisController extends MasterController implements Initializable{
     
     //Variables FXML
     @FXML private TextField tfNom;
@@ -52,39 +57,81 @@ public class AltaUsuarisController implements Initializable{
     @FXML private TableColumn<Usuari, Date> colData;
     @FXML private TableColumn<Usuari, Boolean> colBloquejat;
     @FXML private TableColumn<Usuari, Boolean> colAdmin;
+    @FXML private Button btPrimer, btAnterior, btSeguent, btFinal;
 
     //Variables Programa
-    private EntityManagerFactory emf;
-    private Usuari usuari;
     private ObservableList<Usuari> dades;
+    private int posTaula;
+    ContextMenu contextMenu = new ContextMenu();
+    MenuItem miModificar = new MenuItem("Modificar Usuari");    
+    MenuItem miModificarp = new MenuItem("Modificar Contrasenya");
     
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         configuraColumnes();
         Platform.runLater(() -> {
+            //Obtenim els usuaris
             dades = getUsuaris();
-            actualitzaTaula();  
+            
+            //Inicialitzem i omplim la taula
+            actualitzaTaula();                         
         });
+        
+        //Accions dels submenus
+        miModificar.setOnAction(e -> {
+            try {
+                obrirModif();
+            } catch (IOException ex) {
+                Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        miModificarp.setOnAction(e -> {
+            try {
+                canviarContrasenya('b');
+            } catch (IOException ex) {
+                Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        contextMenu.getItems().addAll(miModificar, miModificarp);
+        tvUsuaris.setContextMenu(contextMenu);
+        
+        //Listener dobleclic
+        tvUsuaris.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                    //Pels botons <- i ->
+                    posTaula = tvUsuaris.getFocusModel().getFocusedIndex();
+                    comprovarControls();
+                    if(mouseEvent.getClickCount() == 2){
+                        try {
+                            obrirModif();
+                        } catch (IOException ex) {
+                            Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });        
     }   
     
-    @FXML
-    protected void mnuConnectaOnAction (ActionEvent actionEvent) {
-        actualitzaTaula();
-        goTableItem(0);
-    }
-    
-
-
+    /**
+     * Actualitza la taula mitjançant un ObservableList.
+     */
     private void actualitzaTaula() {
         if (!tvUsuaris.getItems().isEmpty()){
             dades = getUsuaris();
         }
-        tvUsuaris.setItems(dades);
-
+        tvUsuaris.setItems(dades);        
         inicialitzaTaula();
     } 
     
+    /**
+     * Inicialitzem la taula i afegim listener per filtrar els usuaris.
+     */
     private void inicialitzaTaula() {
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Usuari> filteredData = new FilteredList<>(tvUsuaris.getItems(), p -> true);
@@ -120,7 +167,9 @@ public class AltaUsuarisController implements Initializable{
         tvUsuaris.setItems(sortedData);
     }
     
-    
+    /**
+     * Configura les columnes per indicar a quines variables de l'objecte pertanyen.
+     */
     private void configuraColumnes() {
         colCodi.setCellValueFactory(new PropertyValueFactory<>("codi"));
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -130,6 +179,7 @@ public class AltaUsuarisController implements Initializable{
         colAdmin.setCellValueFactory(new PropertyValueFactory<>("admin"));
     }
 
+    
     private void goTableItem(int row) {
         tvUsuaris.requestFocus();
         tvUsuaris.scrollTo(row);
@@ -138,43 +188,126 @@ public class AltaUsuarisController implements Initializable{
     }  
     
     @FXML
+    private void primerAction() {
+
+        posTaula = 0;
+
+        tvUsuaris.requestFocus();
+        tvUsuaris.getSelectionModel().select(posTaula);
+        tvUsuaris.getFocusModel().focus(posTaula);
+
+        comprovarControls();
+
+    }
+
+    @FXML
+    private void anteriorAction() {
+
+        posTaula--;
+
+        tvUsuaris.requestFocus();
+        tvUsuaris.getSelectionModel().select(posTaula);
+        tvUsuaris.getFocusModel().focus(posTaula);
+
+        comprovarControls();
+
+    }
+
+    @FXML
+    private void seguentAction() {
+
+        posTaula++;
+
+        tvUsuaris.requestFocus();
+        tvUsuaris.getSelectionModel().select(posTaula);
+        tvUsuaris.getFocusModel().focus(posTaula);
+
+        comprovarControls();
+
+    }
+
+    @FXML
+    private void finalAction() {
+
+        posTaula = tvUsuaris.getItems().size() - 1;
+
+        tvUsuaris.requestFocus();
+        tvUsuaris.getSelectionModel().select(posTaula);
+        tvUsuaris.getFocusModel().focus(posTaula);
+
+        comprovarControls();
+
+    }
+
+    private void comprovarControls() {
+
+        //Habilita tots els botons
+        btPrimer.setDisable(false);
+        btAnterior.setDisable(false);
+        btSeguent.setDisable(false);
+        btFinal.setDisable(false);
+
+        //Si la posició es el primer element desabilita els botons de primer i anterior
+        if (posTaula == 0) {
+
+            btPrimer.setDisable(true);
+            btAnterior.setDisable(true);
+
+             //Si la posició es l'ultim element desabilita els botons de seguent i final
+        } else if (posTaula == tvUsuaris.getItems().size() - 1) {
+
+            btSeguent.setDisable(true);
+            btFinal.setDisable(true);
+
+        }
+
+    }
+
+    
+    /**
+     * Obre l'interfície genèrica amb la opció de crear.
+     * @throws IOException 
+     */
+    @FXML
     private void obrirCrear() throws IOException{
         char opt = 'c';
         obrirGeneric(opt);
     }    
     
+    /**
+     * Obre l'interfície genèrica amb la opció de modificar.
+     * @throws IOException 
+     */    
     @FXML
     private void obrirModif() throws IOException{
         char opt = 'm';
         obrirGeneric(opt);
     }
     
+    /**
+     * Obté l'usuari seleccionat i l'elimina.
+     */
     @FXML
     private void eliminarUsuari(){
-            //Creació Entity Manager i del CB
-            EntityManager em = emf.createEntityManager();
-            CriteriaBuilder cb = emf.getCriteriaBuilder();
-            CriteriaDelete<Usuari> delete = cb.createCriteriaDelete(Usuari.class);                        
-            Root<Usuari> c = delete.from(Usuari.class);
-            
-            //Sentència SQL
-            getSeleccionat();
-            delete.where(cb.equal(c.get("codi"), usuari.getCodi()));
-            
-            //Actualitzar BBDD
-            em.getTransaction().begin();
-            em.createQuery(delete).executeUpdate();
-            em.getTransaction().commit();  
-            
-            //Notificar
-            info("Usuari eliminat!");
-            
-            //Recarregar taula
-            actualitzaTaula();
-            
-            //Tencar Entity
-            em.close();
+        //Eliminar Usuari de la BBDD
+        setSeleccionat();
+        user.eliminarUsuari(emf);
+
+        //Notificar
+        info("Usuari eliminat!");
+
+        //Recarregar taula
+        actualitzaTaula();
     }
+    
+    protected void canviarContrasenya(char opc) throws IOException, ParseException{
+        //Obtenir Usuari
+        setSeleccionat();
+        
+        //Interfície canviar contrasenya
+        carregaCanvi(opc);         
+        
+    }        
     
     private void obrirGeneric(char opt) throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaGeneric.fxml"));
@@ -185,8 +318,8 @@ public class AltaUsuarisController implements Initializable{
         controller.setEmf(emf);
         controller.setOpc(opt);
         if(opt == 'm'){
-            getSeleccionat();
-            controller.setUser(usuari);
+            setSeleccionat();
+            controller.setUser(user);
         }
 
         Stage stage = new Stage();
@@ -197,10 +330,34 @@ public class AltaUsuarisController implements Initializable{
         stage.showAndWait();
         actualitzaTaula();
     }    
-
+    
+    protected void carregaCanvi(char opc)throws IOException{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
+            Parent root = (Parent) fxmlLoader.load();   
+            ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
+            
+            //
+            controller.setOpc(opc);
+            controller.setUser(user);
+            controller.setEmf(emf);
+            
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(root));
+            stage.setTitle("Introduir contrasenya");
+            
+            stage.setOnHiding(event -> {
+                user.setPasswd(controller.getPasswd());                
+            });
+            stage.showAndWait();  
+    }        
+    
+    //GETTERS AND SETTERS
     /**
-     * Getters & Setters
-     **/
+     * Obtené una llista completa de tots els usuaris.
+     * @return 
+     */
     private ObservableList<Usuari> getUsuaris() {
         EntityManager manager = emf.createEntityManager();
         ArrayList<Usuari> llista = (ArrayList<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
@@ -209,24 +366,7 @@ public class AltaUsuarisController implements Initializable{
         return llistaUs;
     }
     
-    public EntityManagerFactory getEntity() {
-        return emf;
+    private void setSeleccionat(){
+        this.user = tvUsuaris.getSelectionModel().getSelectedItem();
     }
-
-    public void setEntity(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    
-    private void getSeleccionat(){
-        this.usuari = tvUsuaris.getSelectionModel().getSelectedItem();
-    }
-
-    public Usuari getUsuari() {
-        return usuari;
-    }
-
-    public void setUsuari(Usuari usuari) {
-        this.usuari = usuari;
-    }
-    
 }

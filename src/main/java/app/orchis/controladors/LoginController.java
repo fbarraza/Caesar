@@ -16,17 +16,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javax.mail.MessagingException;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javax.persistence.criteria.CriteriaUpdate;
 import java.io.IOException;
 import java.text.ParseException;
 import javafx.application.Platform;
@@ -43,7 +36,7 @@ import org.apache.commons.configuration.ConfigurationException;
  *
  * @author m15
  */
-public class LoginController implements Initializable{
+public class LoginController extends MasterController implements Initializable {
 
     //Vars elements FXML
     @FXML private AnchorPane Panel;
@@ -53,10 +46,8 @@ public class LoginController implements Initializable{
     @FXML private Button btLogin;
     
     //Vars pel programa    
-    private static EntityManagerFactory emf;
     private static int intents_n;
     private static int intents_m;
-    private static Usuari user = new Usuari();
     private static Configuracio config = new Configuracio();
     
     @Override
@@ -66,28 +57,6 @@ public class LoginController implements Initializable{
             intents_m = intents_n;
         });        
     } 
-    
-    /**
-     * Listener dels TextFields del Login.
-     * @param e /Tecla premuda
-     * @throws Exception 
-     */
-    @FXML
-    private void keyPress(KeyEvent e) throws Exception {
-        if (e.getSource().equals(tfUser)) {
-            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB))
-                if (tfPasswd.getText().isEmpty()) {
-                    tfPasswd.requestFocus();
-                } else {
-                    Login();
-                }            
-        } else {
-            if (e.getCode().equals(KeyCode.ENTER)) {
-                Login();
-            } 
-        }
-    }    
-
     
     /**
      * Bloqueja l'aplicació i no permet que el client segueixi intentant.
@@ -100,7 +69,7 @@ public class LoginController implements Initializable{
     }    
     
     /**
-     * Notifica el client que l'usuari introduït està bloquejat.
+     * Notifica el client que l'usuari introduït està bloquejat i bloquegem l'aplicació
      * @param user /Usuari introduït
      */
     protected void usuariBloquejat(String user){
@@ -108,51 +77,39 @@ public class LoginController implements Initializable{
         bloqueigApp();
     }
     
+    /**
+     * Carreguem la interfície per canviar la contrasenya
+     * @throws IOException 
+     */
     protected void carregaCanvi()throws IOException{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
-            Parent root = (Parent) fxmlLoader.load();   
-            ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
-            String passwd;
-            
-            //
-            controller.setOpc('a');
-            
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.setScene(new Scene(root));
-            stage.setTitle("Introduir contrasenya");
-            
-            stage.setOnHiding(event -> {
-                user.setPasswd(controller.getPasswd());                
-            });
-            stage.showAndWait();  
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
+        Parent root = (Parent) fxmlLoader.load();   
+        ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
+
+        //
+        controller.setOpc('a');
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Introduir contrasenya");
+
+        stage.setOnHiding(event -> {
+            user.setPasswd(controller.getPasswd());                
+        });
+        stage.showAndWait();  
     }    
     
     protected void canviarContrasenya() throws IOException, ParseException{
-        EntityManager manager = emf.createEntityManager();
-        
         //Avisem a l'usuari    
         info("La contrasenya té més de " +config.getCaducitat()+" i s'ha de canviar!");
             
         //Interfície canviar contrasenya
         carregaCanvi();
         
-        //Variables per actualitzar
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
-        Root<Usuari> c = update.from(Usuari.class);     
-
-        //Vars a actualitzar      
-        update.set("passwd", user.getPasswd());   
-        update.set("data", user.getAvui());
-        update.where(cb.equal(c.get("codi"), user.getCodi()));  
-        //Actualitzar BBDD
-        //actualitzaBD(em, update);        
-        
-        manager.getTransaction().begin();
-        manager.createQuery(update).executeUpdate();
-        manager.getTransaction().commit();     
+        //Actualitzar contrasenya
+        user.actualitzarUsuari(emf);
         
     }    
     
@@ -190,20 +147,9 @@ public class LoginController implements Initializable{
         if(intents_n == 0){
             tfInfo.setText("L'usuari ha sigut bloquejat ja que has fallat " +intents_m+ " vegades! S'ha informat a l'admin i la app ha quedat bloquejada.");            
             
-            //Creació Entity Manager i del CB
-            EntityManager manager = emf.createEntityManager();
-            CriteriaBuilder cb = emf.getCriteriaBuilder();
-            CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
-            Root<Usuari> c = update.from(Usuari.class);
-            
-            //Sentència SQL
-            update.set("bloquejat", true);
-            update.where(cb.equal(c.get("login"), usuari.getLogin()));  
-            
-            //Actualitzar BBDD
-        manager.getTransaction().begin();
-        manager.createQuery(update).executeUpdate();
-        manager.getTransaction().commit();   
+            //Actualitzar usuari
+            user.setBloquejat(true);
+            user.actualitzarUsuari(emf);
                      
             //Informar administrador
             enviarMissatge("Han intentat fer login amb l'usuari " + usuari.getLogin() + " i ha quedat bloquejat"); 
@@ -230,7 +176,7 @@ public class LoginController implements Initializable{
         //TODO: RNB - 18/12/2017 - dehabilitat per compilar. En procés.
         //Passar valors de variables
         controller.setUser(user);
-        controller.setEntity(emf);
+        controller.setEmf(emf);
         
         //Iniciar nova finestra i RIP login.
         Stage stage = new Stage();
@@ -238,19 +184,32 @@ public class LoginController implements Initializable{
         stage.setTitle("Menú Principal");
         stage.initModality(Modality.NONE);
         stage.setOnHiding( event -> {emf.close();} );
+        
         //emf.close();
         primaryStage.close();
         stage.showAndWait();        
     }
-
+    
     /**
-     * Apagar l'aplicació
+     * Listener dels TextFields del Login.
+     * @param e /Tecla premuda
+     * @throws Exception 
      */
     @FXML
-    protected void Surt(){
-        emf.close();
-        System.exit(0);
-    }
+    private void keyPress(KeyEvent e) throws Exception {
+        if (e.getSource().equals(tfUser)) {
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB))
+                if (tfPasswd.getText().isEmpty()) {
+                    tfPasswd.requestFocus();
+                } else {
+                    Login();
+                }            
+        } else {
+            if (e.getCode().equals(KeyCode.ENTER)) {
+                Login();
+            } 
+        }
+    }        
     
     /**
      * Funció per iniciar sessió amb l'usuari que el client ha introduït
@@ -262,28 +221,15 @@ public class LoginController implements Initializable{
     protected void Login() throws ConfigurationException, MessagingException, Exception{
         //Variables del programa
         String username = tfUser.getText();
-        String password = encripta(tfPasswd.getText());
-        
-        //Manager local
-        EntityManager _manager = emf.createEntityManager();
-
-        //Obtenir dades de l'usuari introduit
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        CriteriaQuery<Usuari> cbQuery = cb.createQuery(Usuari.class);
-        Root<Usuari> c = cbQuery.from(Usuari.class);
-        cbQuery.select(c);
-        cbQuery.where(cb.equal(c.get("login"), username));
-        Query query = _manager.createQuery(cbQuery);                       
-        
+        String password = encripta(tfPasswd.getText());                    
+                
         try{
-            user = (Usuari) query.getSingleResult();
+            user = Usuari.obtenirUsuari(emf, username);
             if(user.isBloquejat()){
                 usuariBloquejat(username);
             }
             else{
                 //Usuari introduit OK
-                System.out.println(password);
-                System.out.println(user.getPasswd());
                 if(testPassword(password,user.getPasswd())){
                     try{
                         //Iniciar app principal
@@ -313,14 +259,15 @@ public class LoginController implements Initializable{
                 System.err.println(Ex.getCause());
             System.err.println(Ex.getMessage());
         }
-        
-        //Fi manager
-        if (_manager.isOpen())
-            _manager.close();
-    }    
+    }  
     
-    public void setEmf(EntityManagerFactory emf){
-        this.emf = emf;
-    }
+    /**
+     * Apagar l'aplicació
+     */
+    @FXML
+    protected void Surt(){
+        emf.close();
+        System.exit(0);
+    }    
 }
   
