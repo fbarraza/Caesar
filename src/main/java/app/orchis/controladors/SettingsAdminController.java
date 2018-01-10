@@ -20,8 +20,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -39,7 +37,7 @@ import javax.persistence.criteria.Root;
  *
  * @author infot
  */
-public class SettingsAdminController implements Initializable {
+public class SettingsAdminController extends MasterController implements Initializable {
 
     //Variables dels elements en la vista
     @FXML
@@ -56,9 +54,6 @@ public class SettingsAdminController implements Initializable {
     private Button btnModificar;
     @FXML
     private Button btnSortir;  
-    
-    //Vars programa
-    private static EntityManagerFactory emf;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -152,12 +147,4 @@ public class SettingsAdminController implements Initializable {
         manager.close();
 
     }
-
-    //Setter
-    public void setEntity(EntityManagerFactory emf){
-        this.emf = emf;
-    }
-    
-    
-
 }

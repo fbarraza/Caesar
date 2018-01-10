@@ -6,7 +6,6 @@
 package app.orchis.controladors;
 
 import app.orchis.model.Configuracio;
-import app.orchis.model.Usuari;
 import app.orchis.utils.Connexio;
 import java.io.IOException;
 import java.net.URL;
@@ -24,7 +23,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -34,7 +32,7 @@ import javax.persistence.criteria.Root;
  *
  * @author m15
  */
-public class MainMenuController implements Initializable{
+public class MainMenuController extends MasterController implements Initializable{
 
     //Vars element FXML
     @FXML private MenuItem adminConfig;
@@ -47,9 +45,7 @@ public class MainMenuController implements Initializable{
     //@FXML private Label server;
         
     //Vars programa
-    private static Usuari user = new Usuari();
     private static Configuracio config;
-    private static EntityManagerFactory emf;
     private static Iterable<String> IP_HEADER_CANDIDATES;
     
     @Override
@@ -86,7 +82,7 @@ public class MainMenuController implements Initializable{
         AltaUsuarisController controller = fxmlLoader.<AltaUsuarisController>getController();
 
         //Vars
-        controller.setEntity(emf);
+        controller.setEmf(emf);
 
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -104,7 +100,7 @@ public class MainMenuController implements Initializable{
             SettingsAdminController controller = fxmlLoader.<SettingsAdminController>getController();
             
             //Vars
-            controller.setEntity(emf);
+            controller.setEmf(emf);
             
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -119,12 +115,4 @@ public class MainMenuController implements Initializable{
         
     }
     
-    //Getters and Setters per passar variables
-    public void setUser(Usuari user){
-        this.user = user;
-    }  
-    
-    public void setEntity(EntityManagerFactory emf){
-        this.emf = emf;
-    }    
 }

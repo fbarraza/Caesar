@@ -27,13 +27,14 @@ import javax.persistence.EntityManagerFactory;
  *
  * @author m15
  */
-public class SplashScreenController implements Initializable{
+public class SplashScreenController extends MasterController implements Initializable{
 
+    //Vars FXML
     @FXML private AnchorPane rootPane;
     
+    //Vars programa
     private final long SLEEP = 3000;
-    private static EntityManagerFactory emf;
-
+    
     private void obteDadesApp() {
         AppConfig appConfig = AppConfig.getInstance();
         appConfig.setPersistenceUnit("app.orchis.persistencia");

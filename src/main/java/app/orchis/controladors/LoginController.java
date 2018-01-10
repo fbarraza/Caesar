@@ -16,17 +16,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javax.mail.MessagingException;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javax.persistence.criteria.CriteriaUpdate;
 import java.io.IOException;
 import java.text.ParseException;
 import javafx.application.Platform;
@@ -43,7 +36,7 @@ import org.apache.commons.configuration.ConfigurationException;
  *
  * @author m15
  */
-public class LoginController implements Initializable{
+public class LoginController extends MasterController implements Initializable {
 
     //Vars elements FXML
     @FXML private AnchorPane Panel;
@@ -53,10 +46,8 @@ public class LoginController implements Initializable{
     @FXML private Button btLogin;
     
     //Vars pel programa    
-    private static EntityManagerFactory emf;
     private static int intents_n;
     private static int intents_m;
-    private static Usuari user = new Usuari();
     private static Configuracio config = new Configuracio();
     
     @Override
@@ -185,7 +176,7 @@ public class LoginController implements Initializable{
         //TODO: RNB - 18/12/2017 - dehabilitat per compilar. En procés.
         //Passar valors de variables
         controller.setUser(user);
-        controller.setEntity(emf);
+        controller.setEmf(emf);
         
         //Iniciar nova finestra i RIP login.
         Stage stage = new Stage();
@@ -278,10 +269,5 @@ public class LoginController implements Initializable{
         emf.close();
         System.exit(0);
     }    
-    
-    //GETTERS AND SETTERS
-    public void setEmf(EntityManagerFactory emf){
-        this.emf = emf;
-    }
 }
   

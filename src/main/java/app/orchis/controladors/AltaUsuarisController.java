@@ -12,7 +12,6 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,13 +20,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -40,18 +39,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
+
 
 
 /**
  *
  * @author m15
  */
-public class AltaUsuarisController implements Initializable{
+public class AltaUsuarisController extends MasterController implements Initializable{
     
     //Variables FXML
     @FXML private TextField tfNom;
@@ -62,12 +57,11 @@ public class AltaUsuarisController implements Initializable{
     @FXML private TableColumn<Usuari, Date> colData;
     @FXML private TableColumn<Usuari, Boolean> colBloquejat;
     @FXML private TableColumn<Usuari, Boolean> colAdmin;
+    @FXML private Button btPrimer, btAnterior, btSeguent, btFinal;
 
     //Variables Programa
-    private EntityManagerFactory emf;
-    private Usuari usuari;
     private ObservableList<Usuari> dades;
-    
+    private int posTaula;
     ContextMenu contextMenu = new ContextMenu();
     MenuItem miModificar = new MenuItem("Modificar Usuari");    
     MenuItem miModificarp = new MenuItem("Modificar Contrasenya");
@@ -109,6 +103,9 @@ public class AltaUsuarisController implements Initializable{
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                    //Pels botons <- i ->
+                    posTaula = tvUsuaris.getFocusModel().getFocusedIndex();
+                    comprovarControls();
                     if(mouseEvent.getClickCount() == 2){
                         try {
                             obrirModif();
@@ -190,6 +187,83 @@ public class AltaUsuarisController implements Initializable{
         tvUsuaris.getFocusModel().focus(row);
     }  
     
+    @FXML
+    private void primerAction() {
+
+        posTaula = 0;
+
+        tvUsuaris.requestFocus();
+        tvUsuaris.getSelectionModel().select(posTaula);
+        tvUsuaris.getFocusModel().focus(posTaula);
+
+        comprovarControls();
+
+    }
+
+    @FXML
+    private void anteriorAction() {
+
+        posTaula--;
+
+        tvUsuaris.requestFocus();
+        tvUsuaris.getSelectionModel().select(posTaula);
+        tvUsuaris.getFocusModel().focus(posTaula);
+
+        comprovarControls();
+
+    }
+
+    @FXML
+    private void seguentAction() {
+
+        posTaula++;
+
+        tvUsuaris.requestFocus();
+        tvUsuaris.getSelectionModel().select(posTaula);
+        tvUsuaris.getFocusModel().focus(posTaula);
+
+        comprovarControls();
+
+    }
+
+    @FXML
+    private void finalAction() {
+
+        posTaula = tvUsuaris.getItems().size() - 1;
+
+        tvUsuaris.requestFocus();
+        tvUsuaris.getSelectionModel().select(posTaula);
+        tvUsuaris.getFocusModel().focus(posTaula);
+
+        comprovarControls();
+
+    }
+
+    private void comprovarControls() {
+
+        //Habilita tots els botons
+        btPrimer.setDisable(false);
+        btAnterior.setDisable(false);
+        btSeguent.setDisable(false);
+        btFinal.setDisable(false);
+
+        //Si la posició es el primer element desabilita els botons de primer i anterior
+        if (posTaula == 0) {
+
+            btPrimer.setDisable(true);
+            btAnterior.setDisable(true);
+
+             //Si la posició es l'ultim element desabilita els botons de seguent i final
+        } else if (posTaula == tvUsuaris.getItems().size() - 1) {
+
+            btSeguent.setDisable(true);
+            btFinal.setDisable(true);
+
+        }
+
+    }
+
+    
     /**
      * Obre l'interfície genèrica amb la opció de crear.
      * @throws IOException 
@@ -217,7 +291,7 @@ public class AltaUsuarisController implements Initializable{
     private void eliminarUsuari(){
         //Eliminar Usuari de la BBDD
         setSeleccionat();
-        usuari.eliminarUsuari(emf);
+        user.eliminarUsuari(emf);
 
         //Notificar
         info("Usuari eliminat!");
@@ -245,7 +319,7 @@ public class AltaUsuarisController implements Initializable{
         controller.setOpc(opt);
         if(opt == 'm'){
             setSeleccionat();
-            controller.setUser(usuari);
+            controller.setUser(user);
         }
 
         Stage stage = new Stage();
@@ -264,7 +338,7 @@ public class AltaUsuarisController implements Initializable{
             
             //
             controller.setOpc(opc);
-            controller.setUser(usuari);
+            controller.setUser(user);
             controller.setEmf(emf);
             
             Stage stage = new Stage();
@@ -274,15 +348,12 @@ public class AltaUsuarisController implements Initializable{
             stage.setTitle("Introduir contrasenya");
             
             stage.setOnHiding(event -> {
-                usuari.setPasswd(controller.getPasswd());                
+                user.setPasswd(controller.getPasswd());                
             });
             stage.showAndWait();  
     }        
     
-    /*
-     * Getters & Setters
-     */
-    
+    //GETTERS AND SETTERS
     /**
      * Obtené una llista completa de tots els usuaris.
      * @return 
@@ -295,24 +366,7 @@ public class AltaUsuarisController implements Initializable{
         return llistaUs;
     }
     
-    public EntityManagerFactory getEntity() {
-        return emf;
-    }
-
-    public void setEntity(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    
     private void setSeleccionat(){
-        this.usuari = tvUsuaris.getSelectionModel().getSelectedItem();
+        this.user = tvUsuaris.getSelectionModel().getSelectedItem();
     }
-
-    public Usuari getUsuari() {
-        return usuari;
-    }
-
-    public void setUsuari(Usuari usuari) {
-        this.usuari = usuari;
-    }
-    
 }

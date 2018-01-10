@@ -5,15 +5,10 @@
  */
 package app.orchis.controladors;
 
-import app.orchis.model.Usuari;
-import static app.orchis.utils.Alertes.avis;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.Alertes.sortir;
-import static app.orchis.utils.CryptoHelper.encripta;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.ParseException;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -31,25 +26,12 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
-import org.hibernate.HibernateException;
-import org.hibernate.exception.ConstraintViolationException;
 
 /**
  *
  * @author m15
  */
-public class AltaGenericController implements Initializable{
-    
-    //Vars Controller
-    private Usuari user = new Usuari();
-    private EntityManagerFactory emf;
-    private char opc;
-    private String passwd;
+public class AltaGenericController extends MasterController implements Initializable{   
     
     //Vars FXML
     @FXML private Button btAfegir;
@@ -64,6 +46,9 @@ public class AltaGenericController implements Initializable{
     @FXML private Label lbId;
     @FXML private Label lbInfo;
     
+    //Vars Controller
+    private char opc;
+    private String passwd;         
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -179,21 +164,6 @@ public class AltaGenericController implements Initializable{
     
     
     //Getters and Setters
-    public Usuari getUser() {
-        return user;
-    }
-    public void setUser(Usuari user) {
-        this.user = user;
-    }
-
-    public EntityManagerFactory getEmf() {
-        return emf;
-    }
-
-    public void setEmf(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-
     public char getOpc() {
         return opc;
     }

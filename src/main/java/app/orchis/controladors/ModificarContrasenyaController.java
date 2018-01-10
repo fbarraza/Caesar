@@ -8,19 +8,15 @@ package app.orchis.controladors;
 import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.CryptoHelper.encripta;
-import java.awt.Panel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
@@ -33,7 +29,7 @@ import javax.persistence.criteria.Root;
  *
  * @author m15
  */
-public class ModificarContrasenyaController implements Initializable{
+public class ModificarContrasenyaController extends MasterController implements Initializable{
     
     //Vars FXML
     @FXML private AnchorPane Panel;
@@ -46,8 +42,6 @@ public class ModificarContrasenyaController implements Initializable{
     @FXML private Label lbAnterior;
     
     //Vars
-    private Usuari user;
-    private EntityManagerFactory emf;
     private char opc;
     
     private String passwd;
@@ -123,23 +117,7 @@ public class ModificarContrasenyaController implements Initializable{
             info("Contrasenya actualitzada!");
     }
 
-    //Getters and Setters
-    public Usuari getUser() {
-        return user;
-    }
-
-    public void setUser(Usuari user) {
-        this.user = user;
-    }
-
-    public EntityManagerFactory getEmf() {
-        return emf;
-    }
-
-    public void setEmf(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    
+    //Getters and Setters    
     public char getOpc() {
         return opc;
     }

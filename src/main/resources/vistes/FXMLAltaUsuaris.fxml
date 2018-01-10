@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
@@ -15,9 +10,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox id="MainVBox" fx:id="vbxPrincipal" prefHeight="538.0" prefWidth="640.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.AltaUsuarisController">
+<VBox id="MainVBox" fx:id="vbxPrincipal" prefHeight="500.0" prefWidth="640.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.AltaUsuarisController">
    <children>
-      <SplitPane id="MainSplit" dividerPositions="0.12771084337349398" orientation="VERTICAL" stylesheets="@../estils/estil.css">
+      <SplitPane id="MainSplit" dividerPositions="0.12771084337349398" orientation="VERTICAL" prefHeight="430.0" prefWidth="640.0" stylesheets="@../estils/estil.css">
          <items>
             <AnchorPane id="MainAnchor" stylesheets="@../estils/estil.css">
                <children>
@@ -29,7 +24,7 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <TableView id="MainTPanel" fx:id="tvUsuaris" prefHeight="429.0" prefWidth="694.0" stylesheets="@../estils/estil.css">
+            <TableView id="MainTPanel" fx:id="tvUsuaris" prefHeight="447.0" prefWidth="638.0" stylesheets="@../estils/estil.css">
                <columns>
                   <TableColumn fx:id="colCodi" prefWidth="48.0" text="Codi" />
                   <TableColumn fx:id="colNom" prefWidth="156.0" text="Nom" />
@@ -41,22 +36,16 @@
             </TableView>
          </items>
       </SplitPane>
-      <HBox prefHeight="36.0" prefWidth="640.0" spacing="100.0" stylesheets="@../estils/estil.css">
+      <AnchorPane id="MainAnchor" prefHeight="83.0" prefWidth="640.0">
          <children>
-            <Button fx:id="btAfegir" mnemonicParsing="false" onAction="#obrirCrear" prefHeight="26.0" prefWidth="120.0" text="Afegir">
-               <HBox.margin>
-                  <Insets left="40.0" />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="btModificar" mnemonicParsing="false" onAction="#obrirModif" prefHeight="26.0" prefWidth="133.0" text="Modificar" />
-            <Button fx:id="btEliminar" mnemonicParsing="false" onAction="#eliminarUsuari" prefHeight="26.0" prefWidth="119.0" text="Eliminar" />
+            <Button fx:id="btModificar" layoutX="386.0" layoutY="19.0" mnemonicParsing="false" onAction="#obrirModif" prefHeight="40.0" prefWidth="120.0" text="Modificar" />
+            <Button fx:id="btEliminar" layoutX="510.0" layoutY="19.0" mnemonicParsing="false" onAction="#eliminarUsuari" prefHeight="40.0" prefWidth="120.0" text="Eliminar" />
+            <Button fx:id="btAfegir" layoutX="262.0" layoutY="18.0" mnemonicParsing="false" onAction="#obrirCrear" prefHeight="40.0" prefWidth="120.0" text="Afegir" />
+            <Button fx:id="btPrimer" layoutX="16.0" layoutY="18.0" mnemonicParsing="false" onAction="#primerAction" prefHeight="40.0" prefWidth="33.0" text="Button" />
+            <Button fx:id="btAnterior" layoutX="57.0" layoutY="20.0" mnemonicParsing="false" onAction="#anteriorAction" prefHeight="40.0" prefWidth="33.0" text="Button" />
+            <Button fx:id="btSeguent" layoutX="96.0" layoutY="19.0" mnemonicParsing="false" onAction="#seguentAction" prefHeight="40.0" prefWidth="33.0" text="Button" />
+            <Button fx:id="btFinal" layoutX="137.0" layoutY="18.0" mnemonicParsing="false" onAction="#finalAction" prefHeight="40.0" prefWidth="33.0" text="Button" />
          </children>
-         <VBox.margin>
-            <Insets bottom="20.0" top="20.0" />
-         </VBox.margin>
-         <padding>
-            <Insets right="20.0" />
-         </padding>
-      </HBox>
+      </AnchorPane>
    </children>
 </VBox>

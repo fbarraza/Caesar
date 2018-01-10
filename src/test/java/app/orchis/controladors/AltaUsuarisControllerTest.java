@@ -7,13 +7,16 @@ package app.orchis.controladors;
 
 import app.orchis.classes.AppConfig;
 import app.orchis.model.Usuari;
+import static app.orchis.model.Usuari.obtenirUsuari;
 import static app.orchis.utils.Alertes.avis;
 import static app.orchis.utils.Alertes.info;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.Root;
@@ -32,6 +35,7 @@ import static org.junit.Assert.*;
 public class AltaUsuarisControllerTest {
     
     private EntityManagerFactory emf;
+    private Usuari user = new Usuari();
     
     public AltaUsuarisControllerTest() {
     }
@@ -45,10 +49,14 @@ public class AltaUsuarisControllerTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws ParseException {
         AppConfig appConfig = AppConfig.getInstance();
         appConfig.setPersistenceUnit("app.orchis.persistencia");
 
+        user.setNom("JUnit");
+        user.setLogin("junit");
+        user.getAvui();
+        
         try {
             emf = appConfig.loadAppConfig();
         } catch (Exception e){
@@ -66,49 +74,26 @@ public class AltaUsuarisControllerTest {
     @Test    
     public void testcrearUsuari() throws Exception {
         //Variables
-        /*EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        //Afegim usuari a la base de dades
-        try {
-        em.persist(usuari);
-        em.getTransaction().commit();   
-        info("Usuari introduït satisfactòriament");      
-        }catch (HibernateException ex) {                    
-
-
-                avis("Error a la hora d'inserir l'usuari! Nom d'usuari ja existeix!");
-                em.getTransaction().rollback();
-                System.out.println(ex.getMessage());
-
-        }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");*/
+        user.afegirUsuari(emf);
+        user = obtenirUsuari(emf,user.getLogin());
+        
+        //Obtenir usuari
+        assertNotNull(user.getLogin());
+        
     }
     /**
      * Test of eliminarUsuari method, of class AltaUsuarisController.
      */
     @Test
-    public void testeliminarUsuari() throws Exception {
-        System.out.println("Eliminar Usuari");
-        EntityManager em = emf.createEntityManager();
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        CriteriaDelete<Usuari> delete = cb.createCriteriaDelete(Usuari.class);                        
-        Root<Usuari> c = delete.from(Usuari.class);
-        Usuari usuari = new Usuari();
-        //Sentència SQL
-        delete.where(cb.equal(c.get("codi"), usuari.getCodi()));
+    public void testeliminarUsuari(){
+        user.eliminarUsuari(emf);
 
-        //Actualitzar BBDD
-        em.getTransaction().begin();
-        em.createQuery(delete).executeUpdate();
-        em.getTransaction().commit();  
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
      * Test of canviarContrasenya method, of class AltaUsuarisController.
      */
+    /*
     @Test
     public void testCanviarContrasenya() throws Exception {
         System.out.println("canviarContrasenya");
@@ -117,5 +102,5 @@ public class AltaUsuarisControllerTest {
         instance.canviarContrasenya(opc);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
-    }
+    }*/
 }
