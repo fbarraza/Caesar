@@ -11,6 +11,7 @@ import static app.orchis.utils.Alertes.sortir;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -24,6 +25,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -78,8 +81,9 @@ public class AltaGenericController extends MasterController implements Initializ
                 System.err.println("Error!");
                 break;
         }
+        tfNom.requestFocus();
     }
-    
+        
     private void carregarUsuari(){
         tfId.setText(Long.toString(user.getCodi()));
         tfNom.setText(user.getNom());
@@ -118,6 +122,38 @@ public class AltaGenericController extends MasterController implements Initializ
             stage.showAndWait();  
    
     }    
+    
+    @FXML
+    private void keyPress(KeyEvent e) throws Exception {
+        if (e.getSource().equals(tfNom)) {
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB))
+                    tfLogin.requestFocus();
+            }
+        
+        else if(e.getSource().equals(tfLogin)){
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB)) {
+                cbBloqueig.requestFocus();
+            } 
+        }
+        else if(e.getSource().equals(cbBloqueig)){
+            if (e.getCode().equals(KeyCode.TAB)){
+                cbAdmin.requestFocus();
+            }
+        }
+        else if(e.getSource().equals(cbAdmin)){
+            if (e.getCode().equals(KeyCode.TAB) && !tfLogin.getText().isEmpty()){
+                if(opc == 'a'){
+                    crearUsuari();
+                }
+                else{
+                    modificarUsuari();
+                }
+            }
+            else{
+                tfLogin.requestFocus();
+            }
+        }
+    }     
     
     @FXML
     private void crearUsuari() throws ParseException, IOException {
