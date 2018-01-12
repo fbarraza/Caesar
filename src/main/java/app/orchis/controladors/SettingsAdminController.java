@@ -6,6 +6,7 @@
 package app.orchis.controladors;
 
 import app.orchis.model.Configuracio;
+import static app.orchis.model.Configuracio.getConfig;
 import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.Alertes.sortir;
@@ -66,9 +67,10 @@ public class SettingsAdminController extends MasterController implements Initial
     @FXML
     protected void modificarAction() throws ParseException {
         //Vars
-        DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         Configuracio config = new Configuracio();
         
+        //Posar dades
+        config.setCodi(Integer.parseInt(tfID.getText()));
         config.setMail(tfMailAdmin.getText());
         config.setIntents(Integer.parseInt(tfMaxIntents.getText()));
         config.setNom_admin(cmbNomAdmin.getSelectionModel().getSelectedItem());
@@ -90,17 +92,9 @@ public class SettingsAdminController extends MasterController implements Initial
     }
 
     private void omplirText() {
-
-        //Creació Entity Manager i del CB
-        EntityManager manager = emf.createEntityManager();
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        //Criteria per el select
-        CriteriaQuery<Configuracio> cbQuery = cb.createQuery(Configuracio.class);
-        Root<Configuracio> consulta = cbQuery.from(Configuracio.class);
-        cbQuery.select(consulta);
-        Query query = manager.createQuery(cbQuery);
-        //Ficar totes les dades en un objecte ce configuració
-        Configuracio configuracio = (Configuracio) query.getSingleResult();
+        Configuracio configuracio;
+        configuracio = getConfig(emf);
+        
         //Omplir tots els textField amb el seu valor corresponent
         tfID.setText(Integer.toString(configuracio.getCodi()));
         omplirCombo();
@@ -109,7 +103,7 @@ public class SettingsAdminController extends MasterController implements Initial
         tfMailAdmin.setText(String.valueOf(configuracio.getMail()));
         tfMaxIntents.setText(String.valueOf(configuracio.getIntents()));
         tfDataCaducitat.setText(String.valueOf(configuracio.getCaducitat()));
-        manager.close();
+        
 
     }
 

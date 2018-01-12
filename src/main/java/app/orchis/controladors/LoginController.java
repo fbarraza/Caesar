@@ -53,7 +53,7 @@ public class LoginController extends MasterController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
-            intents_n = config.obtenirIntents(emf);
+            intents_n = config.getIntents(emf);
             intents_m = intents_n;
         });        
     } 

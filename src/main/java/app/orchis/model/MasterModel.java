@@ -17,7 +17,7 @@ import org.hibernate.exception.ConstraintViolationException;
 public class MasterModel {
 
    /**
-     * Afegeix/Insereix l'usuari a la BBDD.
+     * Afegeix/Insereix l'objecte a la BBDD.
      * @param emf EntityManagerFactory per passar la connexió.
      */
     public void afegir(EntityManagerFactory emf){
@@ -40,8 +40,8 @@ public class MasterModel {
     }    
     
     /**
-     * Actualitza l'usuari en la BBDD.
-     * @param emf 
+     * Actualitza l'objecte en la BBDD.
+     * @param emf EntityManagerFactory per passar la connexió.
      */
     public void actualitzar(EntityManagerFactory emf){
         EntityManager em = emf.createEntityManager();
@@ -57,7 +57,7 @@ public class MasterModel {
     }
     
     /**
-     * Elimina l'usuari en la BBDD.
+     * Elimina l'objecte en la BBDD.
      * @param emf EntityManagerFactory per passar la connexió.
      */
     public void eliminar(EntityManagerFactory emf){
