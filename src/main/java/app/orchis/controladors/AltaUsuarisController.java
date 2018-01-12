@@ -291,7 +291,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
     private void eliminarUsuari(){
         //Eliminar Usuari de la BBDD
         setSeleccionat();
-        user.eliminarUsuari(emf);
+        user.eliminar(emf);
 
         //Notificar
         info("Usuari eliminat!");

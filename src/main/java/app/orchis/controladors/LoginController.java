@@ -109,7 +109,7 @@ public class LoginController extends MasterController implements Initializable {
         carregaCanvi();
         
         //Actualitzar contrasenya
-        user.actualitzarUsuari(emf);
+        user.actualitzar(emf);
         
     }    
     
@@ -149,7 +149,7 @@ public class LoginController extends MasterController implements Initializable {
             
             //Actualitzar usuari
             user.setBloquejat(true);
-            user.actualitzarUsuari(emf);
+            user.actualitzar(emf);
                      
             //Informar administrador
             enviarMissatge("Han intentat fer login amb l'usuari " + usuari.getLogin() + " i ha quedat bloquejat"); 

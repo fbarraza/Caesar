@@ -8,19 +8,10 @@ package app.orchis.controladors;
 import app.orchis.classes.AppConfig;
 import app.orchis.model.Usuari;
 import static app.orchis.model.Usuari.obtenirUsuari;
-import static app.orchis.utils.Alertes.avis;
-import static app.orchis.utils.Alertes.info;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.Root;
-import org.hibernate.HibernateException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -72,35 +63,53 @@ public class AltaUsuarisControllerTest {
      * Test of eliminarUsuari method, of class AltaUsuarisController.
      */
     @Test    
-    public void testcrearUsuari() throws Exception {
+    public void testCrearUsuari() throws Exception {
+        System.out.println("testCrearUsuari");
         //Variables
-        user.afegirUsuari(emf);
+        user.afegir(emf);
         user = obtenirUsuari(emf,user.getLogin());
         
         //Obtenir usuari
         assertNotNull(user.getLogin());
+        user.eliminar(emf);
+        
+    }
+    
+    @Test
+    public void testModificarUsuari(){
+        System.out.println("testModificarUsuari");
+        Usuari user2;
+        
+        //Modifiquem usuari
+        user.afegir(emf);
+        user.setLogin("junit2");
+        user.actualitzar(emf);
+        
+        //Obtenim usuari
+        user2 = obtenirUsuari(emf,"junit2");
+        assertEquals(user.getLogin(),user2.getLogin());
+        
+        user.eliminar(emf);
         
     }
     /**
      * Test of eliminarUsuari method, of class AltaUsuarisController.
      */
-    @Test
-    public void testeliminarUsuari(){
-        user.eliminarUsuari(emf);
+    @Test(expected = NoResultException.class)
+    public void testEliminarUsuari(){
+        System.out.println("testEliminarUsuari");
+        
+        //Afegim usuari
+        user.afegir(emf);
+        user = obtenirUsuari(emf,user.getLogin());
+        
+        //Eliminem usuari
+        user.eliminar(emf);
+        user = obtenirUsuari(emf,user.getLogin());
 
     }
 
     /**
      * Test of canviarContrasenya method, of class AltaUsuarisController.
      */
-    /*
-    @Test
-    public void testCanviarContrasenya() throws Exception {
-        System.out.println("canviarContrasenya");
-        char opc = ' ';
-        AltaUsuarisController instance = new AltaUsuarisController();
-        instance.canviarContrasenya(opc);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
 }

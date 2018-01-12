@@ -43,7 +43,6 @@ public class ModificarContrasenyaController extends MasterController implements 
     
     //Vars
     private char opc;
-    
     private String passwd;
 
     @Override

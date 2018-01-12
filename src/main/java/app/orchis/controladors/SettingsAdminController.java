@@ -67,24 +67,14 @@ public class SettingsAdminController extends MasterController implements Initial
     protected void modificarAction() throws ParseException {
         //Vars
         DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        Configuracio config = new Configuracio();
+        
+        config.setMail(tfMailAdmin.getText());
+        config.setIntents(Integer.parseInt(tfMaxIntents.getText()));
+        config.setNom_admin(cmbNomAdmin.getSelectionModel().getSelectedItem());
+        config.setCaducitat(Integer.parseInt(tfDataCaducitat.getText()));
 
-        //Creació Entity Manager i del CB
-        EntityManager manager = emf.createEntityManager();
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        //Criteria per el update
-        CriteriaUpdate<Configuracio> update = cb.createCriteriaUpdate(Configuracio.class);
-        Root<Configuracio> consultaUpdate = update.from(Configuracio.class);
-
-        update.set("mail", tfMailAdmin.getText());
-        update.set("intents", Integer.parseInt(tfMaxIntents.getText()));
-        update.set("nom_admin", cmbNomAdmin.getSelectionModel().getSelectedItem());
-        update.set("caducitat", Integer.parseInt(tfDataCaducitat.getText()));
-      
-        //Efectuar el commit a la base de dades
-        manager.getTransaction().begin();
-        manager.createQuery(update).executeUpdate();
-        manager.getTransaction().commit();
-        manager.close();
+        config.actualitzar(emf);
         
         info("La configuració ha sigut modificada");
 

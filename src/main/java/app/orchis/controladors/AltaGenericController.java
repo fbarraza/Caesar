@@ -5,6 +5,7 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.Alertes.sortir;
 import java.io.IOException;
@@ -48,7 +49,8 @@ public class AltaGenericController extends MasterController implements Initializ
     
     //Vars Controller
     private char opc;
-    private String passwd;         
+    private String passwd;
+    
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -100,7 +102,7 @@ public class AltaGenericController extends MasterController implements Initializ
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
             Parent root = (Parent) fxmlLoader.load();   
             ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
-            
+            String pwd;
             //
             controller.setOpc(opc);
             
@@ -111,24 +113,26 @@ public class AltaGenericController extends MasterController implements Initializ
             stage.setTitle("Introduir contrasenya");
             
             stage.setOnHiding(event -> {
-                user.setPasswd(controller.getPasswd());
+                passwd = controller.getPasswd();
             });
-            stage.showAndWait();            
+            stage.showAndWait();  
+   
     }    
     
     @FXML
     private void crearUsuari() throws ParseException, IOException {
-        
+        Usuari user = new Usuari();
         if(!comprovaCamp(tfNom)){
             if(!comprovaCamp(tfLogin)){
                 user.setNom(tfNom.getText());
                 carregaPasswd('a');
+                user.setPasswd(passwd);
                 user.setBloquejat(cbBloqueig.isSelected());
                 user.setLogin(tfLogin.getText());
                 user.setData(user.getAvui());
                 user.setAdmin(cbAdmin.isSelected());
                 
-                user.afegirUsuari(emf);
+                user.afegir(emf);
                 info("Usuari creat satisfactòriament");                             
             }
             else{
@@ -147,7 +151,7 @@ public class AltaGenericController extends MasterController implements Initializ
         user.setBloquejat(cbBloqueig.isSelected());
         user.setLogin(tfLogin.getText());
         user.setAdmin(cbAdmin.isSelected());
-        user.actualitzarUsuari(emf);
+        user.actualitzar(emf);
         
         //Notificar Usuari
         info("Usuari modificat!");
