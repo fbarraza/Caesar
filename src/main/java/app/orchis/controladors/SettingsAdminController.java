@@ -56,6 +56,8 @@ public class SettingsAdminController extends MasterController implements Initial
     @FXML
     private Button btnSortir;  
     
+    private List<Usuari> llista;
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
@@ -68,20 +70,34 @@ public class SettingsAdminController extends MasterController implements Initial
     protected void modificarAction() throws ParseException {
         //Vars
         Configuracio config = new Configuracio();
-        
+        String admin = cmbNomAdmin.getSelectionModel().getSelectedItem();
         //Posar dades
         config.setCodi(Integer.parseInt(tfID.getText()));
         config.setMail(tfMailAdmin.getText());
         config.setIntents(Integer.parseInt(tfMaxIntents.getText()));
-        config.setNom_admin(cmbNomAdmin.getSelectionModel().getSelectedItem());
+        config.setNom_admin(admin);
         config.setCaducitat(Integer.parseInt(tfDataCaducitat.getText()));
 
         config.actualitzar(emf);
+        actualitzarAdmin(admin);
         
         info("La configuració ha sigut modificada");
 
     }
-
+    
+    protected void actualitzarAdmin(String admin){
+        Usuari user = new Usuari();
+        //Admin vell
+        user = Usuari.obteAdmin(llista);
+        user.setAdmin(false);
+        user.actualitzar(emf);
+        //Nou admin
+        user = Usuari.obtenirUsuari(emf,admin);
+        user.setAdmin(true);
+        user.actualitzar(emf);
+        
+        
+    }
     @FXML
     protected void sortirAction() {
         if (sortir() == ButtonType.YES) {
@@ -117,7 +133,7 @@ public class SettingsAdminController extends MasterController implements Initial
         cbQuery.select(consulta);
         Query query = manager.createQuery(cbQuery);
 
-        List<Usuari> llista = query.getResultList();
+        llista = query.getResultList();
         ObservableList<String> data = FXCollections.observableArrayList();
 
         for (int i = 0; i < llista.size(); i++) {

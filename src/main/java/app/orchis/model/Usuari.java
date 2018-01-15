@@ -1,6 +1,7 @@
 package app.orchis.model;
 
 import static app.orchis.utils.Alertes.avis;
+import static app.orchis.utils.CryptoHelper.encripta;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
@@ -79,8 +81,7 @@ public class Usuari extends MasterModel implements Serializable{
     public static Usuari obtenirUsuari(EntityManagerFactory emf, String username){
         //Variables
         EntityManager em = emf.createEntityManager();
-        Usuari user;
-        
+        Usuari user = new Usuari();
         //Obtenir dades de l'usuari introduit
         CriteriaBuilder cb = emf.getCriteriaBuilder();
         CriteriaQuery<Usuari> cbQuery = cb.createQuery(Usuari.class);
@@ -93,9 +94,37 @@ public class Usuari extends MasterModel implements Serializable{
         user = (Usuari) query.getSingleResult();
         em.close();
         
-        return  user;
+        return user;
     }
+    
+    public static Usuari obteAdmin(List<Usuari> llista){        
+        for(int i=0; i<llista.size();i++){
+            if(llista.get(i).isAdmin()){
+                return llista.get(i);
+            }
+        }     
+        return null;
+    }    
  
+    public void actualitzaPasswd(EntityManagerFactory emf, String nou){
+            //Creació Entity Manager i del CB
+            EntityManager manager = emf.createEntityManager();
+            CriteriaBuilder cb = emf.getCriteriaBuilder();
+            CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
+            Root<Usuari> c = update.from(Usuari.class);
+            
+            
+            //Sentència SQL
+            update.set("passwd", nou);
+            update.where(cb.equal(c.get("codi"), this.getCodi())); 
+            
+            //Actualitzar BBDD
+            manager.getTransaction().begin();
+            manager.createQuery(update).executeUpdate();
+            manager.getTransaction().commit();     
+            
+            manager.close();
+    }
     /*
     @Override
     public String toString() {
@@ -163,6 +192,16 @@ public class Usuari extends MasterModel implements Serializable{
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+    
+    public void setUsuari(Usuari user){
+        this.codi = (int) user.getCodi();
+        this.nom = user.getNom();
+        this.login = user.getLogin();
+        this.passwd = user.getPasswd();
+        this.bloquejat = user.isBloquejat();
+        this.data = user.getData();
+        this.admin = user.isAdmin();
     }
     
     public Date getAvui() throws ParseException{

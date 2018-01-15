@@ -6,6 +6,7 @@
 package app.orchis.controladors;
 
 import app.orchis.model.Usuari;
+import static app.orchis.utils.Alertes.avis;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.CryptoHelper.encripta;
 import java.io.IOException;
@@ -68,6 +69,8 @@ public class ModificarContrasenyaController extends MasterController implements 
     
     @FXML
     private void comprovaVella() throws IOException{
+        System.out.println(pfAnterior.getText());
+        System.out.println(user.getPasswd());
         if(encripta(pfAnterior.getText()).equals(user.getPasswd())){
            comprovaNoves(); 
         }
@@ -91,7 +94,8 @@ public class ModificarContrasenyaController extends MasterController implements 
                 tencarFinestra();
             }
             else{
-                actualitzaPasswd();
+                String encriptat = encripta(pfNou2.getText());
+                actualitzaPasswd(encriptat);
             }
         }
         else{
@@ -99,24 +103,14 @@ public class ModificarContrasenyaController extends MasterController implements 
         }
     }
     
-    private void actualitzaPasswd(){
-            //Creació Entity Manager i del CB
-            EntityManager manager = emf.createEntityManager();
-            CriteriaBuilder cb = emf.getCriteriaBuilder();
-            CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
-            Root<Usuari> c = update.from(Usuari.class);
-            
-            
-            //Sentència SQL
-            update.set("passwd", encripta(pfNou2.getText()));
-            update.where(cb.equal(c.get("codi"), user.getCodi())); 
-            
-            //Actualitzar BBDD
-            manager.getTransaction().begin();
-            manager.createQuery(update).executeUpdate();
-            manager.getTransaction().commit();     
-            
+    private void actualitzaPasswd(String nou){
+        user.setPasswd(nou);
+        try{
+            user.actualitzar(emf);
             info("Contrasenya actualitzada!");
+        }catch(Exception ex){
+            avis("Error al actualitzar la contrasenya!");
+        }
     }
     
     @FXML

@@ -70,21 +70,21 @@ public class AltaGenericController extends MasterController implements Initializ
                 btAfegir.setDisable(false);
                 tfId.setVisible(false);
                 lbId.setVisible(false);
+                if(admin) cbAdmin.setDisable(true);
                 break;
             
             case 'm':
                 btModificar.setVisible(true);
                 btModificar.setDisable(false);
                 carregarUsuari();
+                if(admin && !user.isAdmin()) cbAdmin.setDisable(true);     
                 break;
                 
             default:
                 System.err.println("Error!");
                 break;
         }
-        if(admin && !user.isAdmin()){
-            cbAdmin.setDisable(true);
-        }
+
         tfNom.requestFocus();
     }
         
