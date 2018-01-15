@@ -53,6 +53,7 @@ public class AltaGenericController extends MasterController implements Initializ
     //Vars Controller
     private char opc;
     private String passwd;
+    private boolean admin;
     
     
     @Override
@@ -80,6 +81,9 @@ public class AltaGenericController extends MasterController implements Initializ
             default:
                 System.err.println("Error!");
                 break;
+        }
+        if(admin && !user.isAdmin()){
+            cbAdmin.setDisable(true);
         }
         tfNom.requestFocus();
     }
@@ -140,24 +144,12 @@ public class AltaGenericController extends MasterController implements Initializ
                 cbAdmin.requestFocus();
             }
         }
-        else if(e.getSource().equals(cbAdmin)){
-            if (e.getCode().equals(KeyCode.TAB) && !tfLogin.getText().isEmpty()){
-                if(opc == 'a'){
-                    crearUsuari();
-                }
-                else{
-                    modificarUsuari();
-                }
-            }
-            else{
-                tfLogin.requestFocus();
-            }
-        }
     }     
     
     @FXML
     private void crearUsuari() throws ParseException, IOException {
         Usuari user = new Usuari();
+        
         if(!comprovaCamp(tfNom)){
             if(!comprovaCamp(tfLogin)){
                 user.setNom(tfNom.getText());
@@ -211,8 +203,21 @@ public class AltaGenericController extends MasterController implements Initializ
     public void setOpc(char opc) {
         this.opc = opc;
     }
-    
-    public void setPasswd(String passwd){
+
+    public String getPasswd() {
+        return passwd;
+    }
+
+    public void setPasswd(String passwd) {
         this.passwd = passwd;
     }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
 }

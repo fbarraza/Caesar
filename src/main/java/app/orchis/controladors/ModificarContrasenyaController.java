@@ -17,6 +17,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
@@ -57,6 +59,7 @@ public class ModificarContrasenyaController extends MasterController implements 
             btAfegir.setVisible(true);
             pfAnterior.setVisible(false);
             lbAnterior.setVisible(false);
+            pfAnterior.requestFocus();
         }
         else{
             btModificar.setVisible(true);
@@ -115,6 +118,32 @@ public class ModificarContrasenyaController extends MasterController implements 
             
             info("Contrasenya actualitzada!");
     }
+    
+    @FXML
+    private void keyPress(KeyEvent e) throws Exception {
+        if (e.getSource().equals(pfAnterior)) {
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB))
+                    pfNou.requestFocus();
+            }
+        
+        else if(e.getSource().equals(pfNou)){
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB)) {
+                pfNou2.requestFocus();
+            } 
+        }
+        else if(e.getSource().equals(pfNou2)){
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB)){
+                if(!pfNou.getText().isEmpty()){
+                    if(opc=='a'){
+                        comprovaNoves();
+                    }
+                    else{
+                        comprovaVella();
+                    }
+                }
+            }
+        }
+    }      
 
     //Getters and Setters    
     public char getOpc() {
@@ -128,5 +157,8 @@ public class ModificarContrasenyaController extends MasterController implements 
     public String getPasswd() {
         return passwd;
     }
-    
+
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
+    }
 }

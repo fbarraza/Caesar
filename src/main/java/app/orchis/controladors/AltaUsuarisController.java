@@ -62,6 +62,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
     //Variables Programa
     private ObservableList<Usuari> dades;
     private int posTaula;
+    private boolean admin;
     ContextMenu contextMenu = new ContextMenu();
     MenuItem miModificar = new MenuItem("Modificar Usuari");    
     MenuItem miModificarp = new MenuItem("Modificar Contrasenya");
@@ -75,7 +76,8 @@ public class AltaUsuarisController extends MasterController implements Initializ
             dades = getUsuaris();
             
             //Inicialitzem i omplim la taula
-            actualitzaTaula();                         
+            actualitzaTaula();    
+            primerAction();
         });
         
         //Accions dels submenus
@@ -118,6 +120,16 @@ public class AltaUsuarisController extends MasterController implements Initializ
         });        
     }   
     
+    private void comprovaAdmin(){
+        int i;
+        admin = false;
+        for(i=0; i<tvUsuaris.getItems().size();i++){
+            if(tvUsuaris.getItems().get(i).isAdmin()){
+                admin = true;
+            }
+        }
+    }
+    
     /**
      * Actualitza la taula mitjançant un ObservableList.
      */
@@ -127,6 +139,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
         }
         tvUsuaris.setItems(dades);        
         inicialitzaTaula();
+        comprovaAdmin();
     } 
     
     /**
@@ -298,6 +311,14 @@ public class AltaUsuarisController extends MasterController implements Initializ
 
         //Recarregar taula
         actualitzaTaula();
+        
+        //Posició
+        if(posTaula!=0){
+            anteriorAction();
+        }
+        else{
+            primerAction();
+        }
     }
     
     protected void canviarContrasenya(char opc) throws IOException, ParseException{
@@ -317,6 +338,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
         //Vars
         controller.setEmf(emf);
         controller.setOpc(opt);
+        controller.setAdmin(admin);
         if(opt == 'm'){
             setSeleccionat();
             controller.setUser(user);
