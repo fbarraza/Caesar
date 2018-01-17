@@ -80,7 +80,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
             primerAction();
         });
         
-        //Accions dels submenus
+        //Assigna acció de modificar usuari als submenú miModificar
         miModificar.setOnAction(e -> {
             try {
                 obrirModif();
@@ -88,6 +88,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
                 Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+        //Assigna acció de modificar la contrasenya als submenú miModificararp
         miModificarp.setOnAction(e -> {
             try {
                 canviarContrasenya('b');
@@ -97,7 +98,10 @@ public class AltaUsuarisController extends MasterController implements Initializ
                 Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+        //Assignem els submenús al contextMenu
         contextMenu.getItems().addAll(miModificar, miModificarp);
+        
+        //Assignem el contextMenu al a taula.
         tvUsuaris.setContextMenu(contextMenu);
         
         //Listener dobleclic
@@ -119,7 +123,9 @@ public class AltaUsuarisController extends MasterController implements Initializ
             }
         });        
     }   
-    
+    /**
+     * Comprova si hi ha un usuari admin en la taula.
+     */
     private void comprovaAdmin(){
         int i;
         admin = false;
@@ -143,7 +149,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
     } 
     
     /**
-     * Inicialitzem la taula i afegim listener per filtrar els usuaris.
+     * Inicialitza la taula i afegeix listener per filtrar els usuaris.
      */
     private void inicialitzaTaula() {
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).
@@ -192,14 +198,16 @@ public class AltaUsuarisController extends MasterController implements Initializ
         colAdmin.setCellValueFactory(new PropertyValueFactory<>("admin"));
     }
 
-    
+    //UNUSED
     private void goTableItem(int row) {
         tvUsuaris.requestFocus();
         tvUsuaris.scrollTo(row);
         tvUsuaris.getSelectionModel().select(row);
         tvUsuaris.getFocusModel().focus(row);
     }  
-    
+    /**
+     * Selecciona el primer usuari de la taula.
+     */
     @FXML
     private void primerAction() {
 
@@ -213,6 +221,9 @@ public class AltaUsuarisController extends MasterController implements Initializ
 
     }
 
+    /**
+     * Selecciona l'usuari anterior de la taula.
+     */
     @FXML
     private void anteriorAction() {
 
@@ -226,6 +237,9 @@ public class AltaUsuarisController extends MasterController implements Initializ
 
     }
 
+    /**
+     * Selecciona l'usuari següent de la taula.
+     */
     @FXML
     private void seguentAction() {
 
@@ -239,6 +253,9 @@ public class AltaUsuarisController extends MasterController implements Initializ
 
     }
 
+    /**
+     * Selecciona l'últim usuari de la taula.
+     */
     @FXML
     private void finalAction() {
 
@@ -252,6 +269,9 @@ public class AltaUsuarisController extends MasterController implements Initializ
 
     }
 
+    /**
+     * Activa o desactiva botons depenent del usuari seleccionat.
+     */
     private void comprovarControls() {
 
         //Habilita tots els botons
@@ -278,7 +298,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
 
     
     /**
-     * Obre l'interfície genèrica amb la opció de crear.
+     * Obre la interfície genèrica amb la opció de crear.
      * @throws IOException 
      */
     @FXML
@@ -288,7 +308,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
     }    
     
     /**
-     * Obre l'interfície genèrica amb la opció de modificar.
+     * Obre la interfície genèrica amb la opció de modificar.
      * @throws IOException 
      */    
     @FXML
@@ -321,6 +341,12 @@ public class AltaUsuarisController extends MasterController implements Initializ
         }
     }
     
+    /**
+     * Obté usuari seleccionat i obra interfície canvi contrasenya.
+     * @param opc
+     * @throws IOException
+     * @throws ParseException 
+     */
     protected void canviarContrasenya(char opc) throws IOException, ParseException{
         //Obtenir Usuari
         setSeleccionat();
@@ -330,6 +356,11 @@ public class AltaUsuarisController extends MasterController implements Initializ
         
     }        
     
+    /**
+     * Obre la interfície genèrica.
+     * @param opt
+     * @throws IOException 
+     */
     private void obrirGeneric(char opt) throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaGeneric.fxml"));
         Parent root = (Parent) fxmlLoader.load();
@@ -353,6 +384,11 @@ public class AltaUsuarisController extends MasterController implements Initializ
         actualitzaTaula();
     }    
     
+    /**
+     * Obre la interfície canvi de contrasenya.
+     * @param opc
+     * @throws IOException 
+     */
     protected void carregaCanvi(char opc)throws IOException{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
             Parent root = (Parent) fxmlLoader.load();   
@@ -377,7 +413,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
     
     //GETTERS AND SETTERS
     /**
-     * Obtené una llista completa de tots els usuaris.
+     * Obté una llista completa de tots els usuaris.
      * @return 
      */
     private ObservableList<Usuari> getUsuaris() {

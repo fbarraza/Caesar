@@ -11,7 +11,6 @@ import static app.orchis.utils.Alertes.sortir;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -63,6 +62,10 @@ public class AltaGenericController extends MasterController implements Initializ
         });
     }   
     
+    /**
+     * Carrega l'aplicació genèrica, mostrant uns botons o uns altres.
+     * @param opc Mode app genèric. c = crear m = modificar
+     */
     private void carregaApp(char opc){
         switch (opc){
             case 'c':
@@ -88,6 +91,9 @@ public class AltaGenericController extends MasterController implements Initializ
         tfNom.requestFocus();
     }
         
+    /**
+     * Carrega l'usuari que li hem passat. Modificar.
+     */
     private void carregarUsuari(){
         tfId.setText(Long.toString(user.getCodi()));
         tfNom.setText(user.getNom());
@@ -97,6 +103,11 @@ public class AltaGenericController extends MasterController implements Initializ
         
     }
     
+    /**
+     * Comprova si el camp que li passem està buit.
+     * @param field Camp a comprovar.
+     * @return True = buit False = Té contingut
+     */
     private boolean comprovaCamp(TextField field){
         if(field.getText().isEmpty()){
             return true;
@@ -106,6 +117,11 @@ public class AltaGenericController extends MasterController implements Initializ
         }
     } 
     
+    /**
+     * Carrega interfície de canvi contrasenya.
+     * @param opc Opció a passar (a afegir, m modificar).
+     * @throws IOException Excepció si no troba fitxer FXML.
+     */
     private void carregaPasswd(char opc) throws IOException{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
             Parent root = (Parent) fxmlLoader.load();   
@@ -126,7 +142,11 @@ public class AltaGenericController extends MasterController implements Initializ
             stage.showAndWait();  
    
     }    
-    
+    /**
+     * "Listener" per canviar camps.
+     * @param e Tecla premuda
+     * @throws Exception Excepció
+     */
     @FXML
     private void keyPress(KeyEvent e) throws Exception {
         if (e.getSource().equals(tfNom)) {
@@ -146,6 +166,11 @@ public class AltaGenericController extends MasterController implements Initializ
         }
     }     
     
+    /**
+     * Crea un usuari amb les dades introduïdes en els TextFields
+     * @throws ParseException 
+     * @throws IOException 
+     */
     @FXML
     private void crearUsuari() throws ParseException, IOException {
         Usuari user = new Usuari();
@@ -171,7 +196,9 @@ public class AltaGenericController extends MasterController implements Initializ
             lbInfo.setText("Falta el nom real de l'usuari!");            
         }        
     }    
-    
+    /**
+     * Modifica usuari que està sent editat.
+     */
     @FXML
     private void modificarUsuari(){        
         //Sentència SQL        
@@ -185,6 +212,9 @@ public class AltaGenericController extends MasterController implements Initializ
         info("Usuari modificat!");
     }    
     
+    /**
+     * Tenca finestra.
+     */
     @FXML
     protected void sortirAction() {
         if (sortir() == ButtonType.YES) {

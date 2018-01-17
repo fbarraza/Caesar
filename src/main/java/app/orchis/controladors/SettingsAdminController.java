@@ -11,9 +11,7 @@ import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.Alertes.sortir;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -27,11 +25,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
 /**
@@ -41,21 +37,15 @@ import javax.persistence.criteria.Root;
 public class SettingsAdminController extends MasterController implements Initializable {
 
     //Variables dels elements en la vista
-    @FXML
-    private TextField tfID;
-    @FXML
-    private ComboBox<String> cmbNomAdmin;
-    @FXML
-    private TextField tfMailAdmin;
-    @FXML
-    private TextField tfMaxIntents;
-    @FXML
-    private TextField tfDataCaducitat;
-    @FXML
-    private Button btnModificar;
-    @FXML
-    private Button btnSortir;  
+    @FXML private TextField tfID;
+    @FXML private ComboBox<String> cmbNomAdmin;
+    @FXML private TextField tfMailAdmin;
+    @FXML private TextField tfMaxIntents;
+    @FXML private TextField tfDataCaducitat;
+    @FXML private Button btnModificar;
+    @FXML private Button btnSortir;  
     
+    //Vars programa
     private List<Usuari> llista;
     
     @Override
@@ -66,6 +56,10 @@ public class SettingsAdminController extends MasterController implements Initial
 
     }
 
+    /**
+     * Modifica fitxer configuració.
+     * @throws ParseException 
+     */
     @FXML
     protected void modificarAction() throws ParseException {
         //Vars
@@ -85,6 +79,10 @@ public class SettingsAdminController extends MasterController implements Initial
 
     }
     
+    /**
+     * Actualitza usuari admin de la taula usuari
+     * @param admin 
+     */
     protected void actualitzarAdmin(String admin){
         Usuari user = new Usuari();
         //Admin vell
@@ -96,8 +94,10 @@ public class SettingsAdminController extends MasterController implements Initial
         user.setAdmin(true);
         user.actualitzar(emf);
         
-        
     }
+    /**
+    * Tenca la finestra
+    */    
     @FXML
     protected void sortirAction() {
         if (sortir() == ButtonType.YES) {
@@ -107,6 +107,9 @@ public class SettingsAdminController extends MasterController implements Initial
         }
     }
 
+    /**
+     * Omple Text amb la configuració actual
+     */
     private void omplirText() {
         Configuracio configuracio;
         configuracio = getConfig(emf);
@@ -123,6 +126,9 @@ public class SettingsAdminController extends MasterController implements Initial
 
     }
 
+    /**
+     * Omple el ComboBox amb els usuaris existents.
+     */
     private void omplirCombo() {
 
         EntityManager manager = emf.createEntityManager();

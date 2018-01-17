@@ -9,7 +9,7 @@ import app.orchis.model.Usuari;
 import javax.persistence.EntityManagerFactory;
 
 /**
- *
+ *  Controlador mestre, tots els controladors l'hereten
  * @author m15
  */
 public class MasterController {

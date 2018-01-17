@@ -5,7 +5,6 @@
  */
 package app.orchis.controladors;
 
-import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.avis;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.CryptoHelper.encripta;
@@ -22,11 +21,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -55,6 +49,9 @@ public class ModificarContrasenyaController extends MasterController implements 
         });        
     }      
     
+    /**
+     * Carrega certs elements depenent de l'opció que s'ha passat.
+     */
     private void inicialitzaGeneric(){
         if(opc=='a'){
             btAfegir.setVisible(true);
@@ -66,7 +63,10 @@ public class ModificarContrasenyaController extends MasterController implements 
             btModificar.setVisible(true);
         }
     }
-    
+    /**
+     * Verifica contrasenya usuari amb la introduïda. 
+     * @throws IOException 
+     */
     @FXML
     private void comprovaVella() throws IOException{
         System.out.println(pfAnterior.getText());
@@ -79,6 +79,9 @@ public class ModificarContrasenyaController extends MasterController implements 
         }
     }
     
+    /**
+     * Tenca la finestra.
+     */
     @FXML
     private void tencarFinestra(){
         Stage secondaryStage = (Stage)Panel.getScene().getWindow();    
@@ -87,6 +90,10 @@ public class ModificarContrasenyaController extends MasterController implements 
         
     }
     
+    /**
+     * Comprova si la contrasenya introduïda en els dos camps coincideix.
+     * @throws IOException 
+     */
     @FXML
     private void comprovaNoves() throws IOException{
         if(pfNou.getText().equals(pfNou2.getText())){
@@ -103,6 +110,10 @@ public class ModificarContrasenyaController extends MasterController implements 
         }
     }
     
+    /**
+     * Actualitza la contrasenya del usuari.
+     * @param nou 
+     */
     private void actualitzaPasswd(String nou){
         user.setPasswd(nou);
         try{
@@ -113,6 +124,11 @@ public class ModificarContrasenyaController extends MasterController implements 
         }
     }
     
+    /**
+     * "Listener" botons.
+     * @param e
+     * @throws Exception 
+     */
     @FXML
     private void keyPress(KeyEvent e) throws Exception {
         if (e.getSource().equals(pfAnterior)) {

@@ -7,6 +7,7 @@ package app.orchis.model;
 
 import static app.orchis.utils.Alertes.avis;
 import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -21,8 +22,8 @@ import org.hibernate.exception.ConstraintViolationException;
  */
 public class MasterModel<T> {
     
-    //private ArrayList<T> llista;
-    //private Class<T> placeClass;
+    private Class<T> placeClass;
+    private EntityManagerFactory emf;
    
    /**
      * Afegeix/Insereix l'objecte a la BBDD.
@@ -81,7 +82,20 @@ public class MasterModel<T> {
             em.getTransaction().rollback();
         } finally {
             em.close();
-        }        
-        
+        }                
     }    
+    
+    public List<T> getAll() {
+        CriteriaBuilder cb = this.emf.getCriteriaBuilder();
+        EntityManager manager = this.emf.createEntityManager();
+
+        CriteriaQuery<T> cbQuery = cb.createQuery(placeClass);
+        Root<T> c = cbQuery.from(placeClass);
+        cbQuery.select(c);
+
+        Query query = manager.createQuery(cbQuery);
+
+        return query.getResultList();
+    }
+
 }

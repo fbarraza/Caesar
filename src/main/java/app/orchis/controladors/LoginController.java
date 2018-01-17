@@ -78,7 +78,7 @@ public class LoginController extends MasterController implements Initializable {
     }
     
     /**
-     * Carreguem la interfície per canviar la contrasenya
+     * Carrega la interfície per canviar la contrasenya
      * @throws IOException 
      */
     protected void carregaCanvi()throws IOException{
@@ -101,6 +101,11 @@ public class LoginController extends MasterController implements Initializable {
         stage.showAndWait();  
     }    
     
+    /**
+     * Actualitza contrasenya de l'usuari introduït
+     * @throws IOException
+     * @throws ParseException 
+     */
     protected void canviarContrasenya() throws IOException, ParseException{
         //Avisem a l'usuari    
         info("La contrasenya té més de " +config.getCaducitat()+" i s'ha de canviar!");
@@ -185,7 +190,6 @@ public class LoginController extends MasterController implements Initializable {
         stage.initModality(Modality.NONE);
         stage.setOnHiding( event -> {emf.close();} );
         
-        //emf.close();
         primaryStage.close();
         stage.showAndWait();        
     }
@@ -262,7 +266,7 @@ public class LoginController extends MasterController implements Initializable {
     }  
     
     /**
-     * Apagar l'aplicació
+     * Sortir de l'aplicació.
      */
     @FXML
     protected void Surt(){
