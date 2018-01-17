@@ -5,6 +5,7 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.Alertes.sortir;
@@ -59,6 +60,7 @@ public class AltaGenericController extends MasterController implements Initializ
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
             carregaApp(opc);
+            helperU = new MasterModel(emf, Usuari.class);
         });
     }   
     
@@ -185,7 +187,7 @@ public class AltaGenericController extends MasterController implements Initializ
                 user.setData(user.getAvui());
                 user.setAdmin(cbAdmin.isSelected());
                 
-                user.afegir(emf);
+                helperU.afegir(user);
                 info("Usuari creat satisfactòriament");                             
             }
             else{
@@ -206,7 +208,7 @@ public class AltaGenericController extends MasterController implements Initializ
         user.setBloquejat(cbBloqueig.isSelected());
         user.setLogin(tfLogin.getText());
         user.setAdmin(cbAdmin.isSelected());
-        user.actualitzar(emf);
+        helperU.actualitzar(user);
         
         //Notificar Usuari
         info("Usuari modificat!");

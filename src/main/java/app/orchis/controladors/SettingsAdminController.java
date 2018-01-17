@@ -7,6 +7,7 @@ package app.orchis.controladors;
 
 import app.orchis.model.Configuracio;
 import static app.orchis.model.Configuracio.getConfig;
+import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.Alertes.sortir;
@@ -47,6 +48,7 @@ public class SettingsAdminController extends MasterController implements Initial
     
     //Vars programa
     private List<Usuari> llista;
+    public MasterModel<Configuracio> helperC = new MasterModel(emf,Configuracio.class);
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -72,7 +74,7 @@ public class SettingsAdminController extends MasterController implements Initial
         config.setNom_admin(admin);
         config.setCaducitat(Integer.parseInt(tfDataCaducitat.getText()));
 
-        config.actualitzar(emf);
+        helperC.actualitzar(config);
         actualitzarAdmin(admin);
         
         info("La configuració ha sigut modificada");
@@ -88,11 +90,11 @@ public class SettingsAdminController extends MasterController implements Initial
         //Admin vell
         user = Usuari.obteAdmin(llista);
         user.setAdmin(false);
-        user.actualitzar(emf);
+        helperU.actualitzar(user);
         //Nou admin
         user = Usuari.obtenirUsuari(emf,admin);
         user.setAdmin(true);
-        user.actualitzar(emf);
+        helperU.actualitzar(user);
         
     }
     /**

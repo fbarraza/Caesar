@@ -22,43 +22,48 @@ import org.hibernate.exception.ConstraintViolationException;
  */
 public class MasterModel<T> {
     
-    private Class<T> placeClass;
+    //Vars
     private EntityManagerFactory emf;
+    private Class<T> placeClass;
    
-   /**
+    
+    //Constructors
+    public MasterModel(EntityManagerFactory emf, Class<T> placeClass) {
+        this.emf = emf;
+        this.placeClass = placeClass;
+    }
+    
+    
+    /**
      * Afegeix/Insereix l'objecte a la BBDD.
-     * @param emf EntityManagerFactory per passar la connexió.
+     * @param t
      */
-    public void afegir(EntityManagerFactory emf){
-        //Variables
+    public void afegir(T t){
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        //Afegim usuari a la base de dades
         try {
-        em.persist(this);
-        //em.flush();
-        em.getTransaction().commit();   
-        
-        }catch (Exception ex) {                    
+            em.persist(t);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
             if (ex.getCause() instanceof ConstraintViolationException){
                 em.getTransaction().rollback();
                 avis("Error al inserir! Ja existeix!");                        
                 System.out.println(ex.getMessage());
             }
-        }finally {
+        } finally {
             em.close();
-        }           
+        }          
     }    
     
     /**
      * Actualitza l'objecte en la BBDD.
-     * @param emf EntityManagerFactory per passar la connexió.
+     * @param t 
      */
-    public void actualitzar(EntityManagerFactory emf){
+    public void actualitzar(T t){
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         try {
-            em.merge(this);
+            em.merge(t);
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
@@ -69,14 +74,14 @@ public class MasterModel<T> {
     
     /**
      * Elimina l'objecte en la BBDD.
-     * @param emf EntityManagerFactory per passar la connexió.
+     * @param t 
      */
-    public void eliminar(EntityManagerFactory emf){
+    public void eliminar(T t){
         EntityManager em = emf.createEntityManager();
         
         em.getTransaction().begin();
         try {
-            em.remove(em.merge(this));
+            em.remove(em.merge(t));
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();

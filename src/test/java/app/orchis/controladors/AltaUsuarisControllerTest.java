@@ -6,6 +6,7 @@
 package app.orchis.controladors;
 
 import app.orchis.classes.AppConfig;
+import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
 import static app.orchis.model.Usuari.obtenirUsuari;
 import java.net.URL;
@@ -27,6 +28,7 @@ public class AltaUsuarisControllerTest {
     
     private EntityManagerFactory emf;
     private Usuari user = new Usuari();
+    private MasterModel<Usuari> helperU;
     
     public AltaUsuarisControllerTest() {
     }
@@ -50,6 +52,7 @@ public class AltaUsuarisControllerTest {
         
         try {
             emf = appConfig.loadAppConfig();
+            helperU = new MasterModel(emf, Usuari.class);
         } catch (Exception e){
             System.out.println("Error!");
         }        
@@ -66,12 +69,12 @@ public class AltaUsuarisControllerTest {
     public void testCrearUsuari() throws Exception {
         System.out.println("testCrearUsuari");
         //Variables
-        user.afegir(emf);
+        helperU.afegir(user);
         user = obtenirUsuari(emf,user.getLogin());
         
         //Obtenir usuari
         assertNotNull(user.getLogin());
-        user.eliminar(emf);
+        helperU.eliminar(user);
         
     }
     
@@ -81,15 +84,15 @@ public class AltaUsuarisControllerTest {
         Usuari user2;
         
         //Modifiquem usuari
-        user.afegir(emf);
+        helperU.afegir(user);
         user.setLogin("junit2");
-        user.actualitzar(emf);
+        helperU.actualitzar(user);
         
         //Obtenim usuari
         user2 = obtenirUsuari(emf,"junit2");
         assertEquals(user.getLogin(),user2.getLogin());
         
-        user.eliminar(emf);
+        helperU.eliminar(user);
         
     }
     /**
@@ -100,16 +103,12 @@ public class AltaUsuarisControllerTest {
         System.out.println("testEliminarUsuari");
         
         //Afegim usuari
-        user.afegir(emf);
+        helperU.afegir(user);
         user = obtenirUsuari(emf,user.getLogin());
         
         //Eliminem usuari
-        user.eliminar(emf);
+        helperU.eliminar(user);
         user = obtenirUsuari(emf,user.getLogin());
 
     }
-
-    /**
-     * Test of canviarContrasenya method, of class AltaUsuarisController.
-     */
 }

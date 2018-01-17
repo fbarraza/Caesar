@@ -5,6 +5,7 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import java.io.IOException;
@@ -66,18 +67,20 @@ public class AltaUsuarisController extends MasterController implements Initializ
     ContextMenu contextMenu = new ContextMenu();
     MenuItem miModificar = new MenuItem("Modificar Usuari");    
     MenuItem miModificarp = new MenuItem("Modificar Contrasenya");
-    
+    MasterModel helperU;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         configuraColumnes();
         Platform.runLater(() -> {
             //Obtenim els usuaris
+            helperU = new MasterModel(emf, Usuari.class);
             dades = getUsuaris();
             
             //Inicialitzem i omplim la taula
             actualitzaTaula();    
             primerAction();
+            
         });
         
         //Assigna acció de modificar usuari als submenú miModificar
@@ -324,7 +327,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
     private void eliminarUsuari(){
         //Eliminar Usuari de la BBDD
         setSeleccionat();
-        user.eliminar(emf);
+        helperU.eliminar(user);
 
         //Notificar
         info("Usuari eliminat!");
@@ -418,7 +421,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
      */
     private ObservableList<Usuari> getUsuaris() {
         EntityManager manager = emf.createEntityManager();
-        ArrayList<Usuari> llista = (ArrayList<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
+        ArrayList<Usuari> llista = (ArrayList) helperU.getAll();
         ObservableList<Usuari> llistaUs = FXCollections.observableArrayList(llista);
         manager.close();
         return llistaUs;

@@ -26,7 +26,7 @@ import java.util.GregorianCalendar;
  */
 @Entity
 @Table(name = "admin_config")
-public class Configuracio extends MasterModel implements Serializable{
+public class Configuracio implements Serializable{
 
     private static final long serialVersionUID = 2;
 

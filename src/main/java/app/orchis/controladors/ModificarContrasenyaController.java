@@ -5,6 +5,8 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.MasterModel;
+import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.avis;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.CryptoHelper.encripta;
@@ -46,6 +48,7 @@ public class ModificarContrasenyaController extends MasterController implements 
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
             inicialitzaGeneric();
+            helperU = new MasterModel(emf, Usuari.class);
         });        
     }      
     
@@ -117,7 +120,7 @@ public class ModificarContrasenyaController extends MasterController implements 
     private void actualitzaPasswd(String nou){
         user.setPasswd(nou);
         try{
-            user.actualitzar(emf);
+            helperU.actualitzar(user);
             info("Contrasenya actualitzada!");
         }catch(Exception ex){
             avis("Error al actualitzar la contrasenya!");

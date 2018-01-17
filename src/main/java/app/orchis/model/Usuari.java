@@ -30,7 +30,7 @@ import org.hibernate.exception.ConstraintViolationException;
 
 @Entity
 @Table (name = "user")
-public class Usuari extends MasterModel implements Serializable{
+public class Usuari implements Serializable{
  
 
     private static final long serialVersionUID = 1;
@@ -59,6 +59,7 @@ public class Usuari extends MasterModel implements Serializable{
 
     //Constructor
     public Usuari() {
+        
     }
 
     public Usuari(int codi, String nom, String login, String passwd, boolean bloquejat, Date data, boolean admin) {
@@ -125,17 +126,6 @@ public class Usuari extends MasterModel implements Serializable{
             
             manager.close();
     }
-    /*
-    @Override
-    public String toString() {
-        return "Usuari{" +
-                "codi=" + codi +
-                ", nom='" + nom + '\'' +
-                ", login='" + login + '\'' +
-                ", bloquejat=" + bloquejat +
-                '}';
-    }    
-    */
     
     //GETTERS AND SETTERS
     public long getCodi() {

@@ -2,6 +2,7 @@ package app.orchis.controladors;
 
 
 import app.orchis.model.Configuracio;
+import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.CryptoHelper.encripta;
@@ -53,6 +54,7 @@ public class LoginController extends MasterController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
+            helperU = new MasterModel(emf, Usuari.class);
             intents_n = config.getIntents(emf);
             intents_m = intents_n;
         });        
@@ -114,7 +116,7 @@ public class LoginController extends MasterController implements Initializable {
         carregaCanvi();
         
         //Actualitzar contrasenya
-        user.actualitzar(emf);
+        helperU.actualitzar(user);
         
     }    
     
@@ -154,7 +156,7 @@ public class LoginController extends MasterController implements Initializable {
             
             //Actualitzar usuari
             user.setBloquejat(true);
-            user.actualitzar(emf);
+            helperU.actualitzar(user);
                      
             //Informar administrador
             enviarMissatge("Han intentat fer login amb l'usuari " + usuari.getLogin() + " i ha quedat bloquejat"); 
