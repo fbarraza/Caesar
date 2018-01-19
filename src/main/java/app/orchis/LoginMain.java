@@ -1,7 +1,5 @@
 package app.orchis;
 
-
-import app.orchis.controladors.LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

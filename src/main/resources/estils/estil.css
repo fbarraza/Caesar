@@ -8,16 +8,22 @@ and open the template in the editor.
     Author     : m15
 */
 /* FONT DE L'APLICACIÓ */
-@font-face{
-    -fx-font-family: Quesha;
-    -fx-src: url(../fonts/quesha.ttf);
+@font-face{ /* AQUÍ COM EL CSS DE TOTA LA VIDA, sense -fx davant */
+    font-family: Quesha;
+    src: url(../fonts/quesha.ttf);
 }
 
 /*INICI PANELLS PRINCIPALS*/
 #MainAnchor, #MainPane{
- -fx-background-color: #bbbbbb;
+    -fx-background-color: #bbbbbb;
 }
 /* FI PANELLS PRINCIPALS */
+
+/* TAULA ALTA D'USUARIS */
+
+#MainTPanel{
+    -fx-background-color: #fbfbfb;
+}
 
 /* INICI COMPORTAMENT BARRA DE MENÚS, BOTONS, I MENÚS DE INTERFÍCIE */
 #MenuBarButton:active, #MenuBarButton:hover, #MenuBarButton:pressed, #MenuBarButton:focus, #MenuBarButton:showing, #MenuBarButton:inactive, MenuBarButton:armed{
@@ -44,17 +50,25 @@ and open the template in the editor.
 }
 
 /* TEXT CORPORATIU 'M15'*/
-.corp{ 
-    -fx-font-size: 40px;
+#MainCorp{ /* CLASSE */
+    -fx-font-size: 96px;
     -fx-style: Bold;
     -fx-font-family: Quesha;
-    -fx-opacity: 0.7;
+    -fx-opacity: 0.2;
+}
+
+/* TEXT CORPORATIU 'M15'*/
+.MainCorp{ /* CLASSE */
+    -fx-font-size: 180px;
+    -fx-style: Bold;
+    -fx-font-family: Quesha;
+    -fx-opacity: 0.2;
 }
 
 /* TEXT MENÚ PRINCIPAL, TOOLBAR */
-#TextTB, #LabelTB{
+#TextTB, #LabelTB{ /* IDs */
     -fx-font-family: Quesha;
-    -fx-font-size: 12px;
+    -fx-font-size: 20px;
 }
 
 /* TEXT D'ERROR, LOGIN */
@@ -63,8 +77,39 @@ and open the template in the editor.
     -fx-font-family: Quesha;
 }
 
+/* ICONES BOTONS NAVEGACIÓ ALTA D'USUARIS */
+
+.btPrimer{
+    -fx-background-image: url(../icons/principi.png);
+    -fx-background-size: cover, auto;
+    -fx-pref-width:36px;
+    -fx-pref-height:36px;
+    -fx-align-content: "center";
+}
+.btAnterior{
+    -fx-background-image: url(../icons/enrere.png);
+    -fx-background-size: cover, auto;
+    -fx-pref-width:36px;
+    -fx-pref-height:36px;
+    -fx-align-content: "center";
+}
+.btSeguent{
+    -fx-background-image: url(../icons/endavant.png);
+    -fx-background-size: cover, auto;
+    -fx-pref-width:36px;
+    -fx-pref-height:36px;
+    -fx-align-content: "center";
+}
+.btFinal{
+    -fx-background-image: url(../icons/final.png);
+    -fx-background-size: cover, auto;
+    -fx-pref-width:36px;
+    -fx-pref-height:36px;
+    -fx-align-content: "center";
+}
+
 /* MIDA DE TOTES LES ICONES */
-#icon{
+.icon,.btPrimer{
     -fx-width: "16px";
     -fx-height: "16px";
     -fx-fit-width: "16px";

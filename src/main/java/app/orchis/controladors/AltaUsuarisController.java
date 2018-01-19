@@ -5,7 +5,9 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
+import static app.orchis.model.Usuari.obteDisp;
 import static app.orchis.utils.Alertes.info;
 import java.io.IOException;
 import java.net.URL;
@@ -62,23 +64,27 @@ public class AltaUsuarisController extends MasterController implements Initializ
     //Variables Programa
     private ObservableList<Usuari> dades;
     private int posTaula;
+    private boolean admin;
     ContextMenu contextMenu = new ContextMenu();
     MenuItem miModificar = new MenuItem("Modificar Usuari");    
     MenuItem miModificarp = new MenuItem("Modificar Contrasenya");
-    
+    MasterModel helperU;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         configuraColumnes();
         Platform.runLater(() -> {
             //Obtenim els usuaris
+            helperU = new MasterModel(emf, Usuari.class);
             dades = getUsuaris();
             
             //Inicialitzem i omplim la taula
-            actualitzaTaula();                         
+            actualitzaTaula();    
+            primerAction();
+            
         });
         
-        //Accions dels submenus
+        //Assigna acció de modificar usuari als submenú miModificar
         miModificar.setOnAction(e -> {
             try {
                 obrirModif();
@@ -86,6 +92,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
                 Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+        //Assigna acció de modificar la contrasenya als submenú miModificararp
         miModificarp.setOnAction(e -> {
             try {
                 canviarContrasenya('b');
@@ -95,28 +102,21 @@ public class AltaUsuarisController extends MasterController implements Initializ
                 Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+        //Assignem els submenús al contextMenu
         contextMenu.getItems().addAll(miModificar, miModificarp);
-        tvUsuaris.setContextMenu(contextMenu);
-        
-        //Listener dobleclic
-        tvUsuaris.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-                    //Pels botons <- i ->
-                    posTaula = tvUsuaris.getFocusModel().getFocusedIndex();
-                    comprovarControls();
-                    if(mouseEvent.getClickCount() == 2){
-                        try {
-                            obrirModif();
-                        } catch (IOException ex) {
-                            Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-            }
-        });        
     }   
+    /**
+     * Comprova si hi ha un usuari admin en la taula.
+     */
+    private void comprovaAdmin(){
+        int i;
+        admin = false;
+        for(i=0; i<tvUsuaris.getItems().size();i++){
+            if(tvUsuaris.getItems().get(i).isAdmin()){
+                admin = true;
+            }
+        }
+    }
     
     /**
      * Actualitza la taula mitjançant un ObservableList.
@@ -127,10 +127,11 @@ public class AltaUsuarisController extends MasterController implements Initializ
         }
         tvUsuaris.setItems(dades);        
         inicialitzaTaula();
+        comprovaAdmin();
     } 
     
     /**
-     * Inicialitzem la taula i afegim listener per filtrar els usuaris.
+     * Inicialitza la taula i afegeix listener per filtrar els usuaris.
      */
     private void inicialitzaTaula() {
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).
@@ -156,6 +157,29 @@ public class AltaUsuarisController extends MasterController implements Initializ
             });
         });
 
+        //Assignem el contextMenu a la taula.
+        tvUsuaris.setContextMenu(contextMenu);
+        
+        //Listener dobleclic
+        tvUsuaris.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                    //Pels botons <- i ->
+                    posTaula = tvUsuaris.getFocusModel().getFocusedIndex();
+                    comprovarControls();
+                    if(mouseEvent.getClickCount() == 2){
+                        try {
+                            obrirModif();
+                        } catch (IOException ex) {
+                            Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });        
+        
+        
         // 3. Wrap the FilteredList in a SortedList.
         SortedList<Usuari> sortedData = new SortedList<>(filteredData);
 
@@ -179,14 +203,16 @@ public class AltaUsuarisController extends MasterController implements Initializ
         colAdmin.setCellValueFactory(new PropertyValueFactory<>("admin"));
     }
 
-    
+    //UNUSED
     private void goTableItem(int row) {
         tvUsuaris.requestFocus();
         tvUsuaris.scrollTo(row);
         tvUsuaris.getSelectionModel().select(row);
         tvUsuaris.getFocusModel().focus(row);
     }  
-    
+    /**
+     * Selecciona el primer usuari de la taula.
+     */
     @FXML
     private void primerAction() {
 
@@ -200,6 +226,9 @@ public class AltaUsuarisController extends MasterController implements Initializ
 
     }
 
+    /**
+     * Selecciona l'usuari anterior de la taula.
+     */
     @FXML
     private void anteriorAction() {
 
@@ -213,6 +242,9 @@ public class AltaUsuarisController extends MasterController implements Initializ
 
     }
 
+    /**
+     * Selecciona l'usuari següent de la taula.
+     */
     @FXML
     private void seguentAction() {
 
@@ -226,6 +258,9 @@ public class AltaUsuarisController extends MasterController implements Initializ
 
     }
 
+    /**
+     * Selecciona l'últim usuari de la taula.
+     */
     @FXML
     private void finalAction() {
 
@@ -239,6 +274,9 @@ public class AltaUsuarisController extends MasterController implements Initializ
 
     }
 
+    /**
+     * Activa o desactiva botons depenent del usuari seleccionat.
+     */
     private void comprovarControls() {
 
         //Habilita tots els botons
@@ -265,7 +303,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
 
     
     /**
-     * Obre l'interfície genèrica amb la opció de crear.
+     * Obre la interfície genèrica amb la opció de crear.
      * @throws IOException 
      */
     @FXML
@@ -275,7 +313,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
     }    
     
     /**
-     * Obre l'interfície genèrica amb la opció de modificar.
+     * Obre la interfície genèrica amb la opció de modificar.
      * @throws IOException 
      */    
     @FXML
@@ -291,15 +329,29 @@ public class AltaUsuarisController extends MasterController implements Initializ
     private void eliminarUsuari(){
         //Eliminar Usuari de la BBDD
         setSeleccionat();
-        user.eliminarUsuari(emf);
+        helperU.eliminar(user);
 
         //Notificar
         info("Usuari eliminat!");
 
         //Recarregar taula
         actualitzaTaula();
+        
+        //Posició
+        if(posTaula!=0){
+            anteriorAction();
+        }
+        else{
+            primerAction();
+        }
     }
     
+    /**
+     * Obté usuari seleccionat i obra interfície canvi contrasenya.
+     * @param opc /Opció per seleccionar si volem modificar o afegir
+     * @throws IOException /Excepció de Fitxer
+     * @throws ParseException /Excepció de Parse
+     */
     protected void canviarContrasenya(char opc) throws IOException, ParseException{
         //Obtenir Usuari
         setSeleccionat();
@@ -309,6 +361,11 @@ public class AltaUsuarisController extends MasterController implements Initializ
         
     }        
     
+    /**
+     * Obre la interfície genèrica.
+     * @param opt
+     * @throws IOException 
+     */
     private void obrirGeneric(char opt) throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaGeneric.fxml"));
         Parent root = (Parent) fxmlLoader.load();
@@ -317,6 +374,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
         //Vars
         controller.setEmf(emf);
         controller.setOpc(opt);
+        controller.setAdmin(admin);
         if(opt == 'm'){
             setSeleccionat();
             controller.setUser(user);
@@ -331,6 +389,11 @@ public class AltaUsuarisController extends MasterController implements Initializ
         actualitzaTaula();
     }    
     
+    /**
+     * Obre la interfície canvi de contrasenya.
+     * @param opc
+     * @throws IOException 
+     */
     protected void carregaCanvi(char opc)throws IOException{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
             Parent root = (Parent) fxmlLoader.load();   
@@ -355,14 +418,14 @@ public class AltaUsuarisController extends MasterController implements Initializ
     
     //GETTERS AND SETTERS
     /**
-     * Obtené una llista completa de tots els usuaris.
+     * Obté una llista completa de tots els usuaris.
      * @return 
      */
     private ObservableList<Usuari> getUsuaris() {
-        EntityManager manager = emf.createEntityManager();
-        ArrayList<Usuari> llista = (ArrayList<Usuari>) manager.createQuery("FROM " + Usuari.class.getName()).getResultList();
+        ArrayList<Usuari> llista = (ArrayList) helperU.getAll();
+        llista = (ArrayList) obteDisp(llista);
         ObservableList<Usuari> llistaUs = FXCollections.observableArrayList(llista);
-        manager.close();
+        
         return llistaUs;
     }
     

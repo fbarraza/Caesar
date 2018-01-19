@@ -5,19 +5,30 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
 import javax.persistence.EntityManagerFactory;
 
 /**
- *
+ *  Controlador mestre, tots els controladors l'hereten
  * @author m15
  */
 public class MasterController {
     //Vars
-    EntityManagerFactory emf;
-    Usuari user;
+    public EntityManagerFactory emf;
+    public Usuari user;
+    public MasterModel<Usuari> helperU;
     
     //Getters and Setters
+
+    public MasterModel<Usuari> getHelperU() {
+        return helperU;
+    }
+
+    public void setHelperU(MasterModel<Usuari> helperU) {
+        this.helperU = helperU;
+    }    
+    
     public EntityManagerFactory getEmf() {
         return emf;
     }

@@ -6,6 +6,8 @@
 package app.orchis.controladors;
 
 import app.orchis.classes.AppConfig;
+import app.orchis.model.MasterModel;
+import app.orchis.model.Usuari;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -79,13 +81,13 @@ public class SplashScreenController extends MasterController implements Initiali
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLLogin.fxml"));
                         root = (Parent)fxmlLoader.load();
                         LoginController controller = fxmlLoader.<LoginController>getController();
-                        
-                        controller.setEmf(emf);
+
+                        controller.setEmf(emf);                            
                         Scene scene = new Scene(root);
                         Stage stage = new Stage();
                         stage.initStyle(StageStyle.UNDECORATED);
                         stage.setScene(scene);
-
+                        
                         stage.show();
                         primaryStage.close();                        
                     } catch (IOException ex) {

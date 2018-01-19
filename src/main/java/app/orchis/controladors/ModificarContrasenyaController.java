@@ -5,7 +5,9 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
+import static app.orchis.utils.Alertes.avis;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.CryptoHelper.encripta;
 import java.io.IOException;
@@ -17,13 +19,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -43,29 +42,38 @@ public class ModificarContrasenyaController extends MasterController implements 
     
     //Vars
     private char opc;
-    
     private String passwd;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
             inicialitzaGeneric();
+            helperU = new MasterModel(emf, Usuari.class);
         });        
     }      
     
+    /**
+     * Carrega certs elements depenent de l'opció que s'ha passat.
+     */
     private void inicialitzaGeneric(){
         if(opc=='a'){
             btAfegir.setVisible(true);
             pfAnterior.setVisible(false);
             lbAnterior.setVisible(false);
+            pfAnterior.requestFocus();
         }
         else{
             btModificar.setVisible(true);
         }
     }
-    
+    /**
+     * Verifica contrasenya usuari amb la introduïda. 
+     * @throws IOException 
+     */
     @FXML
     private void comprovaVella() throws IOException{
+        System.out.println(pfAnterior.getText());
+        System.out.println(user.getPasswd());
         if(encripta(pfAnterior.getText()).equals(user.getPasswd())){
            comprovaNoves(); 
         }
@@ -74,6 +82,9 @@ public class ModificarContrasenyaController extends MasterController implements 
         }
     }
     
+    /**
+     * Tenca la finestra.
+     */
     @FXML
     private void tencarFinestra(){
         Stage secondaryStage = (Stage)Panel.getScene().getWindow();    
@@ -82,6 +93,10 @@ public class ModificarContrasenyaController extends MasterController implements 
         
     }
     
+    /**
+     * Comprova si la contrasenya introduïda en els dos camps coincideix.
+     * @throws IOException 
+     */
     @FXML
     private void comprovaNoves() throws IOException{
         if(pfNou.getText().equals(pfNou2.getText())){
@@ -89,7 +104,8 @@ public class ModificarContrasenyaController extends MasterController implements 
                 tencarFinestra();
             }
             else{
-                actualitzaPasswd();
+                String encriptat = encripta(pfNou2.getText());
+                actualitzaPasswd(encriptat);
             }
         }
         else{
@@ -97,25 +113,50 @@ public class ModificarContrasenyaController extends MasterController implements 
         }
     }
     
-    private void actualitzaPasswd(){
-            //Creació Entity Manager i del CB
-            EntityManager manager = emf.createEntityManager();
-            CriteriaBuilder cb = emf.getCriteriaBuilder();
-            CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
-            Root<Usuari> c = update.from(Usuari.class);
-            
-            
-            //Sentència SQL
-            update.set("passwd", encripta(pfNou2.getText()));
-            update.where(cb.equal(c.get("codi"), user.getCodi())); 
-            
-            //Actualitzar BBDD
-            manager.getTransaction().begin();
-            manager.createQuery(update).executeUpdate();
-            manager.getTransaction().commit();     
-            
+    /**
+     * Actualitza la contrasenya del usuari.
+     * @param nou 
+     */
+    private void actualitzaPasswd(String nou){
+        user.setPasswd(nou);
+        try{
+            helperU.actualitzar(user);
             info("Contrasenya actualitzada!");
+        }catch(Exception ex){
+            avis("Error al actualitzar la contrasenya!");
+        }
     }
+    
+    /**
+     * "Listener" botons.
+     * @param e
+     * @throws Exception 
+     */
+    @FXML
+    private void keyPress(KeyEvent e) throws Exception {
+        if (e.getSource().equals(pfAnterior)) {
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB))
+                    pfNou.requestFocus();
+            }
+        
+        else if(e.getSource().equals(pfNou)){
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB)) {
+                pfNou2.requestFocus();
+            } 
+        }
+        else if(e.getSource().equals(pfNou2)){
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB)){
+                if(!pfNou.getText().isEmpty()){
+                    if(opc=='a'){
+                        comprovaNoves();
+                    }
+                    else{
+                        comprovaVella();
+                    }
+                }
+            }
+        }
+    }      
 
     //Getters and Setters    
     public char getOpc() {
@@ -129,5 +170,8 @@ public class ModificarContrasenyaController extends MasterController implements 
     public String getPasswd() {
         return passwd;
     }
-    
+
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
+    }
 }

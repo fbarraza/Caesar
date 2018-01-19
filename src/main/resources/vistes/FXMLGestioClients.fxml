@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.GestioClientsController">
+    <stylesheets>
+        <URL value="@/estils/estil.css" />
+    </stylesheets>
+   <children>
+      <HBox alignment="CENTER_LEFT" layoutX="436.0" layoutY="56.0" prefHeight="18.0" prefWidth="104.0" spacing="5.0">
+         <children>
+            <CheckBox mnemonicParsing="false" />
+            <Label text="Bloquejat" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="436.0" layoutY="84.0" prefHeight="18.0" prefWidth="104.0" spacing="5.0">
+         <children>
+            <CheckBox mnemonicParsing="false" />
+            <Label text="Eliminat" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

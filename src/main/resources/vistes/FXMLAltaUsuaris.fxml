@@ -9,43 +9,50 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox id="MainVBox" fx:id="vbxPrincipal" prefHeight="500.0" prefWidth="640.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.AltaUsuarisController">
-   <children>
-      <SplitPane id="MainSplit" dividerPositions="0.12771084337349398" orientation="VERTICAL" prefHeight="430.0" prefWidth="640.0" stylesheets="@../estils/estil.css">
-         <items>
-            <AnchorPane id="MainAnchor" stylesheets="@../estils/estil.css">
-               <children>
-                  <HBox alignment="CENTER" layoutX="14.0" layoutY="14.0" spacing="10.0">
-                     <children>
-                        <Label text="Nom del usuari" />
-                        <TextField fx:id="tfNom" prefHeight="27.0" prefWidth="440.0" />
-                     </children>
-                  </HBox>
-               </children>
-            </AnchorPane>
-            <TableView id="MainTPanel" fx:id="tvUsuaris" prefHeight="447.0" prefWidth="638.0" stylesheets="@../estils/estil.css">
-               <columns>
-                  <TableColumn fx:id="colCodi" prefWidth="48.0" text="Codi" />
-                  <TableColumn fx:id="colNom" prefWidth="156.0" text="Nom" />
-                  <TableColumn fx:id="colLogin" prefWidth="100.0" text="Login" />
-                  <TableColumn fx:id="colData" minWidth="0.0" prefWidth="138.0" text="Data" />
-                  <TableColumn fx:id="colAdmin" prefWidth="91.0" text="Admin" />
-                  <TableColumn fx:id="colBloquejat" prefWidth="105.0" text="Bloquejat" />
-               </columns>
-            </TableView>
-         </items>
-      </SplitPane>
-      <AnchorPane id="MainAnchor" prefHeight="83.0" prefWidth="640.0">
-         <children>
-            <Button fx:id="btModificar" layoutX="386.0" layoutY="19.0" mnemonicParsing="false" onAction="#obrirModif" prefHeight="40.0" prefWidth="120.0" text="Modificar" />
-            <Button fx:id="btEliminar" layoutX="510.0" layoutY="19.0" mnemonicParsing="false" onAction="#eliminarUsuari" prefHeight="40.0" prefWidth="120.0" text="Eliminar" />
-            <Button fx:id="btAfegir" layoutX="262.0" layoutY="18.0" mnemonicParsing="false" onAction="#obrirCrear" prefHeight="40.0" prefWidth="120.0" text="Afegir" />
-            <Button fx:id="btPrimer" layoutX="16.0" layoutY="18.0" mnemonicParsing="false" onAction="#primerAction" prefHeight="40.0" prefWidth="33.0" text="Button" />
-            <Button fx:id="btAnterior" layoutX="57.0" layoutY="20.0" mnemonicParsing="false" onAction="#anteriorAction" prefHeight="40.0" prefWidth="33.0" text="Button" />
-            <Button fx:id="btSeguent" layoutX="96.0" layoutY="19.0" mnemonicParsing="false" onAction="#seguentAction" prefHeight="40.0" prefWidth="33.0" text="Button" />
-            <Button fx:id="btFinal" layoutX="137.0" layoutY="18.0" mnemonicParsing="false" onAction="#finalAction" prefHeight="40.0" prefWidth="33.0" text="Button" />
-         </children>
-      </AnchorPane>
-   </children>
+<VBox id="MainVBox" fx:id="vbxPrincipal" prefHeight="538.0" prefWidth="640.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.AltaUsuarisController">
+    <children>
+        <SplitPane id="MainSplit" dividerPositions="0.12771084337349398" orientation="VERTICAL" stylesheets="@../estils/estil.css">
+            <items>
+                <AnchorPane id="MainAnchor" stylesheets="@../estils/estil.css">
+                    <children>
+                        <HBox alignment="CENTER" layoutX="14.0" layoutY="14.0" spacing="10.0">
+                            <children>
+                                <Label text="Nom del usuari" />
+                                <TextField fx:id="tfNom" prefHeight="27.0" prefWidth="440.0" />
+                            </children>
+                        </HBox>
+                    </children>
+                </AnchorPane>
+                <TableView id="MainTPanel" fx:id="tvUsuaris" prefHeight="429.0" prefWidth="694.0" stylesheets="@../estils/estil.css">
+                    <columns>
+                        <TableColumn fx:id="colCodi" prefWidth="48.0" text="Codi" />
+                        <TableColumn fx:id="colNom" prefWidth="156.0" text="Nom" />
+                        <TableColumn fx:id="colLogin" prefWidth="100.0" text="Login" />
+                        <TableColumn fx:id="colData" minWidth="0.0" prefWidth="138.0" text="Data" />
+                        <TableColumn fx:id="colAdmin" prefWidth="91.0" text="Admin" />
+                        <TableColumn fx:id="colBloquejat" prefWidth="105.0" text="Bloquejat" />
+                    </columns>
+                </TableView>
+            </items>
+        </SplitPane>
+        <AnchorPane id="MainAnchor" prefHeight="61.0" prefWidth="640.0" stylesheets="@../estils/estil.css">
+            <children>
+                <Button fx:id="btPrimer" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#primerAction" prefHeight="36.0" prefWidth="36.0" styleClass="btPrimer" stylesheets="@../estils/estil.css" />
+                <Button fx:id="btAnterior" layoutX="57.0" layoutY="12.0" mnemonicParsing="false" onAction="#anteriorAction" prefHeight="36.0" prefWidth="36.0" styleClass="btAnterior" stylesheets="@../estils/estil.css" />
+                <Button fx:id="btSeguent" layoutX="104.0" layoutY="12.0" mnemonicParsing="false" onAction="#seguentAction" prefHeight="36.0" prefWidth="36.0" styleClass="btSeguent" stylesheets="@../estils/estil.css" />
+                <Button fx:id="btFinal" layoutX="151.0" layoutY="12.0" mnemonicParsing="false" onAction="#finalAction" prefHeight="36.0" prefWidth="36.0" styleClass="btFinal" stylesheets="@../estils/estil.css" />
+                <Text layoutX="218.0" layoutY="41.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" text="M15">
+                    <font>
+                        <Font name="System Bold" size="34.0" />
+                    </font>
+                </Text>
+                <Button fx:id="btAfegir" layoutX="323.0" layoutY="10.0" mnemonicParsing="false" onAction="#obrirCrear" prefHeight="36.0" prefWidth="100.0" text="Afegir" />
+                <Button fx:id="btModificar" layoutX="427.0" layoutY="10.0" mnemonicParsing="false" onAction="#obrirModif" prefHeight="36.0" prefWidth="100.0" text="Modificar" />
+                <Button fx:id="btEliminar" layoutX="532.0" layoutY="10.0" mnemonicParsing="false" onAction="#eliminarUsuari" prefHeight="36.0" prefWidth="100.0" text="Eliminar" />
+            </children>
+        </AnchorPane>
+    </children>
 </VBox>

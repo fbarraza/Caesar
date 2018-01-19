@@ -5,6 +5,9 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.MasterModel;
+import app.orchis.model.Usuari;
+import app.orchis.model.enums.UsuariEstat;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.Alertes.sortir;
 import java.io.IOException;
@@ -23,6 +26,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -48,15 +53,22 @@ public class AltaGenericController extends MasterController implements Initializ
     
     //Vars Controller
     private char opc;
-    private String passwd;         
+    private String passwd;
+    private boolean admin;
+    
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
             carregaApp(opc);
+            helperU = new MasterModel(emf, Usuari.class);
         });
     }   
     
+    /**
+     * Carrega l'aplicació genèrica, mostrant uns botons o uns altres.
+     * @param opc Mode app genèric. c = crear m = modificar
+     */
     private void carregaApp(char opc){
         switch (opc){
             case 'c':
@@ -64,20 +76,27 @@ public class AltaGenericController extends MasterController implements Initializ
                 btAfegir.setDisable(false);
                 tfId.setVisible(false);
                 lbId.setVisible(false);
+                if(admin) cbAdmin.setDisable(true);
                 break;
             
             case 'm':
                 btModificar.setVisible(true);
                 btModificar.setDisable(false);
                 carregarUsuari();
+                if(admin && !user.isAdmin()) cbAdmin.setDisable(true);     
                 break;
                 
             default:
                 System.err.println("Error!");
                 break;
         }
+
+        tfNom.requestFocus();
     }
-    
+        
+    /**
+     * Carrega l'usuari que li hem passat. Modificar.
+     */
     private void carregarUsuari(){
         tfId.setText(Long.toString(user.getCodi()));
         tfNom.setText(user.getNom());
@@ -87,6 +106,11 @@ public class AltaGenericController extends MasterController implements Initializ
         
     }
     
+    /**
+     * Comprova si el camp que li passem està buit.
+     * @param field Camp a comprovar.
+     * @return True = buit False = Té contingut
+     */
     private boolean comprovaCamp(TextField field){
         if(field.getText().isEmpty()){
             return true;
@@ -96,11 +120,16 @@ public class AltaGenericController extends MasterController implements Initializ
         }
     } 
     
+    /**
+     * Carrega interfície de canvi contrasenya.
+     * @param opc Opció a passar (a afegir, m modificar).
+     * @throws IOException Excepció si no troba fitxer FXML.
+     */
     private void carregaPasswd(char opc) throws IOException{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
             Parent root = (Parent) fxmlLoader.load();   
             ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
-            
+            String pwd;
             //
             controller.setOpc(opc);
             
@@ -111,24 +140,56 @@ public class AltaGenericController extends MasterController implements Initializ
             stage.setTitle("Introduir contrasenya");
             
             stage.setOnHiding(event -> {
-                user.setPasswd(controller.getPasswd());
+                passwd = controller.getPasswd();
             });
-            stage.showAndWait();            
+            stage.showAndWait();  
+   
     }    
+    /**
+     * "Listener" per canviar camps.
+     * @param e Tecla premuda
+     * @throws Exception Excepció
+     */
+    @FXML
+    private void keyPress(KeyEvent e) throws Exception {
+        if (e.getSource().equals(tfNom)) {
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB))
+                    tfLogin.requestFocus();
+            }
+        
+        else if(e.getSource().equals(tfLogin)){
+            if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB)) {
+                cbBloqueig.requestFocus();
+            } 
+        }
+        else if(e.getSource().equals(cbBloqueig)){
+            if (e.getCode().equals(KeyCode.TAB)){
+                cbAdmin.requestFocus();
+            }
+        }
+    }     
     
+    /**
+     * Crea un usuari amb les dades introduïdes en els TextFields
+     * @throws ParseException 
+     * @throws IOException 
+     */
     @FXML
     private void crearUsuari() throws ParseException, IOException {
+        Usuari user = new Usuari();
         
         if(!comprovaCamp(tfNom)){
             if(!comprovaCamp(tfLogin)){
                 user.setNom(tfNom.getText());
                 carregaPasswd('a');
+                user.setPasswd(passwd);
                 user.setBloquejat(cbBloqueig.isSelected());
                 user.setLogin(tfLogin.getText());
                 user.setData(user.getAvui());
                 user.setAdmin(cbAdmin.isSelected());
+                user.setEstat(UsuariEstat.normal);
                 
-                user.afegirUsuari(emf);
+                helperU.afegir(user);
                 info("Usuari creat satisfactòriament");                             
             }
             else{
@@ -139,7 +200,9 @@ public class AltaGenericController extends MasterController implements Initializ
             lbInfo.setText("Falta el nom real de l'usuari!");            
         }        
     }    
-    
+    /**
+     * Modifica usuari que està sent editat.
+     */
     @FXML
     private void modificarUsuari(){        
         //Sentència SQL        
@@ -147,12 +210,15 @@ public class AltaGenericController extends MasterController implements Initializ
         user.setBloquejat(cbBloqueig.isSelected());
         user.setLogin(tfLogin.getText());
         user.setAdmin(cbAdmin.isSelected());
-        user.actualitzarUsuari(emf);
+        helperU.actualitzar(user);
         
         //Notificar Usuari
         info("Usuari modificat!");
     }    
     
+    /**
+     * Tenca finestra.
+     */
     @FXML
     protected void sortirAction() {
         if (sortir() == ButtonType.YES) {
@@ -171,8 +237,21 @@ public class AltaGenericController extends MasterController implements Initializ
     public void setOpc(char opc) {
         this.opc = opc;
     }
-    
-    public void setPasswd(String passwd){
+
+    public String getPasswd() {
+        return passwd;
+    }
+
+    public void setPasswd(String passwd) {
         this.passwd = passwd;
     }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
 }

@@ -10,7 +10,7 @@
 
 <AnchorPane id="MainAnchor" fx:id="Panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="393.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.SettingsAdminController">
    <children>
-      <TextField id="tfID" fx:id="tfID" disable="true" editable="false" layoutX="164.0" layoutY="110.0" prefHeight="26.0" prefWidth="192.0" promptText="Número d'indentificació" stylesheets="@../estils/estil.css" />
+      <TextField id="tfID" fx:id="tfID" disable="true" editable="false" layoutX="164.0" layoutY="110.0" prefHeight="26.0" prefWidth="40.0" promptText="Número d'indentificació" stylesheets="@../estils/estil.css" />
       <Button id="buttonLogin" fx:id="btnModificar" layoutX="38.0" layoutY="352.0" mnemonicParsing="false" onAction="#modificarAction" prefHeight="32.0" prefWidth="131.0" stylesheets="@../estils/estil.css" text="Modificar" />
       <Button id="buttonLogin" fx:id="btnSortir" layoutX="228.0" layoutY="352.0" mnemonicParsing="false" onAction="#sortirAction" prefHeight="32.0" prefWidth="131.0" stylesheets="@../estils/estil.css" text="Sortir" />
       <Label layoutX="128.0" layoutY="115.0" text="ID" />

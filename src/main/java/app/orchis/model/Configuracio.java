@@ -6,8 +6,6 @@
 package app.orchis.model;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +26,7 @@ import java.util.GregorianCalendar;
  */
 @Entity
 @Table(name = "admin_config")
-public class Configuracio implements Serializable {
+public class Configuracio implements Serializable{
 
     private static final long serialVersionUID = 2;
 
@@ -59,24 +57,8 @@ public class Configuracio implements Serializable {
 
     public Configuracio() {
     }
-
     
     //Funcions
-    public int obtenirIntents(EntityManagerFactory emf){
-        //Manager local
-        EntityManager _manager = emf.createEntityManager();
-
-        //Obtenir dades de l'usuari introduit
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        CriteriaQuery<Configuracio> cbQuery = cb.createQuery(Configuracio.class);
-        Root<Configuracio> c = cbQuery.from(Configuracio.class);
-        cbQuery.select(c);
-        Query query = _manager.createQuery(cbQuery);  
-        
-        Configuracio config = (Configuracio) query.getSingleResult();
-        return config.getIntents();
-    }    
-    
     public boolean checkMonth(Usuari user){
         //Variables
         int diffYear;
@@ -106,6 +88,38 @@ public class Configuracio implements Serializable {
     }
     
     //GETTERS AND SETTERS
+    public int getIntents(EntityManagerFactory emf){
+        //Manager local
+        EntityManager _manager = emf.createEntityManager();
+
+        //Obtenir dades de l'usuari introduit
+        CriteriaBuilder cb = emf.getCriteriaBuilder();
+        CriteriaQuery<Configuracio> cbQuery = cb.createQuery(Configuracio.class);
+        Root<Configuracio> c = cbQuery.from(Configuracio.class);
+        cbQuery.select(c);
+        Query query = _manager.createQuery(cbQuery);  
+        
+        Configuracio config = (Configuracio) query.getSingleResult();
+        return config.getIntents();
+    }     
+    
+    public static Configuracio getConfig(EntityManagerFactory emf){
+        //Creació Entity Manager i del CB
+        EntityManager manager = emf.createEntityManager();
+        CriteriaBuilder cb = emf.getCriteriaBuilder();
+        //Criteria per el select
+        CriteriaQuery<Configuracio> cbQuery = cb.createQuery(Configuracio.class);
+        Root<Configuracio> consulta = cbQuery.from(Configuracio.class);
+        cbQuery.select(consulta);
+        Query query = manager.createQuery(cbQuery);
+        //Ficar totes les dades en un objecte ce configuració
+        Configuracio configuracio = (Configuracio) query.getSingleResult();
+
+        manager.close();
+        
+        return configuracio;
+    }
+    
     public int getCodi() {
         return codi;
     }

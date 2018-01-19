@@ -40,9 +40,6 @@ public class MainMenuController extends MasterController implements Initializabl
     @FXML private Label lbUserActual;
     @FXML private Label lbServer;
     
-    
-    //@FXML private Label usuariActual;
-    //@FXML private Label server;
         
     //Vars programa
     private static Configuracio config;
@@ -57,6 +54,9 @@ public class MainMenuController extends MasterController implements Initializabl
         });
     }
     
+    /**
+     * Obté usuari admin i bloqueja menú admin if usuari is not admin.
+     */
     private void adminTool(){
         //Crear EntityManager i CriteriaBuilder
         EntityManager em = emf.createEntityManager();
@@ -76,6 +76,10 @@ public class MainMenuController extends MasterController implements Initializabl
         }
     }
     
+    /**
+     * Obre la interfície d'alta d'usuaris.
+     * @throws IOException 
+     */
     @FXML private void obrirAltaUsuari() throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaUsuaris.fxml"));
         Parent root = (Parent) fxmlLoader.load();
@@ -92,6 +96,11 @@ public class MainMenuController extends MasterController implements Initializabl
         stage.show();        
         
     }
+    
+    /**
+     * Obre la interfície del fitxer de configuració.
+     * @throws IOException 
+     */
     @FXML
     private void obrirConfig() throws IOException{
         try {

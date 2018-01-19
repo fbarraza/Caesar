@@ -1,6 +1,8 @@
 package app.orchis.model;
 
+import app.orchis.model.enums.UsuariEstat;
 import static app.orchis.utils.Alertes.avis;
+import static app.orchis.utils.CryptoHelper.encripta;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -8,11 +10,15 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Query;
@@ -53,10 +59,15 @@ public class Usuari implements Serializable{
     private Date data;
     
     @Column(name = "admin")
-    private boolean admin;    
+    private boolean admin;   
+    
+    @Column(name = "estat")
+    @Enumerated(EnumType.STRING)
+    private UsuariEstat estat;
 
     //Constructor
     public Usuari() {
+        
     }
 
     public Usuari(int codi, String nom, String login, String passwd, boolean bloquejat, Date data, boolean admin) {
@@ -79,8 +90,7 @@ public class Usuari implements Serializable{
     public static Usuari obtenirUsuari(EntityManagerFactory emf, String username){
         //Variables
         EntityManager em = emf.createEntityManager();
-        Usuari user;
-        
+        Usuari user = new Usuari();
         //Obtenir dades de l'usuari introduit
         CriteriaBuilder cb = emf.getCriteriaBuilder();
         CriteriaQuery<Usuari> cbQuery = cb.createQuery(Usuari.class);
@@ -93,105 +103,47 @@ public class Usuari implements Serializable{
         user = (Usuari) query.getSingleResult();
         em.close();
         
-        return  user;
+        return user;
     }
     
-    /**
-     * Afegeix/Insereix l'usuari a la BBDD.
-     * @param emf EntityManagerFactory per passar la connexió.
-     */
-    public void afegirUsuari(EntityManagerFactory emf){
-        //Variables
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        //Afegim usuari a la base de dades
-        try {
-        em.persist(this);
-        //em.flush();
-        em.getTransaction().commit();   
-        
-        }catch (Exception ex) {                    
-            if (ex.getCause() instanceof ConstraintViolationException){
-                em.getTransaction().rollback();
-                avis("Error a la hora d'inserir l'usuari! Nom d'usuari ja existeix!");                        
-                System.out.println(ex.getMessage());
+    public static Usuari obteAdmin(List<Usuari> llista){        
+        for(int i=0; i<llista.size();i++){
+            if(llista.get(i).isAdmin()){
+                return llista.get(i);
             }
-        }        
+        }     
+        return null;
     }    
     
-    /**
-     * Actualitza l'usuari en la BBDD.
-     * @param emf 
-     */
-    public void actualitzarUsuari(EntityManagerFactory emf){
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        try {
-            em.merge(this);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-        } finally {
-            em.close();
-        }        
-        
-        /*
-        //Variables Query
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
-        Root<Usuari> c = update.from(Usuari.class);     
-
-        //Sentència SQL
-        update.set("nom", this.nom);   
-        update.set("login", this.login);
-        update.set("passwd", this.passwd);  
-        update.set("bloquejat", this.bloquejat);
-        update.set("data", this.data);
-        update.set("admin", this.admin);                 
-        update.where(cb.equal(c.get("codi"), this.codi));  
-        
-        //Actualitzar BBDD
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.createQuery(update).executeUpdate();
-        em.getTransaction().commit(); 
-        
-        em.close();*/
+    public static List<Usuari> obteDisp(List<Usuari> llista){        
+        List<Usuari> lBo = new ArrayList();
+        for(int i=0; i<llista.size();i++){
+            if(!llista.get(i).getEstat().equals(UsuariEstat.eliminat)){
+                lBo.add(llista.get(i));
+            }
+        }     
+        return lBo;
+    }      
+ 
+    public void actualitzaPasswd(EntityManagerFactory emf, String nou){
+            //Creació Entity Manager i del CB
+            EntityManager manager = emf.createEntityManager();
+            CriteriaBuilder cb = emf.getCriteriaBuilder();
+            CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
+            Root<Usuari> c = update.from(Usuari.class);
+            
+            
+            //Sentència SQL
+            update.set("passwd", nou);
+            update.where(cb.equal(c.get("codi"), this.getCodi())); 
+            
+            //Actualitzar BBDD
+            manager.getTransaction().begin();
+            manager.createQuery(update).executeUpdate();
+            manager.getTransaction().commit();     
+            
+            manager.close();
     }
-    
-    /**
-     * Elimina l'usuari en la BBDD.
-     * @param emf EntityManagerFactory per passar la connexió.
-     */
-    public void eliminarUsuari(EntityManagerFactory emf){
-        EntityManager em = emf.createEntityManager();
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        CriteriaDelete<Usuari> delete = cb.createCriteriaDelete(Usuari.class);                        
-        Root<Usuari> c = delete.from(Usuari.class);
-
-        //Sentència SQL
-        delete.where(cb.equal(c.get("codi"), this.getCodi()));
-
-        //Actualitzar BBDD
-        em.getTransaction().begin();
-        em.createQuery(delete).executeUpdate();
-        em.getTransaction().commit();  
-        
-        //Tencar Entity
-        em.close();
-    }    
-
-    /*
-    @Override
-    public String toString() {
-        return "Usuari{" +
-                "codi=" + codi +
-                ", nom='" + nom + '\'' +
-                ", login='" + login + '\'' +
-                ", bloquejat=" + bloquejat +
-                '}';
-    }    
-    */
     
     //GETTERS AND SETTERS
     public long getCodi() {
@@ -248,6 +200,24 @@ public class Usuari implements Serializable{
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public UsuariEstat getEstat() {
+        return estat;
+    }
+
+    public void setEstat(UsuariEstat estat) {
+        this.estat = estat;
+    }
+      
+    public void setUsuari(Usuari user){
+        this.codi = (int) user.getCodi();
+        this.nom = user.getNom();
+        this.login = user.getLogin();
+        this.passwd = user.getPasswd();
+        this.bloquejat = user.isBloquejat();
+        this.data = user.getData();
+        this.admin = user.isAdmin();
     }
     
     public Date getAvui() throws ParseException{

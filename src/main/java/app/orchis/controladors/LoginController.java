@@ -2,6 +2,7 @@ package app.orchis.controladors;
 
 
 import app.orchis.model.Configuracio;
+import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.CryptoHelper.encripta;
@@ -53,7 +54,8 @@ public class LoginController extends MasterController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
-            intents_n = config.obtenirIntents(emf);
+            helperU = new MasterModel(emf, Usuari.class);
+            intents_n = config.getIntents(emf);
             intents_m = intents_n;
         });        
     } 
@@ -78,7 +80,7 @@ public class LoginController extends MasterController implements Initializable {
     }
     
     /**
-     * Carreguem la interfície per canviar la contrasenya
+     * Carrega la interfície per canviar la contrasenya
      * @throws IOException 
      */
     protected void carregaCanvi()throws IOException{
@@ -101,6 +103,11 @@ public class LoginController extends MasterController implements Initializable {
         stage.showAndWait();  
     }    
     
+    /**
+     * Actualitza contrasenya de l'usuari introduït
+     * @throws IOException
+     * @throws ParseException 
+     */
     protected void canviarContrasenya() throws IOException, ParseException{
         //Avisem a l'usuari    
         info("La contrasenya té més de " +config.getCaducitat()+" i s'ha de canviar!");
@@ -109,7 +116,7 @@ public class LoginController extends MasterController implements Initializable {
         carregaCanvi();
         
         //Actualitzar contrasenya
-        user.actualitzarUsuari(emf);
+        helperU.actualitzar(user);
         
     }    
     
@@ -149,7 +156,7 @@ public class LoginController extends MasterController implements Initializable {
             
             //Actualitzar usuari
             user.setBloquejat(true);
-            user.actualitzarUsuari(emf);
+            helperU.actualitzar(user);
                      
             //Informar administrador
             enviarMissatge("Han intentat fer login amb l'usuari " + usuari.getLogin() + " i ha quedat bloquejat"); 
@@ -183,9 +190,10 @@ public class LoginController extends MasterController implements Initializable {
         stage.setScene(new Scene(root));
         stage.setTitle("Menú Principal");
         stage.initModality(Modality.NONE);
-        stage.setOnHiding( event -> {emf.close();} );
+        stage.setOnCloseRequest(event -> {
+            emf.close();
+        });
         
-        //emf.close();
         primaryStage.close();
         stage.showAndWait();        
     }
@@ -262,7 +270,7 @@ public class LoginController extends MasterController implements Initializable {
     }  
     
     /**
-     * Apagar l'aplicació
+     * Sortir de l'aplicació.
      */
     @FXML
     protected void Surt(){

@@ -6,13 +6,13 @@
 package app.orchis.controladors;
 
 import app.orchis.model.Configuracio;
+import static app.orchis.model.Configuracio.getConfig;
+import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.Alertes.sortir;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -26,11 +26,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
 /**
@@ -40,20 +38,17 @@ import javax.persistence.criteria.Root;
 public class SettingsAdminController extends MasterController implements Initializable {
 
     //Variables dels elements en la vista
-    @FXML
-    private TextField tfID;
-    @FXML
-    private ComboBox<String> cmbNomAdmin;
-    @FXML
-    private TextField tfMailAdmin;
-    @FXML
-    private TextField tfMaxIntents;
-    @FXML
-    private TextField tfDataCaducitat;
-    @FXML
-    private Button btnModificar;
-    @FXML
-    private Button btnSortir;  
+    @FXML private TextField tfID;
+    @FXML private ComboBox<String> cmbNomAdmin;
+    @FXML private TextField tfMailAdmin;
+    @FXML private TextField tfMaxIntents;
+    @FXML private TextField tfDataCaducitat;
+    @FXML private Button btnModificar;
+    @FXML private Button btnSortir;  
+    
+    //Vars programa
+    private List<Usuari> llista;
+    public MasterModel<Configuracio> helperC = new MasterModel(emf,Configuracio.class);
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -63,33 +58,48 @@ public class SettingsAdminController extends MasterController implements Initial
 
     }
 
+    /**
+     * Modifica fitxer configuració.
+     * @throws ParseException 
+     */
     @FXML
     protected void modificarAction() throws ParseException {
         //Vars
-        DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        Configuracio config = new Configuracio();
+        String admin = cmbNomAdmin.getSelectionModel().getSelectedItem();
+        //Posar dades
+        config.setCodi(Integer.parseInt(tfID.getText()));
+        config.setMail(tfMailAdmin.getText());
+        config.setIntents(Integer.parseInt(tfMaxIntents.getText()));
+        config.setNom_admin(admin);
+        config.setCaducitat(Integer.parseInt(tfDataCaducitat.getText()));
 
-        //Creació Entity Manager i del CB
-        EntityManager manager = emf.createEntityManager();
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        //Criteria per el update
-        CriteriaUpdate<Configuracio> update = cb.createCriteriaUpdate(Configuracio.class);
-        Root<Configuracio> consultaUpdate = update.from(Configuracio.class);
-
-        update.set("mail", tfMailAdmin.getText());
-        update.set("intents", Integer.parseInt(tfMaxIntents.getText()));
-        update.set("nom_admin", cmbNomAdmin.getSelectionModel().getSelectedItem());
-        update.set("caducitat", Integer.parseInt(tfDataCaducitat.getText()));
-      
-        //Efectuar el commit a la base de dades
-        manager.getTransaction().begin();
-        manager.createQuery(update).executeUpdate();
-        manager.getTransaction().commit();
-        manager.close();
+        helperC.actualitzar(config);
+        actualitzarAdmin(admin);
         
         info("La configuració ha sigut modificada");
 
     }
-
+    
+    /**
+     * Actualitza usuari admin de la taula usuari
+     * @param admin 
+     */
+    protected void actualitzarAdmin(String admin){
+        Usuari user = new Usuari();
+        //Admin vell
+        user = Usuari.obteAdmin(llista);
+        user.setAdmin(false);
+        helperU.actualitzar(user);
+        //Nou admin
+        user = Usuari.obtenirUsuari(emf,admin);
+        user.setAdmin(true);
+        helperU.actualitzar(user);
+        
+    }
+    /**
+    * Tenca la finestra
+    */    
     @FXML
     protected void sortirAction() {
         if (sortir() == ButtonType.YES) {
@@ -99,18 +109,13 @@ public class SettingsAdminController extends MasterController implements Initial
         }
     }
 
+    /**
+     * Omple Text amb la configuració actual
+     */
     private void omplirText() {
-
-        //Creació Entity Manager i del CB
-        EntityManager manager = emf.createEntityManager();
-        CriteriaBuilder cb = emf.getCriteriaBuilder();
-        //Criteria per el select
-        CriteriaQuery<Configuracio> cbQuery = cb.createQuery(Configuracio.class);
-        Root<Configuracio> consulta = cbQuery.from(Configuracio.class);
-        cbQuery.select(consulta);
-        Query query = manager.createQuery(cbQuery);
-        //Ficar totes les dades en un objecte ce configuració
-        Configuracio configuracio = (Configuracio) query.getSingleResult();
+        Configuracio configuracio;
+        configuracio = getConfig(emf);
+        
         //Omplir tots els textField amb el seu valor corresponent
         tfID.setText(Integer.toString(configuracio.getCodi()));
         omplirCombo();
@@ -119,10 +124,13 @@ public class SettingsAdminController extends MasterController implements Initial
         tfMailAdmin.setText(String.valueOf(configuracio.getMail()));
         tfMaxIntents.setText(String.valueOf(configuracio.getIntents()));
         tfDataCaducitat.setText(String.valueOf(configuracio.getCaducitat()));
-        manager.close();
+        
 
     }
 
+    /**
+     * Omple el ComboBox amb els usuaris existents.
+     */
     private void omplirCombo() {
 
         EntityManager manager = emf.createEntityManager();
@@ -133,7 +141,7 @@ public class SettingsAdminController extends MasterController implements Initial
         cbQuery.select(consulta);
         Query query = manager.createQuery(cbQuery);
 
-        List<Usuari> llista = query.getResultList();
+        llista = query.getResultList();
         ObservableList<String> data = FXCollections.observableArrayList();
 
         for (int i = 0; i < llista.size(); i++) {

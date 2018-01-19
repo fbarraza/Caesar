@@ -14,10 +14,14 @@ import javax.persistence.*;
  * Solament 1 instància de la classe
  */
 public class AppConfig {
+    //Variables de la classe
     private String persistenceUnit;
-
     private static AppConfig _instancia;
 
+    /**
+     * Retorna instància 
+     * @return 
+     */
     public static AppConfig getInstance() {
         if (_instancia == null)
             _instancia = new AppConfig();
@@ -25,10 +29,17 @@ public class AppConfig {
         return _instancia;
     }
 
+    /**
+     * Constructor sense paràmetres
+     */
     private AppConfig() {
 
     }
 
+    /**
+     * Crea la connexió amb la base de dades fent servir el fitxer app.config.
+     * @return Retorna connexió BBDD.
+     */
     public EntityManagerFactory loadAppConfig(){
         if (!persistenceUnit.isEmpty()) {
             Map properties = llegirFitxerPropietats("app.properties");

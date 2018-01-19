@@ -36,7 +36,9 @@ public class AppPropertiesFileHelper {
      * @param pPropertyFileName       /Nom del fitxer de propietats que conté la contrasenya
      * @param pUserPasswordKey        /Left hand side of the password property as key.
      * @param pIsPasswordEncryptedKey /Clau al fitxer de propietats. Indica si la contrasenya està encriptada o no
-     * @throws Exception
+     * @param verbose /Mostra el que fa if true
+     * @throws PropertiesHelperException    /Excepció
+     * @throws ConfigurationException   /Excepció
      */
     public AppPropertiesFileHelper(String pPropertyFileName, String pUserPasswordKey, String pIsPasswordEncryptedKey, boolean verbose) throws PropertiesHelperException, ConfigurationException {
         this.propertyFileName = pPropertyFileName;
@@ -57,8 +59,9 @@ public class AppPropertiesFileHelper {
      * Primer comprova si la contrasenya està encriptada o no.
      * Si no està encriptada, solament encriptarà la contrasenya
      *
-     * @throws ConfigurationException
-     */
+     * @param verbose /Ensenya el que fa if true
+     * @throws ConfigurationException  /Excepció de configuració
+     */    
     public void encryptPropertyValue(boolean verbose) throws ConfigurationException {
         if (verbose) System.out.println("Iniciant procés d'encriptació");
         if (verbose) System.out.println("Llegint fitxer de propietats");
@@ -156,7 +159,7 @@ public class AppPropertiesFileHelper {
             appPropertiesFileHelper = new AppPropertiesFileHelper("app.properties",
                                                                   "jdbc.password",
                                                                   "encrypted",
-                                                                  true);
+                                                                  false);
 
         } catch (PropertiesHelperException e) {
             e.printStackTrace();
