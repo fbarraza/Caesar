@@ -346,9 +346,9 @@ public class AltaUsuarisController extends MasterController implements Initializ
     
     /**
      * Obté usuari seleccionat i obra interfície canvi contrasenya.
-     * @param opc
-     * @throws IOException
-     * @throws ParseException 
+     * @param opc /Opció per seleccionar si volem modificar o afegir
+     * @throws IOException /Excepció de Fitxer
+     * @throws ParseException /Excepció de Parse
      */
     protected void canviarContrasenya(char opc) throws IOException, ParseException{
         //Obtenir Usuari
