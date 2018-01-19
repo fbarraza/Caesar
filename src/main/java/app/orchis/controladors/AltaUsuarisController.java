@@ -7,6 +7,7 @@ package app.orchis.controladors;
 
 import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
+import static app.orchis.model.Usuari.obteDisp;
 import static app.orchis.utils.Alertes.info;
 import java.io.IOException;
 import java.net.URL;
@@ -420,10 +421,10 @@ public class AltaUsuarisController extends MasterController implements Initializ
      * @return 
      */
     private ObservableList<Usuari> getUsuaris() {
-        EntityManager manager = emf.createEntityManager();
         ArrayList<Usuari> llista = (ArrayList) helperU.getAll();
+        llista = (ArrayList) obteDisp(llista);
         ObservableList<Usuari> llistaUs = FXCollections.observableArrayList(llista);
-        manager.close();
+        
         return llistaUs;
     }
     

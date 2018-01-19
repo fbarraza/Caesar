@@ -1,5 +1,6 @@
 package app.orchis.model;
 
+import app.orchis.model.enums.UsuariEstat;
 import static app.orchis.utils.Alertes.avis;
 import static app.orchis.utils.CryptoHelper.encripta;
 import javax.persistence.Column;
@@ -9,12 +10,15 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Query;
@@ -55,7 +59,11 @@ public class Usuari implements Serializable{
     private Date data;
     
     @Column(name = "admin")
-    private boolean admin;    
+    private boolean admin;   
+    
+    @Column(name = "estat")
+    @Enumerated(EnumType.STRING)
+    private UsuariEstat estat;
 
     //Constructor
     public Usuari() {
@@ -106,6 +114,16 @@ public class Usuari implements Serializable{
         }     
         return null;
     }    
+    
+    public static List<Usuari> obteDisp(List<Usuari> llista){        
+        List<Usuari> lBo = new ArrayList();
+        for(int i=0; i<llista.size();i++){
+            if(!llista.get(i).getEstat().equals(UsuariEstat.eliminat)){
+                lBo.add(llista.get(i));
+            }
+        }     
+        return lBo;
+    }      
  
     public void actualitzaPasswd(EntityManagerFactory emf, String nou){
             //Creació Entity Manager i del CB
@@ -183,6 +201,16 @@ public class Usuari implements Serializable{
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
+
+    public UsuariEstat getEstat() {
+        return estat;
+    }
+
+    public void setEstat(UsuariEstat estat) {
+        this.estat = estat;
+    }
+    
+    
     
     public void setUsuari(Usuari user){
         this.codi = (int) user.getCodi();

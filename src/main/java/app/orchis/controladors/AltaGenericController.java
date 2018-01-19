@@ -7,6 +7,7 @@ package app.orchis.controladors;
 
 import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
+import app.orchis.model.enums.UsuariEstat;
 import static app.orchis.utils.Alertes.info;
 import static app.orchis.utils.Alertes.sortir;
 import java.io.IOException;
@@ -186,6 +187,7 @@ public class AltaGenericController extends MasterController implements Initializ
                 user.setLogin(tfLogin.getText());
                 user.setData(user.getAvui());
                 user.setAdmin(cbAdmin.isSelected());
+                user.setEstat(UsuariEstat.normal);
                 
                 helperU.afegir(user);
                 info("Usuari creat satisfactòriament");                             
