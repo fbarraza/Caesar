@@ -87,7 +87,7 @@ public class SplashScreenController extends MasterController implements Initiali
                         Stage stage = new Stage();
                         stage.initStyle(StageStyle.UNDECORATED);
                         stage.setScene(scene);
-
+                        
                         stage.show();
                         primaryStage.close();                        
                     } catch (IOException ex) {

@@ -104,28 +104,6 @@ public class AltaUsuarisController extends MasterController implements Initializ
         });
         //Assignem els submenús al contextMenu
         contextMenu.getItems().addAll(miModificar, miModificarp);
-        
-        //Assignem el contextMenu al a taula.
-        tvUsuaris.setContextMenu(contextMenu);
-        
-        //Listener dobleclic
-        tvUsuaris.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-                    //Pels botons <- i ->
-                    posTaula = tvUsuaris.getFocusModel().getFocusedIndex();
-                    comprovarControls();
-                    if(mouseEvent.getClickCount() == 2){
-                        try {
-                            obrirModif();
-                        } catch (IOException ex) {
-                            Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-            }
-        });        
     }   
     /**
      * Comprova si hi ha un usuari admin en la taula.
@@ -179,6 +157,29 @@ public class AltaUsuarisController extends MasterController implements Initializ
             });
         });
 
+        //Assignem el contextMenu a la taula.
+        tvUsuaris.setContextMenu(contextMenu);
+        
+        //Listener dobleclic
+        tvUsuaris.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                    //Pels botons <- i ->
+                    posTaula = tvUsuaris.getFocusModel().getFocusedIndex();
+                    comprovarControls();
+                    if(mouseEvent.getClickCount() == 2){
+                        try {
+                            obrirModif();
+                        } catch (IOException ex) {
+                            Logger.getLogger(AltaUsuarisController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });        
+        
+        
         // 3. Wrap the FilteredList in a SortedList.
         SortedList<Usuari> sortedData = new SortedList<>(filteredData);
 

@@ -209,9 +209,7 @@ public class Usuari implements Serializable{
     public void setEstat(UsuariEstat estat) {
         this.estat = estat;
     }
-    
-    
-    
+      
     public void setUsuari(Usuari user){
         this.codi = (int) user.getCodi();
         this.nom = user.getNom();

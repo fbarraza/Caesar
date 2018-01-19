@@ -190,7 +190,9 @@ public class LoginController extends MasterController implements Initializable {
         stage.setScene(new Scene(root));
         stage.setTitle("Menú Principal");
         stage.initModality(Modality.NONE);
-        stage.setOnHiding( event -> {emf.close();} );
+        stage.setOnCloseRequest(event -> {
+            emf.close();
+        });
         
         primaryStage.close();
         stage.showAndWait();        
