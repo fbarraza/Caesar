@@ -32,7 +32,7 @@ and open the template in the editor.
 }
 
 #MenuItem{
-   -fx-font-family: Quesha;
+   /*-fx-font-family: Quesha;*/
    -fx-background-color: #ededed;
    -fx-text-fill: #000000;
 }
@@ -46,14 +46,14 @@ and open the template in the editor.
 /* ALINEACIÓ TEXT BOTONS LOGIN */
 #buttonLogin{
     -fx-align-content: "center";
-    -fx-font-family: Quesha;
+    /*-fx-font-family: Quesha;*/
 }
 
 /* TEXT CORPORATIU 'M15'*/
 #MainCorp{ /* CLASSE */
     -fx-font-size: 96px;
     -fx-style: Bold;
-    -fx-font-family: Quesha;
+    /*-fx-font-family: Quesha;*/
     -fx-opacity: 0.2;
 }
 
@@ -61,20 +61,20 @@ and open the template in the editor.
 .MainCorp{ /* CLASSE */
     -fx-font-size: 180px;
     -fx-style: Bold;
-    -fx-font-family: Quesha;
+    /*-fx-font-family: Quesha;*/
     -fx-opacity: 0.2;
 }
 
 /* TEXT MENÚ PRINCIPAL, TOOLBAR */
 #TextTB, #LabelTB{ /* IDs */
-    -fx-font-family: Quesha;
+    /*-fx-font-family: Quesha;*/
     -fx-font-size: 20px;
 }
 
 /* TEXT D'ERROR, LOGIN */
 #showerr{ 
     -fx-fill:#990000;
-    -fx-font-family: Quesha;
+    /*-fx-font-family: Quesha;*/
 }
 
 /* ICONES BOTONS NAVEGACIÓ ALTA D'USUARIS */

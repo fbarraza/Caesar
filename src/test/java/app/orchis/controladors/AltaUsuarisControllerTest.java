@@ -78,6 +78,22 @@ public class AltaUsuarisControllerTest {
         
     }
     
+    /**
+     * Test of eliminarUsuari method, of class AltaUsuarisController.
+     */
+    @Test(expected = NoResultException.class)
+    public void testCercaUsuari(){
+        System.out.println("testCercaUsuari");
+        
+        //Obtenim usuari
+        user = obtenirUsuari(emf,user.getLogin());
+        
+        //Comprovem usuari
+        assertEquals(user.getNom(),"JUnit");
+
+    }    
+    
+    
     @Test
     public void testModificarUsuari(){
         System.out.println("testModificarUsuari");
