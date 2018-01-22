@@ -29,6 +29,18 @@ public class Alertes {
         alert.showAndWait();
     }    
     
+    public static ButtonType advertir(String text){
+        //Alerta
+        Alert alert = new Alert(Alert.AlertType.WARNING, text, ButtonType.YES, ButtonType.NO);
+        alert.setHeaderText(null);
+        alert.setTitle("Alerta!");
+        alert.showAndWait();
+        
+        return alert.getResult();
+        
+    }    
+    
+    
     public static ButtonType sortir(){
         //Alerta
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Segur que vols sortir?", ButtonType.YES, ButtonType.NO);

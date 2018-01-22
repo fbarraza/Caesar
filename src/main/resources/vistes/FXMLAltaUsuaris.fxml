@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox id="MainVBox" fx:id="vbxPrincipal" prefHeight="538.0" prefWidth="640.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.AltaUsuarisController">
+<VBox id="MainVBox" fx:id="vbxPrincipal" prefHeight="538.0" prefWidth="640.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.AltaUsuarisController">
     <children>
         <SplitPane id="MainSplit" dividerPositions="0.12771084337349398" orientation="VERTICAL" stylesheets="@../estils/estil.css">
             <items>
@@ -26,7 +26,7 @@
                         </HBox>
                     </children>
                 </AnchorPane>
-                <TableView id="MainTPanel" fx:id="tvUsuaris" prefHeight="429.0" prefWidth="694.0" stylesheets="@../estils/estil.css">
+                <TableView id="MainTPanel" fx:id="tvUsuaris" onKeyPressed="#keyPress" prefHeight="429.0" prefWidth="694.0" stylesheets="@../estils/estil.css">
                     <columns>
                         <TableColumn fx:id="colCodi" prefWidth="48.0" text="Codi" />
                         <TableColumn fx:id="colNom" prefWidth="156.0" text="Nom" />

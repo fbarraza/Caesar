@@ -28,7 +28,7 @@ and open the template in the editor.
 /* INICI COMPORTAMENT BARRA DE MENÚS, BOTONS, I MENÚS DE INTERFÍCIE */
 #MenuBarButton:active, #MenuBarButton:hover, #MenuBarButton:pressed, #MenuBarButton:focus, #MenuBarButton:showing, #MenuBarButton:inactive, MenuBarButton:armed{
     -fx-background-color: #bababa;
-    -fx-font-family: Quesha;
+    /*-fx-font-family: Quesha;*/
 }
 
 #MenuItem{

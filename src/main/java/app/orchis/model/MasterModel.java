@@ -6,6 +6,7 @@
 package app.orchis.model;
 
 import static app.orchis.utils.Alertes.avis;
+import static app.orchis.utils.Alertes.info;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -44,6 +45,7 @@ public class MasterModel<T> {
         try {
             em.persist(t);
             em.getTransaction().commit();
+            info(placeClass.getSimpleName()+" creat satisfactòriament");  
         } catch (Exception ex) {
             if (ex.getCause() instanceof ConstraintViolationException){
                 em.getTransaction().rollback();
@@ -65,6 +67,7 @@ public class MasterModel<T> {
         try {
             em.merge(t);
             em.getTransaction().commit();
+            info(placeClass.getSimpleName()+" modificat satisfactòriament");  
         } catch (Exception e) {
             em.getTransaction().rollback();
         } finally {

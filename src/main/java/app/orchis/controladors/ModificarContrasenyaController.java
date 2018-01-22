@@ -82,10 +82,16 @@ public class ModificarContrasenyaController extends MasterController implements 
         }
     }
     
-    /**
-     * Tenca la finestra.
-     */
     @FXML
+    private void tencarProces(){
+        Stage secondaryStage = (Stage)Panel.getScene().getWindow();    
+        this.passwd = null;
+        secondaryStage.close();        
+    }
+    
+    /**
+     * Tenca la finestra i retorna la contrasenya
+     */
     private void tencarFinestra(){
         Stage secondaryStage = (Stage)Panel.getScene().getWindow();    
         this.passwd = encripta(pfNou2.getText());        

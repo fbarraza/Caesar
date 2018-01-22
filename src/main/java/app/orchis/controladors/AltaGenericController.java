@@ -180,17 +180,22 @@ public class AltaGenericController extends MasterController implements Initializ
         
         if(!comprovaCamp(tfNom)){
             if(!comprovaCamp(tfLogin)){
-                user.setNom(tfNom.getText());
                 carregaPasswd('a');
-                user.setPasswd(passwd);
-                user.setBloquejat(cbBloqueig.isSelected());
-                user.setLogin(tfLogin.getText());
-                user.setData(user.getAvui());
-                user.setAdmin(cbAdmin.isSelected());
-                user.setEstat(UsuariEstat.normal);
-                
-                helperU.afegir(user);
-                info("Usuari creat satisfactòriament");                             
+                if(passwd != null){
+                    user.setNom(tfNom.getText());                
+                    user.setPasswd(passwd);
+                    user.setBloquejat(cbBloqueig.isSelected());
+                    user.setLogin(tfLogin.getText());
+                    user.setData(user.getAvui());
+                    user.setAdmin(cbAdmin.isSelected());
+                    user.setEstat(UsuariEstat.normal);
+
+                    //Afegim usuari
+                    helperU.afegir(user);   
+                }
+                else{
+                    lbInfo.setText("Creació cancelada");
+                }
             }
             else{
                 lbInfo.setText("Falta el nom de l'usuari! (login) ");    
@@ -205,15 +210,13 @@ public class AltaGenericController extends MasterController implements Initializ
      */
     @FXML
     private void modificarUsuari(){        
-        //Sentència SQL        
+        //Sentència SQL      
         user.setNom(tfNom.getText());
         user.setBloquejat(cbBloqueig.isSelected());
         user.setLogin(tfLogin.getText());
         user.setAdmin(cbAdmin.isSelected());
         helperU.actualitzar(user);
-        
-        //Notificar Usuari
-        info("Usuari modificat!");
+
     }    
     
     /**
@@ -221,11 +224,9 @@ public class AltaGenericController extends MasterController implements Initializ
      */
     @FXML
     protected void sortirAction() {
-        if (sortir() == ButtonType.YES) {
-            //Tanca la finestra actual
-            Stage stage = (Stage) btSortir.getScene().getWindow();
-            stage.close();
-        }
+        //Tanca la finestra actual
+        Stage stage = (Stage) btSortir.getScene().getWindow();
+        stage.close();
     }    
     
     

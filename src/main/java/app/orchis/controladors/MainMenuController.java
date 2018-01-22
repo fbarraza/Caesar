@@ -87,7 +87,8 @@ public class MainMenuController extends MasterController implements Initializabl
 
         //Vars
         controller.setEmf(emf);
-
+        controller.setUserLogin(user);
+        
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.DECORATED);
