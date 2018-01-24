@@ -39,13 +39,13 @@ public class MasterModel<T> {
      * Afegeix/Insereix l'objecte a la BBDD.
      * @param t
      */
-    public void afegir(T t){
+    public void afegir(T t, boolean verbose){
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         try {
             em.persist(t);
             em.getTransaction().commit();
-            info(placeClass.getSimpleName()+" creat satisfactòriament");  
+            if(verbose) info(placeClass.getSimpleName()+" creat satisfactòriament");  
         } catch (Exception ex) {
             if (ex.getCause() instanceof ConstraintViolationException){
                 em.getTransaction().rollback();
@@ -60,14 +60,15 @@ public class MasterModel<T> {
     /**
      * Actualitza l'objecte en la BBDD.
      * @param t 
+     * @param verbose
      */
-    public void actualitzar(T t){
+    public void actualitzar(T t, boolean verbose){
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         try {
             em.merge(t);
             em.getTransaction().commit();
-            info(placeClass.getSimpleName()+" modificat satisfactòriament");  
+            if(verbose) info(placeClass.getSimpleName()+" modificat satisfactòriament");  
         } catch (Exception e) {
             em.getTransaction().rollback();
         } finally {
@@ -79,13 +80,14 @@ public class MasterModel<T> {
      * Elimina l'objecte en la BBDD.
      * @param t 
      */
-    public void eliminar(T t){
+    public void eliminar(T t, boolean verbose){
         EntityManager em = emf.createEntityManager();
         
         em.getTransaction().begin();
         try {
             em.remove(em.merge(t));
             em.getTransaction().commit();
+            if (verbose) info(placeClass.getSimpleName()+" eliminat satisfactòriament");  
         } catch (Exception e) {
             em.getTransaction().rollback();
         } finally {

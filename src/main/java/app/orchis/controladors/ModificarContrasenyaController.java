@@ -126,7 +126,7 @@ public class ModificarContrasenyaController extends MasterController implements 
     private void actualitzaPasswd(String nou){
         user.setPasswd(nou);
         try{
-            helperU.actualitzar(user);
+            helperU.actualitzar(user, false);
             
             info("Contrasenya actualitzada!");
         }catch(Exception ex){

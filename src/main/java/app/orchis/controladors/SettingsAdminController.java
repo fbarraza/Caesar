@@ -74,10 +74,8 @@ public class SettingsAdminController extends MasterController implements Initial
         config.setNom_admin(admin);
         config.setCaducitat(Integer.parseInt(tfDataCaducitat.getText()));
 
-        helperC.actualitzar(config);
+        helperC.actualitzar(config,true);
         actualitzarAdmin(admin);
-        
-        info("La configuració ha sigut modificada");
 
     }
     
@@ -90,11 +88,11 @@ public class SettingsAdminController extends MasterController implements Initial
         //Admin vell
         user = Usuari.obteAdmin(llista);
         user.setAdmin(false);
-        helperU.actualitzar(user);
+        helperU.actualitzar(user,false);
         //Nou admin
         user = Usuari.obtenirUsuari(emf,admin);
         user.setAdmin(true);
-        helperU.actualitzar(user);
+        helperU.actualitzar(user,false);
         
     }
     /**

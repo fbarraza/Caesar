@@ -124,7 +124,27 @@ public class Usuari implements Serializable{
         }     
         return lBo;
     }      
- 
+
+    public void actualitzaLogin(EntityManagerFactory emf, String old, String nou){
+            //Creació Entity Manager i del CB
+            EntityManager manager = emf.createEntityManager();
+            CriteriaBuilder cb = emf.getCriteriaBuilder();
+            CriteriaUpdate<Usuari> update = cb.createCriteriaUpdate(Usuari.class);                        
+            Root<Usuari> c = update.from(Usuari.class);
+            
+            
+            //Sentència SQL
+            update.set("login", nou);
+            update.where(cb.equal(c.get("login"), old)); 
+            
+            //Actualitzar BBDD
+            manager.getTransaction().begin();
+            manager.createQuery(update).executeUpdate();
+            manager.getTransaction().commit();     
+            
+            manager.close();
+    }    
+    
     public void actualitzaPasswd(EntityManagerFactory emf, String nou){
             //Creació Entity Manager i del CB
             EntityManager manager = emf.createEntityManager();

@@ -69,12 +69,12 @@ public class AltaUsuarisControllerTest {
     public void testCrearUsuari() throws Exception {
         System.out.println("testCrearUsuari");
         //Variables
-        helperU.afegir(user);
+        helperU.afegir(user,false);
         user = obtenirUsuari(emf,user.getLogin());
         
         //Obtenir usuari
         assertNotNull(user.getLogin());
-        helperU.eliminar(user);
+        helperU.eliminar(user,false);
         
     }
     
@@ -100,15 +100,15 @@ public class AltaUsuarisControllerTest {
         Usuari user2;
         
         //Modifiquem usuari
-        helperU.afegir(user);
+        helperU.afegir(user,false);
         user.setLogin("junit2");
-        helperU.actualitzar(user);
+        helperU.actualitzar(user,false);
         
         //Obtenim usuari
         user2 = obtenirUsuari(emf,"junit2");
         assertEquals(user.getLogin(),user2.getLogin());
         
-        helperU.eliminar(user);
+        helperU.eliminar(user,false);
         
     }
     /**
@@ -119,11 +119,11 @@ public class AltaUsuarisControllerTest {
         System.out.println("testEliminarUsuari");
         
         //Afegim usuari
-        helperU.afegir(user);
+        helperU.afegir(user,false);
         user = obtenirUsuari(emf,user.getLogin());
         
         //Eliminem usuari
-        helperU.eliminar(user);
+        helperU.eliminar(user,false);
         user = obtenirUsuari(emf,user.getLogin());
 
     }

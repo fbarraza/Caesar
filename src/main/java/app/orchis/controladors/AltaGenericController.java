@@ -14,6 +14,8 @@ import static app.orchis.utils.Alertes.sortir;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -172,16 +174,11 @@ public class AltaGenericController extends MasterController implements Initializ
         }
     }   
     
-    private void afegirAdmin(String login){
-        Configuracio config = (Configuracio) helperC.getAll();
-        config.setNom_admin(login);
-        helperC.actualitzar(config);
-    }
-    
     private void modificarAdmin(String login){
-        Configuracio config = (Configuracio) helperC.getAll();
+        ArrayList<Configuracio> listconfig = (ArrayList<Configuracio>) helperC.getAll();
+        Configuracio config = listconfig.get(0);
         config.setNom_admin(login);
-        helperC.actualitzar(this);
+        helperC.actualitzar(config,false);
     }    
     
     /**
@@ -206,9 +203,9 @@ public class AltaGenericController extends MasterController implements Initializ
                     user.setEstat(UsuariEstat.normal);
 
                     //Afegim usuari
-                    helperU.afegir(user);  
+                    helperU.afegir(user,true);  
                     if(cbAdmin.isSelected()){
-                        afegirAdmin(user.getLogin());
+                        modificarAdmin(user.getLogin());
                     }
                 }
                 else{
@@ -230,19 +227,32 @@ public class AltaGenericController extends MasterController implements Initializ
     private void modificarUsuari(){        
         //Sentència SQL   
         Usuari user = new Usuari();
+        
+        //Update
+        user.setCodi(Integer.parseInt(tfId.getText()));
         user.setNom(tfNom.getText());
+        user.setPasswd(this.user.getPasswd());
+        user.setData(this.user.getData());
         user.setBloquejat(cbBloqueig.isSelected());
         user.setLogin(tfLogin.getText());
         user.setAdmin(cbAdmin.isSelected());
-        helperU.actualitzar(user);
+        user.setEstat(UsuariEstat.normal);
+        
+        helperU.actualitzar(user,true);
+        
         if(userLogin.getLogin().equals(this.user.getLogin())){
             if(userLogin.isAdmin() && !user.isAdmin()){
                 modificarAdmin(null);
             }
-            if(!userLogin.getLogin().equals(user.getLogin())){
+            if(!userLogin.getLogin().equals(user.getLogin())){                
                 modificarAdmin(user.getLogin());
             }
         }
+        else if(!admin && user.isAdmin()){
+            modificarAdmin(user.getLogin());
+        }
+        
+        
     }    
     
     /**

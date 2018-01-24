@@ -374,10 +374,8 @@ public class AltaUsuarisController extends MasterController implements Initializ
         if (advertir("Segur que vols eliminar l'usuari?") == ButtonType.YES) {
             //Eliminar Usuari de la BBDD
             setSeleccionat();
-            helperU.eliminar(user);
+            helperU.eliminar(user, true);
 
-            //Notificar
-            info("Usuari eliminat!");
 
             //Recarregar taula
             actualitzaTaula();
