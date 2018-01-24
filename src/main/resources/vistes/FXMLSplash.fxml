@@ -8,17 +8,17 @@
 
 <AnchorPane id="MainAnchor" fx:id="rootPane" prefHeight="270.0" prefWidth="600.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.SplashScreenController">
    <children>
-      <Text id="corp" layoutX="108.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Benvingut a M15" wrappingWidth="384.7294921875">
+      <Text layoutX="141.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="SplashCorp" text="Benvingut a M15" wrappingWidth="318.7294921875" AnchorPane.topAnchor="15.984001159667969">
          <font>
             <Font name="System Bold" size="40.0" />
          </font>
       </Text>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="200.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="133.0" fitWidth="139.0" layoutX="234.0" layoutY="79.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../imatges/loading.gif" />
          </image>
       </ImageView>
-      <Text id="corp" layoutX="43.0" layoutY="228.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Carregant..." wrappingWidth="105.7294921875">
+      <Text layoutX="22.0" layoutY="241.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="SplashCorp" text="Carregant..." wrappingWidth="167.00000447034836" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="22.0">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>

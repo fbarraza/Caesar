@@ -205,15 +205,15 @@ public class AltaUsuarisController extends MasterController implements Initializ
     @FXML
     private void keyPress(KeyEvent e){
         if(e.getCode().equals(KeyCode.UP)){
-            if(posTaula != 0){
-                posTaula--;
-                comprovarControls();
+            if(posTaula >= 1){
+                e.consume();
+                anteriorAction();
             }
         }
         else if(e.getCode().equals(KeyCode.DOWN)){
             if(posTaula != tvUsuaris.getItems().size() - 1){
-                posTaula++;
-                comprovarControls();
+                e.consume();
+                seguentAction();
             }
         }        
         
@@ -420,11 +420,10 @@ public class AltaUsuarisController extends MasterController implements Initializ
         //Vars
         controller.setEmf(emf);
         controller.setOpc(opt);
+        controller.setUserLogin(userLogin);
         controller.setAdmin(admin);
-        if(opt == 'm'){
-            setSeleccionat();
-            controller.setUser(user);
-        }
+        setSeleccionat();
+        controller.setUser(user);
 
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);

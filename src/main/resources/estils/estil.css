@@ -5,34 +5,39 @@ and open the template in the editor.
 */
 /* 
     Created on : 03/11/2017, 16:38:18
-    Author     : m15
+    Author     : Francisco Barraza - Orchis
 */
-/* FONT DE L'APLICACIÓ */
-@font-face{ /* AQUÍ COM EL CSS DE TOTA LA VIDA, sense -fx davant */
-    font-family: Quesha;
-    src: url(../fonts/quesha.ttf);
+/* FONT GENERAL DE L'APLICACIÓ */
+@font-face{ /* AQUÍ ÉS COM EL CSS DE TOTA LA VIDA, sense -fx davant */
+    font-family: Napoleodoni;
+    src: url(../fonts/napoleodoni.ttf);
+    /* Font: https://www.creamundo.com/es/napoleodoni */
 }
 
-/*INICI PANELLS PRINCIPALS*/
+.bttext{
+        -fx-font-family: Napoleodoni;
+        -fx-font-size: "20px";
+    }    
+/* TEXT DE BOTONS I TEXT GENERAL DE LA APLICACIÓ */  
+#textgeneral{
+    -fx-font-family: Napoleodoni;
+    -fx-font-size: "18px";
+}
+
+/* -------------------INICI PANELLS PRINCIPALS */
 #MainAnchor, #MainPane{
     -fx-background-color: #bbbbbb;
 }
-/* FI PANELLS PRINCIPALS */
-
-/* TAULA ALTA D'USUARIS */
-
-#MainTPanel{
-    -fx-background-color: #fbfbfb;
-}
+/* --------------------- FI PANELLS PRINCIPALS */
 
 /* INICI COMPORTAMENT BARRA DE MENÚS, BOTONS, I MENÚS DE INTERFÍCIE */
 #MenuBarButton:active, #MenuBarButton:hover, #MenuBarButton:pressed, #MenuBarButton:focus, #MenuBarButton:showing, #MenuBarButton:inactive, MenuBarButton:armed{
     -fx-background-color: #bababa;
-    /*-fx-font-family: Quesha;*/
+    -fx-font-family: Napoleodoni;
 }
 
 #MenuItem{
-   /*-fx-font-family: Quesha;*/
+   -fx-font-family: Napoleodoni;
    -fx-background-color: #ededed;
    -fx-text-fill: #000000;
 }
@@ -46,78 +51,104 @@ and open the template in the editor.
 /* ALINEACIÓ TEXT BOTONS LOGIN */
 #buttonLogin{
     -fx-align-content: "center";
-    /*-fx-font-family: Quesha;*/
+    -fx-font-family: Napoleodoni;
 }
 
 /* TEXT CORPORATIU 'M15'*/
-#MainCorp{ /* CLASSE */
-    -fx-font-size: 96px;
-    -fx-style: Bold;
-    /*-fx-font-family: Quesha;*/
-    -fx-opacity: 0.2;
-}
 
-/* TEXT CORPORATIU 'M15'*/
-.MainCorp{ /* CLASSE */
-    -fx-font-size: 180px;
-    -fx-style: Bold;
-    /*-fx-font-family: Quesha;*/
-    -fx-opacity: 0.2;
-}
+/* ----------------------------------------------------------- TEXT LOGIN */
 
-/* TEXT MENÚ PRINCIPAL, TOOLBAR */
-#TextTB, #LabelTB{ /* IDs */
-    /*-fx-font-family: Quesha;*/
-    -fx-font-size: 20px;
+#LoginCorp{
+    -fx-font-family: Napoleodoni;
+    -fx-font-size: "46px";
+    -fx-style: Bold;
+    -fx-opacity: 1.0;
 }
 
 /* TEXT D'ERROR, LOGIN */
 #showerr{ 
     -fx-fill:#990000;
-    /*-fx-font-family: Quesha;*/
+    -fx-font-family: Napoleodoni;
+}
+    
+/* ------------------------------------------------------------- FI LOGIN */
+
+/* ------------------------------------------------------------- TEXT SPLASH */
+.SplashCorp, .LoginCorp{
+    -fx-font-size: 40px;
+    -fx-style: Bold;
+    -fx-font-family: Napoleodoni;
+    -fx-opacity: 1.0;
+    }
+
+.LoginCorp{
+    -fx-font-size: 48px;
+    }
+    
+/* ------------------------------------------------------------- FI SPLASH */
+    
+/* ------------------------------------ TEXTS MENÚ PRINCIPAL */
+#MainCorp{ /* IDENTIFICADOR */
+    -fx-font-size: 96px;
+    -fx-style: Bold;
+    -fx-font-family: Napoleodoni;
+    -fx-opacity: 0.2;
+}
+
+/* ------------------------------- LOGO CORPORATIU 'M15', AL CENTRE */
+.MainCorp{ /* CLASSE */
+    -fx-font-size: 180px;
+    -fx-style: Bold;
+    -fx-font-family: Napoleodoni;
+    -fx-opacity: 0.2;
+}
+
+/*------------------------- TEXT MENÚS I SUBMENÚS SUPERIORS, MAIN MENU */
+.MainMM{
+    -fx-font-family: Napoleodoni;
+    -fx-font-size: 16px;
+    }
+
+/* --------------------------------------- TEXT MENÚ PRINCIPAL, TOOLBAR */
+#menuBar, #TextTB, #LabelTB{
+    -fx-font-family: Napoleodoni;
+    -fx-font-size: 16px;
+}
+
+/* --------------------------------------------------------------------------------- FI MAIN MENU */
+
+/* ----------------------------------------------- TAULA ALTA D'USUARIS */
+#MainTPanel{
+    -fx-background-color: #fbfbfb;
+}
+
+#MainTPanelCorp{
+    -fx-font-family: Napoleodoni;
+    -fx-font-size: 38px;
+    -fx-style: Bold;
 }
 
 /* ICONES BOTONS NAVEGACIÓ ALTA D'USUARIS */
+/* MIDA ICONES */
+.btPrimer, .btAnterior, .btSeguent, .btFinal{
+    -fx-background-size: cover, auto;
+    -fx-min-width: "36px";
+    -fx-min-height: "36px";
+    -fx-pref-width: "36px";
+    -fx-pref-height: "36px";
+    -fx-align-content: "center";
+    }
 
+    /* URL ICONES DE NAVEGACIÓ TAULA */
 .btPrimer{
     -fx-background-image: url(../icons/principi.png);
-    -fx-background-size: cover, auto;
-    -fx-pref-width:36px;
-    -fx-pref-height:36px;
-    -fx-align-content: "center";
-}
+    }
 .btAnterior{
     -fx-background-image: url(../icons/enrere.png);
-    -fx-background-size: cover, auto;
-    -fx-pref-width:36px;
-    -fx-pref-height:36px;
-    -fx-align-content: "center";
-}
+    }
 .btSeguent{
     -fx-background-image: url(../icons/endavant.png);
-    -fx-background-size: cover, auto;
-    -fx-pref-width:36px;
-    -fx-pref-height:36px;
-    -fx-align-content: "center";
-}
+    }
 .btFinal{
     -fx-background-image: url(../icons/final.png);
-    -fx-background-size: cover, auto;
-    -fx-pref-width:36px;
-    -fx-pref-height:36px;
-    -fx-align-content: "center";
-}
-
-/* MIDA DE TOTES LES ICONES */
-.icon,.btPrimer{
-    -fx-width: "16px";
-    -fx-height: "16px";
-    -fx-fit-width: "16px";
-    -fx-fit-height: "16px";
-    -fx-pref-width: "16px";
-    -fx-pref-height: "16px";
-    -fx-min-width: "16px";
-    -fx-min-height: "16px";
-    -fx-max-width: "16px";
-    -fx-max-height: "16px";
-}
+    }

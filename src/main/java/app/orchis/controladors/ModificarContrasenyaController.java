@@ -127,6 +127,7 @@ public class ModificarContrasenyaController extends MasterController implements 
         user.setPasswd(nou);
         try{
             helperU.actualitzar(user);
+            
             info("Contrasenya actualitzada!");
         }catch(Exception ex){
             avis("Error al actualitzar la contrasenya!");

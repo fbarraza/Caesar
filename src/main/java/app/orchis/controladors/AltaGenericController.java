@@ -5,6 +5,7 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.Configuracio;
 import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
 import app.orchis.model.enums.UsuariEstat;
@@ -55,13 +56,15 @@ public class AltaGenericController extends MasterController implements Initializ
     private char opc;
     private String passwd;
     private boolean admin;
-    
+    private MasterModel helperC;
+    private Usuari userLogin = new Usuari();
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
             carregaApp(opc);
             helperU = new MasterModel(emf, Usuari.class);
+            helperC = new MasterModel(emf, Configuracio.class);
         });
     }   
     
@@ -167,7 +170,19 @@ public class AltaGenericController extends MasterController implements Initializ
                 cbAdmin.requestFocus();
             }
         }
-    }     
+    }   
+    
+    private void afegirAdmin(String login){
+        Configuracio config = (Configuracio) helperC.getAll();
+        config.setNom_admin(login);
+        helperC.actualitzar(config);
+    }
+    
+    private void modificarAdmin(String login){
+        Configuracio config = (Configuracio) helperC.getAll();
+        config.setNom_admin(login);
+        helperC.actualitzar(this);
+    }    
     
     /**
      * Crea un usuari amb les dades introduïdes en els TextFields
@@ -191,7 +206,10 @@ public class AltaGenericController extends MasterController implements Initializ
                     user.setEstat(UsuariEstat.normal);
 
                     //Afegim usuari
-                    helperU.afegir(user);   
+                    helperU.afegir(user);  
+                    if(cbAdmin.isSelected()){
+                        afegirAdmin(user.getLogin());
+                    }
                 }
                 else{
                     lbInfo.setText("Creació cancelada");
@@ -210,13 +228,21 @@ public class AltaGenericController extends MasterController implements Initializ
      */
     @FXML
     private void modificarUsuari(){        
-        //Sentència SQL      
+        //Sentència SQL   
+        Usuari user = new Usuari();
         user.setNom(tfNom.getText());
         user.setBloquejat(cbBloqueig.isSelected());
         user.setLogin(tfLogin.getText());
         user.setAdmin(cbAdmin.isSelected());
         helperU.actualitzar(user);
-
+        if(userLogin.getLogin().equals(this.user.getLogin())){
+            if(userLogin.isAdmin() && !user.isAdmin()){
+                modificarAdmin(null);
+            }
+            if(!userLogin.getLogin().equals(user.getLogin())){
+                modificarAdmin(user.getLogin());
+            }
+        }
     }    
     
     /**
@@ -254,5 +280,15 @@ public class AltaGenericController extends MasterController implements Initializ
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
+
+    public Usuari getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(Usuari userLogin) {
+        this.userLogin = userLogin;
+    }
+    
+    
 
 }

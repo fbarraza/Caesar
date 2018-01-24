@@ -94,6 +94,7 @@ public class MainMenuController extends MasterController implements Initializabl
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(new Scene(root));
         stage.setTitle("Alta Usuaris");
+        stage.setResizable(false);
         stage.show();        
         
     }

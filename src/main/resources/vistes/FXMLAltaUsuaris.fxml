@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -12,13 +12,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox id="MainVBox" fx:id="vbxPrincipal" prefHeight="538.0" prefWidth="640.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.AltaUsuarisController">
+<VBox id="MainVBox" fx:id="vbxPrincipal" maxHeight="538.0" maxWidth="640.0" prefHeight="538.0" prefWidth="640.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.AltaUsuarisController">
     <children>
-        <SplitPane id="MainSplit" dividerPositions="0.12771084337349398" orientation="VERTICAL" stylesheets="@../estils/estil.css">
-            <items>
+      <VBox prefHeight="544.0" prefWidth="640.0">
+         <children>
                 <AnchorPane id="MainAnchor" stylesheets="@../estils/estil.css">
                     <children>
-                        <HBox alignment="CENTER" layoutX="14.0" layoutY="14.0" spacing="10.0">
+                        <HBox alignment="CENTER" layoutX="14.0" layoutY="14.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.topAnchor="15.0">
                             <children>
                                 <Label text="Nom del usuari" />
                                 <TextField fx:id="tfNom" prefHeight="27.0" prefWidth="440.0" />
@@ -26,7 +26,26 @@
                         </HBox>
                     </children>
                 </AnchorPane>
-                <TableView id="MainTPanel" fx:id="tvUsuaris" onKeyPressed="#keyPress" prefHeight="429.0" prefWidth="694.0" stylesheets="@../estils/estil.css">
+              <AnchorPane id="MainAnchor" stylesheets="@../estils/estil.css" VBox.vgrow="NEVER">
+                  <children>
+                      <Button fx:id="btPrimer" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#primerAction" prefHeight="36.0" prefWidth="36.0" styleClass="btPrimer" stylesheets="@../estils/estil.css" AnchorPane.bottomAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                      <Button fx:id="btAnterior" layoutX="57.0" layoutY="12.0" mnemonicParsing="false" onAction="#anteriorAction" prefHeight="36.0" prefWidth="36.0" styleClass="btAnterior" stylesheets="@../estils/estil.css" AnchorPane.bottomAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                      <Button fx:id="btSeguent" layoutX="104.0" layoutY="12.0" mnemonicParsing="false" onAction="#seguentAction" prefHeight="36.0" prefWidth="36.0" styleClass="btSeguent" stylesheets="@../estils/estil.css" AnchorPane.bottomAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                      <Button fx:id="btFinal" layoutX="151.0" layoutY="12.0" mnemonicParsing="false" onAction="#finalAction" prefHeight="36.0" prefWidth="36.0" styleClass="btFinal" stylesheets="@../estils/estil.css" AnchorPane.bottomAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                      <Text layoutX="218.0" layoutY="41.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" text="M15" AnchorPane.bottomAnchor="5.0" AnchorPane.topAnchor="5.0">
+                          <font>
+                              <Font name="System Bold" size="34.0" />
+                          </font>
+                      </Text>
+                      <Button fx:id="btAfegir" layoutX="323.0" layoutY="10.0" mnemonicParsing="false" onAction="#obrirCrear" prefHeight="36.0" prefWidth="100.0" text="Afegir" AnchorPane.bottomAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                      <Button fx:id="btModificar" layoutX="427.0" layoutY="10.0" mnemonicParsing="false" onAction="#obrirModif" prefHeight="36.0" prefWidth="100.0" text="Modificar" AnchorPane.bottomAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                      <Button fx:id="btEliminar" layoutX="532.0" layoutY="10.0" mnemonicParsing="false" onAction="#eliminarUsuari" prefHeight="36.0" prefWidth="100.0" text="Eliminar" AnchorPane.bottomAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                  </children>
+               <VBox.margin>
+                  <Insets bottom="2.0" />
+               </VBox.margin>
+              </AnchorPane>
+                <TableView id="MainTPanel" fx:id="tvUsuaris" maxHeight="429.0" maxWidth="694.0" onKeyPressed="#keyPress" prefHeight="429.0" prefWidth="694.0" stylesheets="@../estils/estil.css" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="colCodi" prefWidth="48.0" text="Codi" />
                         <TableColumn fx:id="colNom" prefWidth="156.0" text="Nom" />
@@ -35,24 +54,11 @@
                         <TableColumn fx:id="colAdmin" prefWidth="91.0" text="Admin" />
                         <TableColumn fx:id="colBloquejat" prefWidth="105.0" text="Bloquejat" />
                     </columns>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
                 </TableView>
-            </items>
-        </SplitPane>
-        <AnchorPane id="MainAnchor" prefHeight="61.0" prefWidth="640.0" stylesheets="@../estils/estil.css">
-            <children>
-                <Button fx:id="btPrimer" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#primerAction" prefHeight="36.0" prefWidth="36.0" styleClass="btPrimer" stylesheets="@../estils/estil.css" />
-                <Button fx:id="btAnterior" layoutX="57.0" layoutY="12.0" mnemonicParsing="false" onAction="#anteriorAction" prefHeight="36.0" prefWidth="36.0" styleClass="btAnterior" stylesheets="@../estils/estil.css" />
-                <Button fx:id="btSeguent" layoutX="104.0" layoutY="12.0" mnemonicParsing="false" onAction="#seguentAction" prefHeight="36.0" prefWidth="36.0" styleClass="btSeguent" stylesheets="@../estils/estil.css" />
-                <Button fx:id="btFinal" layoutX="151.0" layoutY="12.0" mnemonicParsing="false" onAction="#finalAction" prefHeight="36.0" prefWidth="36.0" styleClass="btFinal" stylesheets="@../estils/estil.css" />
-                <Text layoutX="218.0" layoutY="41.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" text="M15">
-                    <font>
-                        <Font name="System Bold" size="34.0" />
-                    </font>
-                </Text>
-                <Button fx:id="btAfegir" layoutX="323.0" layoutY="10.0" mnemonicParsing="false" onAction="#obrirCrear" prefHeight="36.0" prefWidth="100.0" text="Afegir" />
-                <Button fx:id="btModificar" layoutX="427.0" layoutY="10.0" mnemonicParsing="false" onAction="#obrirModif" prefHeight="36.0" prefWidth="100.0" text="Modificar" />
-                <Button fx:id="btEliminar" layoutX="532.0" layoutY="10.0" mnemonicParsing="false" onAction="#eliminarUsuari" prefHeight="36.0" prefWidth="100.0" text="Eliminar" />
-            </children>
-        </AnchorPane>
+         </children>
+      </VBox>
     </children>
 </VBox>
