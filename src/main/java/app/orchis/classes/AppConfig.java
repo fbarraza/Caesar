@@ -40,9 +40,9 @@ public class AppConfig {
      * Crea la connexió amb la base de dades fent servir el fitxer app.config.
      * @return Retorna connexió BBDD.
      */
-    public EntityManagerFactory loadAppConfig(char opc){
+    public EntityManagerFactory loadAppConfig(){
         if (!persistenceUnit.isEmpty()) {
-            Map properties = llegirFitxerPropietats("app.properties", opc);
+            Map properties = llegirFitxerPropietats("app.properties");
             final EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit,properties);
             //emf.close();
             return emf;

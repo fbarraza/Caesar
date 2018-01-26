@@ -51,7 +51,7 @@ public class AltaUsuarisControllerTest {
         user.getAvui();
         
         try {
-            emf = appConfig.loadAppConfig('m');
+            emf = appConfig.loadAppConfig();
             helperU = new MasterModel(emf, Usuari.class);
         } catch (Exception e){
             System.out.println("Error!");
