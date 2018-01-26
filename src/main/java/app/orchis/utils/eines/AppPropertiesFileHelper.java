@@ -113,7 +113,7 @@ public class AppPropertiesFileHelper {
         return decryptedPropertyValue;
     }    
     
-    public static Map llegirFitxerPropietats(String filename) {
+    public static Map llegirFitxerPropietats(String filename, char opc) {
         InputStream fitxer = null;
         Properties credencials = new Properties();
         Map properties = new HashMap();
@@ -125,9 +125,15 @@ public class AppPropertiesFileHelper {
                 System.err.println("No puc llegir " + filename);
             } else {
                 credencials.load(fitxer);
-
-                properties.put("javax.persistence.jdbc.user", credencials.getProperty("jdbc.username"));
-                String p = getEncryptedPassword();
+                
+                if(opc=='m'){
+                    properties.put("javax.persistence.jdbc.user", credencials.getProperty("jdbc.username"));
+                }
+                else if(opc=='o'){
+                    properties.put("javax.persistence.jdbc.user", credencials.getProperty("jdbcOdoo.username"));
+                }
+                
+                String p = getEncryptedPassword(opc);
                 if (p != null)
                     properties.put("javax.persistence.jdbc.password", p);
                 else {
@@ -151,15 +157,23 @@ public class AppPropertiesFileHelper {
         return properties;
     }
     
-    private static String getEncryptedPassword() {
+    private static String getEncryptedPassword(char opc) {
         // Generar/Obtenir la contrasenya encriptada
         AppPropertiesFileHelper appPropertiesFileHelper = null;
 
         try {
+            if(opc=='m'){
             appPropertiesFileHelper = new AppPropertiesFileHelper("app.properties",
                                                                   "jdbc.password",
                                                                   "encrypted",
                                                                   false);
+            }
+            else if(opc=='o'){
+            appPropertiesFileHelper = new AppPropertiesFileHelper("app.properties",
+                                                                  "jdbcOdoo.password",
+                                                                  "encryptedOdoo",
+                                                                  true);                
+            }
 
         } catch (PropertiesHelperException e) {
             e.printStackTrace();

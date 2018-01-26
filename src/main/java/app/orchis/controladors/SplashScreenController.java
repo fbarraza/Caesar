@@ -42,7 +42,10 @@ public class SplashScreenController extends MasterController implements Initiali
         appConfig.setPersistenceUnit("app.orchis.persistencia");
 
         try {
-            emf = appConfig.loadAppConfig();
+            emf = appConfig.loadAppConfig('m');
+            
+            appConfig.setPersistenceUnit("app.orchis.odoo");
+            emfO = appConfig.loadAppConfig('o');
         } catch (Exception e){
             System.out.println("No s'ha pogut inicialitzar l'EMF!");
         }
