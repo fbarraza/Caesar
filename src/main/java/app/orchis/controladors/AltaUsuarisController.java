@@ -8,6 +8,7 @@ package app.orchis.controladors;
 import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
 import static app.orchis.model.Usuari.obteDisp;
+import static app.orchis.utils.Alertes.advertir;
 import static app.orchis.utils.Alertes.info;
 import java.io.IOException;
 import java.net.URL;
@@ -29,12 +30,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
@@ -59,12 +63,13 @@ public class AltaUsuarisController extends MasterController implements Initializ
     @FXML private TableColumn<Usuari, Date> colData;
     @FXML private TableColumn<Usuari, Boolean> colBloquejat;
     @FXML private TableColumn<Usuari, Boolean> colAdmin;
-    @FXML private Button btPrimer, btAnterior, btSeguent, btFinal;
+    @FXML private Button btPrimer, btAnterior, btSeguent, btFinal, btAfegir, btModificar, btEliminar;
 
     //Variables Programa
     private ObservableList<Usuari> dades;
     private int posTaula;
     private boolean admin;
+    private Usuari userLogin;
     ContextMenu contextMenu = new ContextMenu();
     MenuItem miModificar = new MenuItem("Modificar Usuari");    
     MenuItem miModificarp = new MenuItem("Modificar Contrasenya");
@@ -122,11 +127,16 @@ public class AltaUsuarisController extends MasterController implements Initializ
      * Actualitza la taula mitjançant un ObservableList.
      */
     private void actualitzaTaula() {
-        if (!tvUsuaris.getItems().isEmpty()){
-            dades = getUsuaris();
-        }
-        tvUsuaris.setItems(dades);        
+        //Obtenim usuaris
+        dades = getUsuaris();
+        
+        //Inserim usuaris en la taula
+        tvUsuaris.setItems(dades);   
+        
+        //Inicialitzem la taula
         inicialitzaTaula();
+        
+        //Comprova si hi ha un admin
         comprovaAdmin();
     } 
     
@@ -139,7 +149,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
 
         // 2. Set the filter Predicate whenever the filter changes.
         tfNom.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(productes -> {
+            filteredData.setPredicate(usuaris -> {
                 // If filter text is empty, display all persons.
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
@@ -148,15 +158,17 @@ public class AltaUsuarisController extends MasterController implements Initializ
                 // Compare first name and last name of every person with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (productes.getNom().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                if (usuaris.getNom().toLowerCase().indexOf(lowerCaseFilter) != -1) {
                     return true; // El filtre coincideix amb el nom
-                } else if ((String.valueOf(productes.getCodi()).indexOf(lowerCaseFilter) != -1)) {
+                } else if (usuaris.getLogin().toLowerCase().indexOf(lowerCaseFilter) != -1) {
                     return true; // El filtre conincideix amb el codi
                 }
                 return false; // Does not match.
             });
         });
 
+        
+        
         //Assignem el contextMenu a la taula.
         tvUsuaris.setContextMenu(contextMenu);
         
@@ -177,8 +189,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
                     }
                 }
             }
-        });        
-        
+        });  
         
         // 3. Wrap the FilteredList in a SortedList.
         SortedList<Usuari> sortedData = new SortedList<>(filteredData);
@@ -189,6 +200,23 @@ public class AltaUsuarisController extends MasterController implements Initializ
 
         // 5. Add sorted (and filtered) data to the table.
         tvUsuaris.setItems(sortedData);
+    }
+    
+    @FXML
+    private void keyPress(KeyEvent e){
+        if(e.getCode().equals(KeyCode.UP)){
+            if(posTaula >= 1){
+                e.consume();
+                anteriorAction();
+            }
+        }
+        else if(e.getCode().equals(KeyCode.DOWN)){
+            if(posTaula != tvUsuaris.getItems().size() - 1){
+                e.consume();
+                seguentAction();
+            }
+        }        
+        
     }
     
     /**
@@ -298,9 +326,24 @@ public class AltaUsuarisController extends MasterController implements Initializ
             btFinal.setDisable(true);
 
         }
+        
+        if(comprovaLogin()){
+            btEliminar.setDisable(true);
+        }
+        else{
+            btEliminar.setDisable(false);
+        }
 
     }
 
+    private boolean comprovaLogin(){
+        if(this.getSeleccionat().getLogin().equals(userLogin.getLogin())){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     
     /**
      * Obre la interfície genèrica amb la opció de crear.
@@ -327,23 +370,24 @@ public class AltaUsuarisController extends MasterController implements Initializ
      */
     @FXML
     private void eliminarUsuari(){
-        //Eliminar Usuari de la BBDD
-        setSeleccionat();
-        helperU.eliminar(user);
+        //Avisar a l'admin
+        if (advertir("Segur que vols eliminar l'usuari?") == ButtonType.YES) {
+            //Eliminar Usuari de la BBDD
+            setSeleccionat();
+            helperU.eliminar(user, true);
 
-        //Notificar
-        info("Usuari eliminat!");
 
-        //Recarregar taula
-        actualitzaTaula();
-        
-        //Posició
-        if(posTaula!=0){
-            anteriorAction();
-        }
-        else{
-            primerAction();
-        }
+            //Recarregar taula
+            actualitzaTaula();
+
+            //Posició
+            if(posTaula!=0){
+                anteriorAction();
+            }
+            else{
+                primerAction();
+            } 
+        }        
     }
     
     /**
@@ -374,11 +418,10 @@ public class AltaUsuarisController extends MasterController implements Initializ
         //Vars
         controller.setEmf(emf);
         controller.setOpc(opt);
+        controller.setUserLogin(userLogin);
         controller.setAdmin(admin);
-        if(opt == 'm'){
-            setSeleccionat();
-            controller.setUser(user);
-        }
+        setSeleccionat();
+        controller.setUser(user);
 
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -410,9 +453,6 @@ public class AltaUsuarisController extends MasterController implements Initializ
             stage.setScene(new Scene(root));
             stage.setTitle("Introduir contrasenya");
             
-            stage.setOnHiding(event -> {
-                user.setPasswd(controller.getPasswd());                
-            });
             stage.showAndWait();  
     }        
     
@@ -431,5 +471,17 @@ public class AltaUsuarisController extends MasterController implements Initializ
     
     private void setSeleccionat(){
         this.user = tvUsuaris.getSelectionModel().getSelectedItem();
+    }
+    
+    private Usuari getSeleccionat(){
+        return tvUsuaris.getSelectionModel().getSelectedItem();
+    }
+
+    public Usuari getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(Usuari userLogin) {
+        this.userLogin = userLogin;
     }
 }

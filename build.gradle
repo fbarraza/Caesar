@@ -29,6 +29,8 @@ dependencies {
     compile group: 'commons-configuration', name: 'commons-configuration', version: '1.10'
     compile group: 'javax.mail', name: 'mail', version: '1.4.1'
     compile 'org.jasypt:jasypt:1.9.2'
+    compile group: 'org.postgresql', name: 'postgresql', version: '9.4-1201-jdbc41'
+
     
 
 }

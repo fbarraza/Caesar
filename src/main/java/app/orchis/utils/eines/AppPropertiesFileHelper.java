@@ -124,9 +124,9 @@ public class AppPropertiesFileHelper {
             if (fitxer == null) {
                 System.err.println("No puc llegir " + filename);
             } else {
-                credencials.load(fitxer);
-
+                credencials.load(fitxer);                
                 properties.put("javax.persistence.jdbc.user", credencials.getProperty("jdbc.username"));
+            
                 String p = getEncryptedPassword();
                 if (p != null)
                     properties.put("javax.persistence.jdbc.password", p);
@@ -159,8 +159,7 @@ public class AppPropertiesFileHelper {
             appPropertiesFileHelper = new AppPropertiesFileHelper("app.properties",
                                                                   "jdbc.password",
                                                                   "encrypted",
-                                                                  false);
-
+                                                                  false);           
         } catch (PropertiesHelperException e) {
             e.printStackTrace();
         } catch (ConfigurationException e) {

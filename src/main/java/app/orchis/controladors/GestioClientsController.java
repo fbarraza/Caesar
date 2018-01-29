@@ -22,6 +22,7 @@ public class GestioClientsController extends MasterController implements Initial
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
     }    
     
 }

@@ -34,7 +34,7 @@
       <PasswordField fx:id="pfNou2" layoutX="211.0" layoutY="201.0" onKeyPressed="#keyPress" prefHeight="26.0" prefWidth="212.0" promptText="Modificar Contrasenya" />
       <Button fx:id="btModificar" layoutX="52.0" layoutY="279.0" mnemonicParsing="false" onAction="#comprovaVella" prefHeight="69.0" prefWidth="108.0" text="Canviar" visible="false" />
       <Button fx:id="btAfegir" layoutX="52.0" layoutY="279.0" mnemonicParsing="false" onAction="#comprovaNoves" prefHeight="69.0" prefWidth="108.0" text="Afegir" visible="false" />
-      <Button fx:id="btSortir" layoutX="263.0" layoutY="279.0" mnemonicParsing="false" onAction="#tencarFinestra" prefHeight="69.0" prefWidth="108.0" text="Sortir" />
+      <Button fx:id="btSortir" layoutX="263.0" layoutY="279.0" mnemonicParsing="false" onAction="#tencarProces" prefHeight="69.0" prefWidth="108.0" text="Sortir" />
       <Label fx:id="lbNotif" layoutX="96.0" layoutY="242.0" />
    </children>
 </AnchorPane>

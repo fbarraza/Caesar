@@ -82,10 +82,16 @@ public class ModificarContrasenyaController extends MasterController implements 
         }
     }
     
-    /**
-     * Tenca la finestra.
-     */
     @FXML
+    private void tencarProces(){
+        Stage secondaryStage = (Stage)Panel.getScene().getWindow();    
+        this.passwd = null;
+        secondaryStage.close();        
+    }
+    
+    /**
+     * Tenca la finestra i retorna la contrasenya
+     */
     private void tencarFinestra(){
         Stage secondaryStage = (Stage)Panel.getScene().getWindow();    
         this.passwd = encripta(pfNou2.getText());        
@@ -120,7 +126,8 @@ public class ModificarContrasenyaController extends MasterController implements 
     private void actualitzaPasswd(String nou){
         user.setPasswd(nou);
         try{
-            helperU.actualitzar(user);
+            helperU.actualitzar(user, false);
+            
             info("Contrasenya actualitzada!");
         }catch(Exception ex){
             avis("Error al actualitzar la contrasenya!");

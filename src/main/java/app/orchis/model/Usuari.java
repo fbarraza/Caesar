@@ -124,7 +124,7 @@ public class Usuari implements Serializable{
         }     
         return lBo;
     }      
- 
+    
     public void actualitzaPasswd(EntityManagerFactory emf, String nou){
             //Creació Entity Manager i del CB
             EntityManager manager = emf.createEntityManager();

@@ -5,6 +5,7 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.Configuracio;
 import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
 import app.orchis.model.enums.UsuariEstat;
@@ -13,6 +14,8 @@ import static app.orchis.utils.Alertes.sortir;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -55,13 +58,15 @@ public class AltaGenericController extends MasterController implements Initializ
     private char opc;
     private String passwd;
     private boolean admin;
-    
+    private MasterModel helperC;
+    private Usuari userLogin = new Usuari();
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
             carregaApp(opc);
             helperU = new MasterModel(emf, Usuari.class);
+            helperC = new MasterModel(emf, Configuracio.class);
         });
     }   
     
@@ -167,7 +172,14 @@ public class AltaGenericController extends MasterController implements Initializ
                 cbAdmin.requestFocus();
             }
         }
-    }     
+    }   
+    
+    private void modificarAdmin(String login){
+        ArrayList<Configuracio> listconfig = (ArrayList<Configuracio>) helperC.getAll();
+        Configuracio config = listconfig.get(0);
+        config.setNom_admin(login);
+        helperC.actualitzar(config,false);
+    }    
     
     /**
      * Crea un usuari amb les dades introduïdes en els TextFields
@@ -180,17 +192,25 @@ public class AltaGenericController extends MasterController implements Initializ
         
         if(!comprovaCamp(tfNom)){
             if(!comprovaCamp(tfLogin)){
-                user.setNom(tfNom.getText());
                 carregaPasswd('a');
-                user.setPasswd(passwd);
-                user.setBloquejat(cbBloqueig.isSelected());
-                user.setLogin(tfLogin.getText());
-                user.setData(user.getAvui());
-                user.setAdmin(cbAdmin.isSelected());
-                user.setEstat(UsuariEstat.normal);
-                
-                helperU.afegir(user);
-                info("Usuari creat satisfactòriament");                             
+                if(passwd != null){
+                    user.setNom(tfNom.getText());                
+                    user.setPasswd(passwd);
+                    user.setBloquejat(cbBloqueig.isSelected());
+                    user.setLogin(tfLogin.getText());
+                    user.setData(user.getAvui());
+                    user.setAdmin(cbAdmin.isSelected());
+                    user.setEstat(UsuariEstat.normal);
+
+                    //Afegim usuari
+                    helperU.afegir(user,true);  
+                    if(cbAdmin.isSelected()){
+                        modificarAdmin(user.getLogin());
+                    }
+                }
+                else{
+                    lbInfo.setText("Creació cancelada");
+                }
             }
             else{
                 lbInfo.setText("Falta el nom de l'usuari! (login) ");    
@@ -205,15 +225,34 @@ public class AltaGenericController extends MasterController implements Initializ
      */
     @FXML
     private void modificarUsuari(){        
-        //Sentència SQL        
+        //Sentència SQL   
+        Usuari user = new Usuari();
+        
+        //Update
+        user.setCodi(Integer.parseInt(tfId.getText()));
         user.setNom(tfNom.getText());
+        user.setPasswd(this.user.getPasswd());
+        user.setData(this.user.getData());
         user.setBloquejat(cbBloqueig.isSelected());
         user.setLogin(tfLogin.getText());
         user.setAdmin(cbAdmin.isSelected());
-        helperU.actualitzar(user);
+        user.setEstat(UsuariEstat.normal);
         
-        //Notificar Usuari
-        info("Usuari modificat!");
+        helperU.actualitzar(user,true);
+        
+        if(userLogin.getLogin().equals(this.user.getLogin())){
+            if(userLogin.isAdmin() && !user.isAdmin()){
+                modificarAdmin(null);
+            }
+            if(!userLogin.getLogin().equals(user.getLogin())){                
+                modificarAdmin(user.getLogin());
+            }
+        }
+        else if(!admin && user.isAdmin()){
+            modificarAdmin(user.getLogin());
+        }
+        
+        
     }    
     
     /**
@@ -221,11 +260,9 @@ public class AltaGenericController extends MasterController implements Initializ
      */
     @FXML
     protected void sortirAction() {
-        if (sortir() == ButtonType.YES) {
-            //Tanca la finestra actual
-            Stage stage = (Stage) btSortir.getScene().getWindow();
-            stage.close();
-        }
+        //Tanca la finestra actual
+        Stage stage = (Stage) btSortir.getScene().getWindow();
+        stage.close();
     }    
     
     
@@ -253,5 +290,15 @@ public class AltaGenericController extends MasterController implements Initializ
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
+
+    public Usuari getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(Usuari userLogin) {
+        this.userLogin = userLogin;
+    }
+    
+    
 
 }

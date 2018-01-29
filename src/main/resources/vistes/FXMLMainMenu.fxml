@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -16,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane id="mainMenu" prefHeight="480.0" prefWidth="640.0" style="-fx-background-color=#BBBBBB" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.MainMenuController">
+<BorderPane id="mainMenu" prefHeight="480.0" prefWidth="640.0" style="-fx-background-color=#BBBBBB" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.MainMenuController">
    <center>
       <Pane id="MainPane" stylesheets="@../estils/estil.css" BorderPane.alignment="CENTER">
          <children>
@@ -26,20 +21,20 @@
    <top>
       <MenuBar id="menuBar" opacity="0.9" prefHeight="29.0" prefWidth="640.0" stylesheets="@../estils/estil.css" BorderPane.alignment="CENTER">
         <menus>
-          <Menu id="MenuBarButton" mnemonicParsing="false" text="Clients">
+          <Menu mnemonicParsing="false" text="Clients">
             <items>
-              <MenuItem id="MenuItem" mnemonicParsing="false" text="Alta de client">
-                     <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+              <MenuItem mnemonicParsing="false" styleClass=".MainMM" text="Alta de clients">
+                  <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/client.png" />
                            </image>
                         </ImageView>
-                     </graphic>
+                  </graphic>
               </MenuItem>
-              <MenuItem id="MenuItem" mnemonicParsing="false" text="Filtra clients">
+              <MenuItem mnemonicParsing="false" text="Filtra clients">
                      <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/filtra.png" />
                            </image>
@@ -48,20 +43,20 @@
               </MenuItem>
             </items>
           </Menu>
-          <Menu id="MenuBarButton" mnemonicParsing="false" text="Proveidors">
+          <Menu mnemonicParsing="false" text="Proveidors">
             <items>
-              <MenuItem id="MenuItem" mnemonicParsing="false" text="Alta de proveidor">
+              <MenuItem mnemonicParsing="false" text="Alta de proveidor">
                      <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/proveidors.png" />
                            </image>
                         </ImageView>
                      </graphic>
               </MenuItem>
-              <MenuItem id="MenuItem" mnemonicParsing="false" text="Filtra proveidors">
+              <MenuItem mnemonicParsing="false" text="Filtra proveidors">
                      <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/filtra.png" />
                            </image>
@@ -70,20 +65,20 @@
               </MenuItem>
             </items>
           </Menu>
-            <Menu id="MenuBarButton" mnemonicParsing="false" text="Facturació">
+            <Menu mnemonicParsing="false" text="Facturació">
              <items>
-              <MenuItem id="MenuItem" mnemonicParsing="false" text="Nova facturació">
+              <MenuItem mnemonicParsing="false" text="Nova facturació">
                      <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/facturacio.png" />
                            </image>
                         </ImageView>
                      </graphic>
               </MenuItem>
-              <MenuItem id="MenuItem" mnemonicParsing="false" text="Filtra factures">
+              <MenuItem mnemonicParsing="false" text="Filtra factures">
                      <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/filtra.png" />
                            </image>
@@ -92,20 +87,20 @@
               </MenuItem>
             </items>
             </Menu>
-            <Menu id="MenuBarButton" mnemonicParsing="false" text="Comandes">
+            <Menu mnemonicParsing="false" text="Comandes">
              <items>
-              <MenuItem id="MenuItem" mnemonicParsing="false" text="Nova comanda">
+              <MenuItem mnemonicParsing="false" text="Nova comanda">
                      <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/comanda.png" />
                            </image>
                         </ImageView>
                      </graphic>
               </MenuItem>
-              <MenuItem id="MenuItem" mnemonicParsing="false" text="Filtrar comandes">
+              <MenuItem mnemonicParsing="false" text="Filtrar comandes">
                      <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/filtra.png" />
                            </image>
@@ -114,11 +109,11 @@
               </MenuItem>
             </items>
             </Menu>
-            <Menu id="MenuBarButton" mnemonicParsing="false" text="Magatzem">
+            <Menu mnemonicParsing="false" text="Magatzem">
              <items>
               <MenuItem id="MenuItem" mnemonicParsing="false" text="Consultar stock">
                      <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/consultar.png" />
                            </image>
@@ -127,7 +122,7 @@
               </MenuItem>
               <MenuItem id="MenuItem" mnemonicParsing="false" text="Sol·licitud de stock">
                      <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/solicitar.png" />
                            </image>
@@ -136,7 +131,7 @@
               </MenuItem>
               <MenuItem id="MenuItem" mnemonicParsing="false" text="Informe de stock">
                      <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/informe.png" />
                            </image>
@@ -145,11 +140,11 @@
               </MenuItem>
             </items>
             </Menu>
-            <Menu id="MenuBarButton" mnemonicParsing="false" text="Opcions">
+            <Menu mnemonicParsing="false" text="Opcions">
                <items>
                   <MenuItem id="MenuItem" mnemonicParsing="false" text="Quant a 'M15'">
                      <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/help.png" />
                            </image>
@@ -158,7 +153,7 @@
                   </MenuItem>
                   <MenuItem id="MenuItem" mnemonicParsing="false" text="Tanca la sessió i surt">
                      <graphic>
-                        <ImageView id="icon" fx:id="btLogout" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fx:id="btLogout" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/logout.png" />
                            </image>
@@ -167,11 +162,11 @@
                   </MenuItem>
                </items>
             </Menu>
-            <Menu id="MenuBarButton" fx:id="mnAdminSettings" mnemonicParsing="false" text="ADMIN">
+            <Menu fx:id="mnAdminSettings" mnemonicParsing="false" text="ADMIN">
                <items>
                   <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaUsuari" text="Alta d'usuaris">
                      <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/nousuari.png" />
                            </image>
@@ -180,7 +175,7 @@
                   </MenuItem>
                   <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirConfig" text="Gestionar configuració">
                      <graphic>
-                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0">
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/settings.png" />
                            </image>

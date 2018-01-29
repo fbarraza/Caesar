@@ -8,6 +8,7 @@ package app.orchis.controladors;
 import app.orchis.model.MasterModel;
 import app.orchis.model.Usuari;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 
 /**
  *  Controlador mestre, tots els controladors l'hereten
@@ -15,7 +16,10 @@ import javax.persistence.EntityManagerFactory;
  */
 public class MasterController {
     //Vars
+    @PersistenceContext(name = "persistencia")
     public EntityManagerFactory emf;
+    @PersistenceContext(name = "odoo")
+    public EntityManagerFactory emfO;
     public Usuari user;
     public MasterModel<Usuari> helperU;
     
