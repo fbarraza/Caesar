@@ -241,7 +241,7 @@ public class LoginController extends MasterController implements Initializable {
                 if(testPassword(password,user.getPasswd())){
                     try{
                         //Iniciar app principal
-                        if(config.checkMonth(user)){
+                        if(!config.checkMonth(user)){
                             canviarContrasenya();
                             tfPasswd.clear();
                         }
