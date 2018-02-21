@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" styleClass="root" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.AltaPaisController">
+    <stylesheets>
+        <URL value="@/estils/estil.css"/>
+    </stylesheets>
+    <children>
+      <HBox alignment="TOP_CENTER" spacing="24.0" styleClass="header-section">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Alta de Tipus de Via">
+               <padding>
+                  <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
+      <SplitPane dividerPositions="0.7" orientation="VERTICAL">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <TableView fx:id="tvTipusVia" prefHeight="95.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                      <TableColumn fx:id="colCodi" prefWidth="149.0" text="Codi" />
+                      <TableColumn fx:id="colNom" prefWidth="448.0" text="Nom" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+          <AnchorPane prefHeight="235.0" prefWidth="598.0">
+               <children>
+                  <Label layoutX="15.0" layoutY="19.0" text="Codi" />
+                  <Label layoutX="14.0" layoutY="55.0" text="Nom" />
+                  <TextField fx:id="tfCodi" editable="false" layoutX="67.0" layoutY="14.0" prefHeight="26.0" prefWidth="114.0" styleClass="text-field" />
+                  <TextField fx:id="tfNom" layoutX="67.0" layoutY="50.0" prefHeight="26.0" prefWidth="401.0" styleClass="text-field" />
+                  <HBox alignment="CENTER" layoutX="468.0" layoutY="7.0" spacing="8.0">
+                     <children>
+                        <Button id="navigation-button" fx:id="btnNou" mnemonicParsing="false" onAction="#btnNouOnAction" styleClass="navigation-button-new" />
+                        <Button id="navigation-button" fx:id="btnGuardar" mnemonicParsing="false" onAction="#btnGuardarOnAction" styleClass="navigation-button-save" />
+                        <Button id="navigation-button" fx:id="btnEliminar" mnemonicParsing="false" onAction="#btnEliminarOnAction" styleClass="navigation-button-delete" />
+                        <Button id="navigation-button" fx:id="btnCancelar" mnemonicParsing="false" onAction="#btnCancelarOnAction" styleClass="navigation-button-cancel" />
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>    
+</VBox>
