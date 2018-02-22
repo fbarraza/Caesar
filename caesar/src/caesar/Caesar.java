@@ -5,19 +5,16 @@ import java.util.Scanner;
 public class Caesar {
 
     public static void main(String[] args) {
-        
+        System.out.println("Qué desea hacer, Encriptar o Desencriptar? 'E' o 'D'?");
         try (Scanner sc = new Scanner(System.in)) {
             char option = sc.next().charAt(0);
-            System.out.println("Qué desea hacer, Encriptar o Desencriptar? 'E' o 'D'?");
             
-            String data = mensaje(sc);
-            int pos = posiciones();
             switch (option) {
                 case 'E':
-                    encriptar(data,pos);
+                    encriptar(mensaje(sc),posiciones());
                     break;
                 case 'D':
-                    desencriptar(data,pos);
+                    desencriptar(mensaje(sc),posiciones());
                     break;
                 default:
                     System.out.println("Bye-Bye!");
