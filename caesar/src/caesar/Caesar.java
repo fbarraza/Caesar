@@ -11,9 +11,13 @@ public class Caesar {
             
             switch (option) {
                 case 'E':
+                    mensaje(sc);
+                    posiciones();
                     encriptar(mensaje(sc),posiciones());
                     break;
                 case 'D':
+                    mensaje(sc);
+                    posiciones();
                     desencriptar(mensaje(sc),posiciones());
                     break;
                 default:
