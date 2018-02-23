@@ -7,10 +7,16 @@ package app.orchis.controladors;
 
 import app.orchis.model.MasterModel;
 import app.orchis.model.Pais;
+import app.orchis.model.Usuari;
+import static app.orchis.model.Usuari.obteDisp;
 import static app.orchis.utils.Alertes.advertir;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -38,9 +44,7 @@ public class AltaPaisController extends MasterController implements Initializabl
     @FXML private Button btnNou, btnGuardar, btnEliminar, btnCancelar;
 
     private static final int FIRST = 0;
-
     private MasterModel<Pais> helperPa;
-
     private boolean mode_insercio = false;
 
     @Override
@@ -53,11 +57,18 @@ public class AltaPaisController extends MasterController implements Initializabl
                 tfNom.setText(newValue.getNom());
             }
         });
+        Platform.runLater(() -> {
+            //Obtenim els usuaris
+            helperPa = new MasterModel(emf, Pais.class);
+            inicia();            
+        });        
+
+
         tvTipusPais.requestFocus();
     }
     
     public void inicia() {
-        helperPa = new MasterModel<Pais>(this.getEmf(), Pais.class);
+        
         refrescaTaula(FIRST);
         if (tvTipusPais.getItems().isEmpty()) {
             btnNou.setDisable(false);
@@ -73,13 +84,14 @@ public class AltaPaisController extends MasterController implements Initializabl
     }
 
     private void configuraColumnes() {
-        colCodi.setCellValueFactory(new PropertyValueFactory<>("codi"));
+        colCodi.setCellValueFactory(new PropertyValueFactory<>("codi_pais"));
+        colAbreviatura.setCellValueFactory(new PropertyValueFactory<>("abreviatura"));
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
     }
 
     private void refrescaTaula() {
         tvTipusPais.getItems().removeAll();
-        tvTipusPais.getItems().setAll(helperPa.getAll());
+        tvTipusPais.getItems().setAll(getPaisos());
         if (tvTipusPais.getItems().isEmpty()) {
             tfCodi.clear();
             tfNom.clear();
@@ -154,7 +166,7 @@ public class AltaPaisController extends MasterController implements Initializabl
     
     public void eliminar () {
         if (!tvTipusPais.getItems().isEmpty()) {
-            if (advertir("Està segur d'eliminar l'element?") == ButtonType.OK) {
+            if (advertir("Està segur d'eliminar l'element?") == ButtonType.YES) {
                 Pais p = tvTipusPais.getSelectionModel().getSelectedItem();
                 if (p != null) {
                     int indexActual = tvTipusPais.getItems().indexOf(p);
@@ -175,6 +187,7 @@ public class AltaPaisController extends MasterController implements Initializabl
                 int index = -1;
                 if (mode_insercio) {
                     Pais p = new Pais();
+                    p.setCodi_pais(0);
                     p.setAbreviatura(tfAbreviatura.getText());
                     p.setNom(tfNom.getText());
                     helperPa.afegir(p,true);
@@ -204,5 +217,16 @@ public class AltaPaisController extends MasterController implements Initializabl
         } else {
             advertir("El camp <nom> és obligatori");
         }
+    }    
+    
+    /**
+     * Obté una llista completa de tots els usuaris.
+     * @return 
+     */
+    private ObservableList<Pais> getPaisos() {
+        ArrayList<Pais> llista = (ArrayList) helperPa.getAll();        
+        ObservableList<Pais> llistaPa = FXCollections.observableArrayList(llista);
+        
+        return llistaPa;
     }    
 }

@@ -11,10 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- *
- * @author m15
- */
 @Entity
 @Table(name = "pais")
 public class Pais implements Serializable{

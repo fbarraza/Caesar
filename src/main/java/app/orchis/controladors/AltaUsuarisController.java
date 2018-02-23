@@ -441,8 +441,7 @@ public class AltaUsuarisController extends MasterController implements Initializ
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLModificarContrasenya.fxml"));
             Parent root = (Parent) fxmlLoader.load();   
             ModificarContrasenyaController controller = fxmlLoader.<ModificarContrasenyaController>getController();
-            
-            //
+                        
             controller.setOpc(opc);
             controller.setUser(user);
             controller.setEmf(emf);

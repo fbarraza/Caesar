@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="451.0" prefWidth="600.0" styleClass="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.141" fx:controller="app.orchis.controladors.AltaPaisController">
+<VBox alignment="TOP_CENTER" prefHeight="451.0" prefWidth="600.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.AltaPaisController">
     <stylesheets>
         <URL value="@/estils/estil.css" />
     </stylesheets>
@@ -20,7 +20,6 @@
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" text="Alta de Països">
                <padding>
-                  <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                </padding>
             </Label>
          </children>
@@ -29,11 +28,11 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <TableView fx:id="tvTipusVia" prefHeight="95.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="tvTipusPais" prefHeight="95.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                       <TableColumn fx:id="colCodi" prefWidth="149.0" text="Codi" />
-                      <TableColumn fx:id="colNom" prefWidth="129.0" text="Abreviatura" />
-                        <TableColumn prefWidth="319.0" text="Nom" />
+                      <TableColumn fx:id="colAbreviatura" prefWidth="129.0" text="Abreviatura" />
+                        <TableColumn fx:id="colNom" prefWidth="319.0" text="Nom" />
                     </columns>
                   </TableView>
                </children>

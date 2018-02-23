@@ -77,6 +77,28 @@ public class MainMenuController extends MasterController implements Initializabl
     }
     
     /**
+     * Obre la interfície d'alta de països.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaPais() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaPais.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaPaisController controller = fxmlLoader.<AltaPaisController>getController();
+
+        //Vars
+        controller.setEmf(emf);        
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Països");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }    
+    
+    /**
      * Obre la interfície d'alta d'usuaris.
      * @throws IOException 
      */

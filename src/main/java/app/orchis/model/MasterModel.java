@@ -96,8 +96,8 @@ public class MasterModel<T> {
     }    
     
     public List<T> getAll() {
-        CriteriaBuilder cb = this.emf.getCriteriaBuilder();
         EntityManager manager = this.emf.createEntityManager();
+        CriteriaBuilder cb = this.emf.getCriteriaBuilder();
 
         CriteriaQuery<T> cbQuery = cb.createQuery(placeClass);
         Root<T> c = cbQuery.from(placeClass);
