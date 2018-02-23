@@ -7,6 +7,7 @@ package app.orchis.controladors;
 
 import app.orchis.model.MasterModel;
 import app.orchis.model.Pais;
+import app.orchis.model.Via;
 import static app.orchis.utils.Alertes.advertir;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,46 +30,43 @@ import javafx.scene.control.cell.PropertyValueFactory;
  *
  * @author m15
  */
-public class AltaPaisController extends MasterController implements Initializable{
+public class AltaViaController extends MasterController implements Initializable{
 
-    @FXML private TableView<Pais> tvTipusPais;
-    @FXML private TableColumn<Pais, Integer> colCodi;
-    @FXML private TableColumn<Pais, String> colAbreviatura;
-    @FXML private TableColumn<Pais, String> colNom;
-    @FXML private TextField tfCodi;
-    @FXML private TextField tfAbreviatura;
-    @FXML private TextField tfNom;
+    @FXML private TableView<Via> tvTipusVia;
+    @FXML private TableColumn<Via, Integer> colCodi;
+    @FXML private TableColumn<Via, String> colTipus;
+    @FXML private TextField tfCodi;    
+    @FXML private TextField tfTipus;
 
     @FXML private Button btnNou, btnGuardar, btnEliminar, btnCancelar;
 
     private static final int FIRST = 0;
-    private MasterModel<Pais> helperPa;
+    private MasterModel<Via> helperVia;
     private boolean mode_insercio = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         configuraColumnes();
-        tvTipusPais.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Pais> observable, Pais oldValue, Pais newValue) -> {
+        tvTipusVia.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Via> observable, Via oldValue, Via newValue) -> {
             if (newValue != null) {
-                tfCodi.setText(String.valueOf(newValue.getCodi_pais()));
-                tfAbreviatura.setText(newValue.getAbreviatura());
-                tfNom.setText(newValue.getNom());
+                tfCodi.setText(String.valueOf(newValue.getCodi_via()));
+                tfTipus.setText(newValue.getTipus_via());
             }
         });
         Platform.runLater(() -> {
             //Obtenim els usuaris
-            helperPa = new MasterModel(emf, Pais.class);
+            helperVia = new MasterModel(emf, Pais.class);
             inicia();            
         });        
 
 
-        tvTipusPais.requestFocus();
+        tvTipusVia.requestFocus();
     }
     
     public void inicia() {
         
         refrescaTaula(FIRST);
-        if (tvTipusPais.getItems().isEmpty()) {
+        if (tvTipusVia.getItems().isEmpty()) {
             btnNou.setDisable(false);
             btnGuardar.setDisable(true);
             btnEliminar.setDisable(true);
@@ -82,18 +80,16 @@ public class AltaPaisController extends MasterController implements Initializabl
     }
 
     private void configuraColumnes() {
-        colCodi.setCellValueFactory(new PropertyValueFactory<>("codi_pais"));
-        colAbreviatura.setCellValueFactory(new PropertyValueFactory<>("abreviatura"));
-        colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        colCodi.setCellValueFactory(new PropertyValueFactory<>("codi_via"));
+        colTipus.setCellValueFactory(new PropertyValueFactory<>("tipus_via"));
     }
 
     private void refrescaTaula() {
-        tvTipusPais.getItems().removeAll();
-        tvTipusPais.getItems().setAll(getPaisos());
-        if (tvTipusPais.getItems().isEmpty()) {
+        tvTipusVia.getItems().removeAll();
+        tvTipusVia.getItems().setAll(getVies());
+        if (tvTipusVia.getItems().isEmpty()) {
             tfCodi.clear();
-            tfNom.clear();
-            tfAbreviatura.clear();
+            tfTipus.clear();
             btnEliminar.setDisable(true);
             btnGuardar.setDisable(true);
         }
@@ -101,14 +97,14 @@ public class AltaPaisController extends MasterController implements Initializabl
 
     private void refrescaTaula(int index) {
         refrescaTaula();
-        tvTipusPais.requestFocus();
-        tvTipusPais.getSelectionModel().select(index);
-        tvTipusPais.getFocusModel().focus(index);
+        tvTipusVia.requestFocus();
+        tvTipusVia.getSelectionModel().select(index);
+        tvTipusVia.getFocusModel().focus(index);
     }
 
     private void refrescaTaula(boolean last) {
         refrescaTaula();
-        tvTipusPais.getSelectionModel().selectLast();
+        tvTipusVia.getSelectionModel().selectLast();
     }
 
     @FXML
@@ -132,10 +128,8 @@ public class AltaPaisController extends MasterController implements Initializabl
     }
     
     public void inserir() {
-        tfCodi.clear();
-        tfNom.clear();
-        tfAbreviatura.clear();
-        tfNom.requestFocus();
+        tfCodi.clear();        
+        tfTipus.requestFocus();
         btnNou.setDisable(true);
         btnGuardar.setDisable(false);
         btnEliminar.setDisable(true);
@@ -144,8 +138,8 @@ public class AltaPaisController extends MasterController implements Initializabl
     }
     
     public void cancelar() {
-        if (!tvTipusPais.getItems().isEmpty()) {
-            Pais item = tvTipusPais.getSelectionModel().getSelectedItem();
+        if (!tvTipusVia.getItems().isEmpty()) {
+            Via item = tvTipusVia.getSelectionModel().getSelectedItem();
             tfCodi.setText(String.valueOf(item.getCodi_pais()));
             tfAbreviatura.setText(item.getNom());
             tfNom.setText(item.getNom());
@@ -223,10 +217,10 @@ public class AltaPaisController extends MasterController implements Initializabl
      * Obté una llista completa de tots els usuaris.
      * @return 
      */
-    private ObservableList<Pais> getPaisos() {
-        ArrayList<Pais> llista = (ArrayList) helperPa.getAll();        
-        ObservableList<Pais> llistaPa = FXCollections.observableArrayList(llista);
+    private ObservableList<Via> getVies() {
+        ArrayList<Via> llista = (ArrayList) helperVia.getAll();        
+        ObservableList<Via> llistaVi = FXCollections.observableArrayList(llista);
         
-        return llistaPa;
+        return llistaVi;
     }    
 }
