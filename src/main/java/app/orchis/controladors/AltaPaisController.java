@@ -7,8 +7,6 @@ package app.orchis.controladors;
 
 import app.orchis.model.MasterModel;
 import app.orchis.model.Pais;
-import app.orchis.model.Usuari;
-import static app.orchis.model.Usuari.obteDisp;
 import static app.orchis.utils.Alertes.advertir;
 import java.net.URL;
 import java.util.ArrayList;
