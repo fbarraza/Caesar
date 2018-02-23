@@ -152,19 +152,3 @@ and open the template in the editor.
 .btFinal{
     -fx-background-image: url(../icons/final.png);
     }
-    
-.navigation-button-delete {
-    -fx-background-image: url('../icons/navigation_button_delete.png');
-}
-
-.navigation-button-new {
-    -fx-background-image: url('../icons/navigation_button_new.png');
-}
-
-.navigation-button-save {
-    -fx-background-image: url('../icons/navigation_button_save.png');
-}
-
-.navigation-button-cancel {
-    -fx-background-image: url('../icons/navigation_button_cancel.png');
-}

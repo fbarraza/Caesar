@@ -237,7 +237,7 @@ public class LoginController extends MasterController implements Initializable {
                 usuariBloquejat(username);
             }
             else{
-                //Usuari introduit OK
+                //Usuari introduit OK                
                 if(testPassword(password,user.getPasswd())){
                     try{
                         //Iniciar app principal
@@ -261,13 +261,13 @@ public class LoginController extends MasterController implements Initializable {
                 }
             }            
         }catch(NoResultException ex){
-             intents(username);
+            intents(username);
         }catch(Exception Ex){
             System.out.println("Error fatal en l'execució de l'aplicacio!");
                 System.err.println(Ex.getCause());
             System.err.println(Ex.getMessage());
         }
-    }  
+    } 
     
     /**
      * Sortir de l'aplicació.
