@@ -79,7 +79,7 @@ public class AltaPaisController extends MasterController implements Initializabl
 
     private void refrescaTaula() {
         tvTipusPais.getItems().removeAll();
-        tvTipusPais.getItems().setAll(helper.getAll());
+        tvTipusPais.getItems().setAll(helperPa.getAll());
         if (tvTipusPais.getItems().isEmpty()) {
             tfCodi.clear();
             tfNom.clear();
@@ -151,63 +151,58 @@ public class AltaPaisController extends MasterController implements Initializabl
         btnCancelar.setDisable(true);
         mode_insercio = false;
     }
-
-    @Override
+    
     public void eliminar () {
         if (!tvTipusPais.getItems().isEmpty()) {
-            
-
-
             if (advertir("Està segur d'eliminar l'element?") == ButtonType.OK) {
                 Pais p = tvTipusPais.getSelectionModel().getSelectedItem();
                 if (p != null) {
-                    int indexActual = tvTipusPais.getItems().indexOf(t);
+                    int indexActual = tvTipusPais.getItems().indexOf(p);
                     int nouIndex = indexActual - 1;
                     if (indexActual == FIRST)
                         nouIndex = FIRST;
-                    helperPa.esborrar(p.getCodi_pais());
+                    helperPa.eliminar(p,true);
                     refrescaTaula(nouIndex);
                 }
             }
         }
     }
 
-    @Override
     public void guardar () {
-        if (!tfNom.getText().isEmpty()) {
-            boolean last = false;
-            int index = -1;
-            if (mode_insercio) {
-                TipusVia t = new TipusVia();
-                t.setNom(tfNom.getText());
-                helper.insert(t);
-                mode_insercio = false;
-                last = true;
+        if (!tfAbreviatura.getText().isEmpty()) {
+            if(!tfNom.getText().isEmpty()){
+                boolean last = false;
+                int index = -1;
+                if (mode_insercio) {
+                    Pais p = new Pais();
+                    p.setAbreviatura(tfAbreviatura.getText());
+                    p.setNom(tfNom.getText());
+                    helperPa.afegir(p,true);
+                    mode_insercio = false;
+                    last = true;
+                } else {
+                    Pais p = tvTipusPais.getSelectionModel().getSelectedItem();
+                    index = tvTipusPais.getSelectionModel().getSelectedIndex();
+                    p.setAbreviatura(tfAbreviatura.getText());
+                    p.setNom(tfNom.getText());
+
+                    helperPa.actualitzar(p,true);
+                }
+
+                if (last)
+                    refrescaTaula(last);
+                else
+                    refrescaTaula(index);
+
+                btnNou.setDisable(false);
+                btnGuardar.setDisable(false);
+                btnEliminar.setDisable(false);
+                btnCancelar.setDisable(true);
             } else {
-                TipusVia t = tvTipusVia.getSelectionModel().getSelectedItem();
-                index = tvTipusVia.getSelectionModel().getSelectedIndex();
-                t.setNom(tfNom.getText());
-
-                helper.update(t);
+                advertir("El camp <abreviatura> és obligatori");                
             }
-
-            if (last)
-                refrescaTaula(last);
-            else
-                refrescaTaula(index);
-
-            btnNou.setDisable(false);
-            btnGuardar.setDisable(false);
-            btnEliminar.setDisable(false);
-            btnCancelar.setDisable(true);
-
         } else {
-            Utilitats.alertaWarning("El camp <nom> és obligatori");
+            advertir("El camp <nom> és obligatori");
         }
     }    
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
