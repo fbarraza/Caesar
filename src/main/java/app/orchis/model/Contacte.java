@@ -50,13 +50,13 @@ public class Contacte implements Serializable{
     private boolean principal;
     
     @Column(name = "codi_cli")
-    private String codi_cli;
+    private Integer codi_cli;
     
     @Column(name = "codi_carrec")
-    private String codi_carrec;
+    private Integer codi_carrec;
     
     @Column(name = "codi_dep")
-    private String codi_dep;
+    private Integer codi_dep;
     
     //GETTERS AND SETTERS
     public Integer getCodi_ctte() {
@@ -131,29 +131,31 @@ public class Contacte implements Serializable{
         this.principal = principal;
     }
 
-    public String getCodi_cli() {
+    public Integer getCodi_cli() {
         return codi_cli;
     }
 
-    public void setCodi_cli(String codi_cli) {
+    public void setCodi_cli(Integer codi_cli) {
         this.codi_cli = codi_cli;
     }
 
-    public String getCodi_carrec() {
+    public Integer getCodi_carrec() {
         return codi_carrec;
     }
 
-    public void setCodi_carrec(String codi_carrec) {
+    public void setCodi_carrec(Integer codi_carrec) {
         this.codi_carrec = codi_carrec;
     }
 
-    public String getCodi_dep() {
+    public Integer getCodi_dep() {
         return codi_dep;
     }
 
-    public void setCodi_dep(String codi_dep) {
+    public void setCodi_dep(Integer codi_dep) {
         this.codi_dep = codi_dep;
     }
+
+
 
     
     

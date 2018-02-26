@@ -41,7 +41,7 @@ public class Client implements Serializable{
     private String nom_adre;
 
     @Column(name = "poblacio")
-    private Integer poblacio;    
+    private String poblacio;    
     
     @Column(name = "cp")
     private String cp;        
@@ -50,7 +50,7 @@ public class Client implements Serializable{
     private Integer codi_via;
     
     @Column(name = "codi_prov")
-    private String codi_prov;
+    private Integer codi_prov;
     
     //GETTERS AND SETTERS
     public Integer getCodi_cli() {
@@ -101,14 +101,14 @@ public class Client implements Serializable{
         this.nom_adre = nom_adre;
     }
 
-    public Integer getPoblacio() {
+    public String getPoblacio() {
         return poblacio;
     }
 
-    public void setPoblacio(Integer poblacio) {
+    public void setPoblacio(String poblacio) {
         this.poblacio = poblacio;
     }
-
+    
     public String getCp() {
         return cp;
     }
@@ -125,13 +125,15 @@ public class Client implements Serializable{
         this.codi_via = codi_via;
     }
 
-    public String getCodi_prov() {
+    public Integer getCodi_prov() {
         return codi_prov;
     }
 
-    public void setCodi_prov(String codi_prov) {
+    public void setCodi_prov(Integer codi_prov) {
         this.codi_prov = codi_prov;
     }
+
+
     
     
 }

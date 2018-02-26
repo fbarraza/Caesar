@@ -34,8 +34,8 @@ public class Comercial implements Serializable{
     @Column(name = "cog2")
     private String cog2;        
     
-    @Column(name = "codi_client")
-    private Integer codi_client;
+    @Column(name = "codi_cli")
+    private Integer codi_cli;
     
     //GETTERS AND SETTERS
     public Integer getCodi_com() {
@@ -70,12 +70,12 @@ public class Comercial implements Serializable{
         this.cog2 = cog2;
     }
 
-    public Integer getCodi_client() {
-        return codi_client;
+    public Integer getCodi_cli() {
+        return codi_cli;
     }
 
-    public void setCodi_client(Integer codi_client) {
-        this.codi_client = codi_client;
+    public void setCodi_cli(Integer codi_client) {
+        this.codi_cli = codi_client;
     }
 
     

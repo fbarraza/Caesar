@@ -28,13 +28,13 @@ public class Comptabilitat implements Serializable{
     @Column(name = "tipus")
     private String tipus;
     
-    @Column(name = "cog1")
+    @Column(name = "codi_cli")
     private Integer codi_cli;    
     
-    @Column(name = "cog2")
+    @Column(name = "codi_impost")
     private Integer codi_impost;        
     
-    @Column(name = "codi_client")
+    @Column(name = "codi_tre")
     private Integer codi_tre;
     
     //GETTERS AND SETTERS
@@ -77,6 +77,8 @@ public class Comptabilitat implements Serializable{
     public void setCodi_tre(Integer codi_tre) {
         this.codi_tre = codi_tre;
     }
+
+
 
     
     
