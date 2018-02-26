@@ -6,7 +6,7 @@
 package app.orchis.controladors;
 
 import app.orchis.model.MasterModel;
-import app.orchis.model.Pais;
+import app.orchis.model.Impost;
 import static app.orchis.utils.Alertes.advertir;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,46 +29,48 @@ import javafx.scene.control.cell.PropertyValueFactory;
  *
  * @author m15
  */
-public class AltaPaisController extends MasterController implements Initializable{
+public class AltaImpostController extends MasterController implements Initializable{
 
-    @FXML private TableView<Pais> tvTipusPais;
-    @FXML private TableColumn<Pais, Integer> colCodi;
-    @FXML private TableColumn<Pais, String> colAbreviatura;
-    @FXML private TableColumn<Pais, String> colNom;
+    @FXML private TableView<Impost> tvTipusImpost;
+    @FXML private TableColumn<Impost, Integer> colCodi;
+    @FXML private TableColumn<Impost, String> colNom;
+    @FXML private TableColumn<Impost, Float> colValor;
     @FXML private TextField tfCodi;
-    @FXML private TextField tfAbreviatura;
     @FXML private TextField tfNom;
+    @FXML private TextField tfValor;
+    
 
     @FXML private Button btnNou, btnGuardar, btnEliminar, btnCancelar;
 
     private static final int FIRST = 0;
-    private MasterModel<Pais> helperPa;
+    private MasterModel<Impost> helperIm;
     private boolean mode_insercio = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         configuraColumnes();
-        tvTipusPais.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Pais> observable, Pais oldValue, Pais newValue) -> {
+        tvTipusImpost.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Impost> observable, Impost oldValue, Impost newValue) -> {
             if (newValue != null) {
-                tfCodi.setText(String.valueOf(newValue.getCodi_pais()));
-                tfAbreviatura.setText(newValue.getAbreviatura());
+                
+                tfCodi.setText(String.valueOf(newValue.getCodi_impost()));                
                 tfNom.setText(newValue.getNom());
+                tfValor.setText(Float.toString(newValue.getValor()));                
             }
         });
         Platform.runLater(() -> {
             //Obtenim els usuaris
-            helperPa = new MasterModel(emf, Pais.class);
+            helperIm = new MasterModel(emf, Impost.class);
             inicia();            
         });        
 
 
-        tvTipusPais.requestFocus();
+        tvTipusImpost.requestFocus();
     }
     
     public void inicia() {
         
         refrescaTaula(FIRST);
-        if (tvTipusPais.getItems().isEmpty()) {
+        if (tvTipusImpost.getItems().isEmpty()) {
             btnNou.setDisable(false);
             btnGuardar.setDisable(true);
             btnEliminar.setDisable(true);
@@ -82,18 +84,18 @@ public class AltaPaisController extends MasterController implements Initializabl
     }
 
     private void configuraColumnes() {
-        colCodi.setCellValueFactory(new PropertyValueFactory<>("codi_pais"));
-        colAbreviatura.setCellValueFactory(new PropertyValueFactory<>("abreviatura"));
+        colCodi.setCellValueFactory(new PropertyValueFactory<>("codi_impost"));        
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        colValor.setCellValueFactory(new PropertyValueFactory<>("valor"));
     }
 
     private void refrescaTaula() {
-        tvTipusPais.getItems().removeAll();
-        tvTipusPais.getItems().setAll(getPaisos());
-        if (tvTipusPais.getItems().isEmpty()) {
+        tvTipusImpost.getItems().removeAll();
+        tvTipusImpost.getItems().setAll(getImpostos());
+        if (tvTipusImpost.getItems().isEmpty()) {
             tfCodi.clear();
             tfNom.clear();
-            tfAbreviatura.clear();
+            tfValor.clear();
             btnEliminar.setDisable(true);
             btnGuardar.setDisable(true);
         }
@@ -101,14 +103,14 @@ public class AltaPaisController extends MasterController implements Initializabl
 
     private void refrescaTaula(int index) {
         refrescaTaula();
-        tvTipusPais.requestFocus();
-        tvTipusPais.getSelectionModel().select(index);
-        tvTipusPais.getFocusModel().focus(index);
+        tvTipusImpost.requestFocus();
+        tvTipusImpost.getSelectionModel().select(index);
+        tvTipusImpost.getFocusModel().focus(index);
     }
 
     private void refrescaTaula(boolean last) {
         refrescaTaula();
-        tvTipusPais.getSelectionModel().selectLast();
+        tvTipusImpost.getSelectionModel().selectLast();
     }
 
     @FXML
@@ -134,7 +136,7 @@ public class AltaPaisController extends MasterController implements Initializabl
     public void inserir() {
         tfCodi.clear();
         tfNom.clear();
-        tfAbreviatura.clear();
+        tfValor.clear();
         tfNom.requestFocus();
         btnNou.setDisable(true);
         btnGuardar.setDisable(false);
@@ -144,11 +146,11 @@ public class AltaPaisController extends MasterController implements Initializabl
     }
     
     public void cancelar() {
-        if (!tvTipusPais.getItems().isEmpty()) {
-            Pais item = tvTipusPais.getSelectionModel().getSelectedItem();
-            tfCodi.setText(String.valueOf(item.getCodi_pais()));
-            tfAbreviatura.setText(item.getAbreviatura());
+        if (!tvTipusImpost.getItems().isEmpty()) {
+            Impost item = tvTipusImpost.getSelectionModel().getSelectedItem();
+            tfCodi.setText(String.valueOf(item.getCodi_impost()));
             tfNom.setText(item.getNom());
+            tfValor.setText(Float.toString(item.getValor()));            
             btnNou.setDisable(false);
             btnGuardar.setDisable(false);
             btnEliminar.setDisable(false);
@@ -165,15 +167,15 @@ public class AltaPaisController extends MasterController implements Initializabl
     }
     
     public void eliminar () {
-        if (!tvTipusPais.getItems().isEmpty()) {
+        if (!tvTipusImpost.getItems().isEmpty()) {
             if (advertir("Està segur d'eliminar l'element?") == ButtonType.YES) {
-                Pais p = tvTipusPais.getSelectionModel().getSelectedItem();
-                if (p != null) {
-                    int indexActual = tvTipusPais.getItems().indexOf(p);
+                Impost i = tvTipusImpost.getSelectionModel().getSelectedItem();
+                if (i != null) {
+                    int indexActual = tvTipusImpost.getItems().indexOf(i);
                     int nouIndex = indexActual - 1;
                     if (indexActual == FIRST)
                         nouIndex = FIRST;
-                    helperPa.eliminar(p,true);
+                    helperIm.eliminar(i,true);
                     refrescaTaula(nouIndex);
                 }
             }
@@ -181,25 +183,26 @@ public class AltaPaisController extends MasterController implements Initializabl
     }
 
     public void guardar () {
-        if (!tfAbreviatura.getText().isEmpty()) {
+        if (!tfValor.getText().isEmpty()) {
             if(!tfNom.getText().isEmpty()){
                 boolean last = false;
                 int index = -1;
                 if (mode_insercio) {
-                    Pais p = new Pais();
-                    p.setCodi_pais(0);
-                    p.setAbreviatura(tfAbreviatura.getText());
-                    p.setNom(tfNom.getText());
-                    helperPa.afegir(p,true);
+                    Impost i = new Impost();
+                    i.setCodi_impost(0);                    
+                    i.setNom(tfNom.getText());
+                    i.setValor(Float.parseFloat(tfValor.getText()));                    
+                    helperIm.afegir(i,true);
                     mode_insercio = false;
                     last = true;
                 } else {
-                    Pais p = tvTipusPais.getSelectionModel().getSelectedItem();
-                    index = tvTipusPais.getSelectionModel().getSelectedIndex();
-                    p.setAbreviatura(tfAbreviatura.getText());
-                    p.setNom(tfNom.getText());
+                    Impost i = tvTipusImpost.getSelectionModel().getSelectedItem();
+                    index = tvTipusImpost.getSelectionModel().getSelectedIndex();
+                    i.setCodi_impost(Integer.parseInt(tfCodi.getText()));                    
+                    i.setNom(tfNom.getText());
+                    i.setValor(Float.parseFloat(tfValor.getText()));   
 
-                    helperPa.actualitzar(p,true);
+                    helperIm.actualitzar(i,true);
                 }
 
                 if (last)
@@ -223,10 +226,10 @@ public class AltaPaisController extends MasterController implements Initializabl
      * Obté una llista completa de tots els usuaris.
      * @return 
      */
-    private ObservableList<Pais> getPaisos() {
-        ArrayList<Pais> llista = (ArrayList) helperPa.getAll();        
-        ObservableList<Pais> llistaPa = FXCollections.observableArrayList(llista);
+    private ObservableList<Impost> getImpostos() {
+        ArrayList<Impost> llista = (ArrayList) helperIm.getAll();        
+        ObservableList<Impost> llistaIm = FXCollections.observableArrayList(llista);
         
-        return llistaPa;
+        return llistaIm;
     }    
 }

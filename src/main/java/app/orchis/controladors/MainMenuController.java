@@ -114,11 +114,33 @@ public class MainMenuController extends MasterController implements Initializabl
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(new Scene(root));
-        stage.setTitle("Alta Via");
+        stage.setTitle("Alta Vies");
         stage.setResizable(false);
         stage.show();        
         
     } 
+    
+    /**
+     * Obre la interfície d'alta d'usuaris.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaImpost() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaImpost.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaImpostController controller = fxmlLoader.<AltaImpostController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Impostos");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }     
     
     /**
      * Obre la interfície d'alta d'usuaris.

@@ -88,6 +88,4 @@ public class Tresoreria implements Serializable{
     public void setCodi_pag(Integer codi_pag) {
         this.codi_pag = codi_pag;
     }
-
-    
 }
