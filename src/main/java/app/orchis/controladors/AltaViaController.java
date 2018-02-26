@@ -6,7 +6,6 @@
 package app.orchis.controladors;
 
 import app.orchis.model.MasterModel;
-import app.orchis.model.Pais;
 import app.orchis.model.Via;
 import static app.orchis.utils.Alertes.advertir;
 import java.net.URL;
@@ -55,7 +54,7 @@ public class AltaViaController extends MasterController implements Initializable
         });
         Platform.runLater(() -> {
             //Obtenim els usuaris
-            helperVia = new MasterModel(emf, Pais.class);
+            helperVia = new MasterModel(emf, Via.class);
             inicia();            
         });        
 
@@ -140,16 +139,15 @@ public class AltaViaController extends MasterController implements Initializable
     public void cancelar() {
         if (!tvTipusVia.getItems().isEmpty()) {
             Via item = tvTipusVia.getSelectionModel().getSelectedItem();
-            tfCodi.setText(String.valueOf(item.getCodi_pais()));
-            tfAbreviatura.setText(item.getNom());
-            tfNom.setText(item.getNom());
+            tfCodi.setText(String.valueOf(item.getCodi_via()));
+            tfTipus.setText(item.getTipus_via());            
             btnNou.setDisable(false);
             btnGuardar.setDisable(false);
             btnEliminar.setDisable(false);
 
         } else {
             tfCodi.clear();
-            tfNom.clear();
+            tfTipus.clear();
             btnNou.setDisable(false);
             btnGuardar.setDisable(true);
             btnEliminar.setDisable(true);
@@ -159,15 +157,15 @@ public class AltaViaController extends MasterController implements Initializable
     }
     
     public void eliminar () {
-        if (!tvTipusPais.getItems().isEmpty()) {
+        if (!tvTipusVia.getItems().isEmpty()) {
             if (advertir("Està segur d'eliminar l'element?") == ButtonType.YES) {
-                Pais p = tvTipusPais.getSelectionModel().getSelectedItem();
-                if (p != null) {
-                    int indexActual = tvTipusPais.getItems().indexOf(p);
+                Via v = tvTipusVia.getSelectionModel().getSelectedItem();
+                if (v != null) {
+                    int indexActual = tvTipusVia.getItems().indexOf(v);
                     int nouIndex = indexActual - 1;
                     if (indexActual == FIRST)
                         nouIndex = FIRST;
-                    helperPa.eliminar(p,true);
+                    helperVia.eliminar(v,true);
                     refrescaTaula(nouIndex);
                 }
             }
@@ -175,39 +173,33 @@ public class AltaViaController extends MasterController implements Initializable
     }
 
     public void guardar () {
-        if (!tfAbreviatura.getText().isEmpty()) {
-            if(!tfNom.getText().isEmpty()){
-                boolean last = false;
-                int index = -1;
-                if (mode_insercio) {
-                    Pais p = new Pais();
-                    p.setCodi_pais(0);
-                    p.setAbreviatura(tfAbreviatura.getText());
-                    p.setNom(tfNom.getText());
-                    helperPa.afegir(p,true);
-                    mode_insercio = false;
-                    last = true;
-                } else {
-                    Pais p = tvTipusPais.getSelectionModel().getSelectedItem();
-                    index = tvTipusPais.getSelectionModel().getSelectedIndex();
-                    p.setAbreviatura(tfAbreviatura.getText());
-                    p.setNom(tfNom.getText());
-
-                    helperPa.actualitzar(p,true);
-                }
-
-                if (last)
-                    refrescaTaula(last);
-                else
-                    refrescaTaula(index);
-
-                btnNou.setDisable(false);
-                btnGuardar.setDisable(false);
-                btnEliminar.setDisable(false);
-                btnCancelar.setDisable(true);
+        if (!tfTipus.getText().isEmpty()) {
+            boolean last = false;
+            int index = -1;
+            if (mode_insercio) {
+                Via v = new Via();
+                v.setCodi_via(0);
+                v.setTipus_via(tfTipus.getText());                
+                helperVia.afegir(v,true);
+                mode_insercio = false;
+                last = true;
             } else {
-                advertir("El camp <abreviatura> és obligatori");                
+                Via v = tvTipusVia.getSelectionModel().getSelectedItem();
+                index = tvTipusVia.getSelectionModel().getSelectedIndex();
+                v.setTipus_via(tfTipus.getText());                
+
+                helperVia.actualitzar(v,true);
             }
+
+            if (last)
+                refrescaTaula(last);
+            else
+                refrescaTaula(index);
+
+            btnNou.setDisable(false);
+            btnGuardar.setDisable(false);
+            btnEliminar.setDisable(false);
+            btnCancelar.setDisable(true);
         } else {
             advertir("El camp <nom> és obligatori");
         }
