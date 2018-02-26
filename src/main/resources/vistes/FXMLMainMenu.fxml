@@ -160,9 +160,18 @@
                         </ImageView>
                      </graphic>
                   </MenuItem>
-                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaImpost" text="Impost">
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaOperacio" text="Impostos">
                      <graphic>
                         <ImageView id="icon" fx:id="btLogout1" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaOperacio" text="Operacions">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout11" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/logout.png" />
                            </image>

@@ -146,6 +146,28 @@ public class MainMenuController extends MasterController implements Initializabl
      * Obre la interfície d'alta d'usuaris.
      * @throws IOException 
      */
+    @FXML private void obrirAltaOperacio() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaOperacio.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaOperacioController controller = fxmlLoader.<AltaOperacioController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Impostos");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }      
+    
+    /**
+     * Obre la interfície d'alta d'usuaris.
+     * @throws IOException 
+     */
     @FXML private void obrirAltaUsuari() throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaUsuaris.fxml"));
         Parent root = (Parent) fxmlLoader.load();
