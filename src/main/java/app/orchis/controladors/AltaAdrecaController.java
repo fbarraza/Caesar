@@ -80,8 +80,8 @@ public class AltaAdrecaController extends MasterController implements Initializa
                 tfNom.setText(newValue.getNom_adre());
                 tfPob.setText(newValue.getPoblacio());
                 tfCp.setText(newValue.getCp());
-                /*cbCli.setText(String.valueOf(newValue.getCodi_cli()));
-                cbPais.setText(String.valueOf(newValue.getCodi_pais()));
+                //cbCli.getSelectionModel().select(newValue.getCodi_cli());
+                /*cbPais.setText(String.valueOf(newValue.getCodi_pais()));
                 cbProv.setText(String.valueOf(newValue.getCodi_prov()));
                 cbVia.setText(String.valueOf(newValue.getCodi_via()));*/
             }
@@ -317,6 +317,12 @@ public class AltaAdrecaController extends MasterController implements Initializa
             advertir("El camp <nom> és obligatori");
         }
     }    
+    
+    private Integer trobaEquiv(ArrayList a, int codi){
+        
+        
+        return null;
+    }
     
     private void carregaForeign(){
         aClient = (ArrayList) helperCl.getAll();
