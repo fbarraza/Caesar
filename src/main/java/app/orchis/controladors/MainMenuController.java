@@ -187,6 +187,41 @@ public class MainMenuController extends MasterController implements Initializabl
         
     }
     
+        @FXML private void obrirAltaCarrec() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaCarrec.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaCarrecController controller = fxmlLoader.<AltaCarrecController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Càrrecs");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }
+        
+        @FXML private void obrirDepartament() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLDepartament.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaCarrecController controller = fxmlLoader.<AltaCarrecController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Departaments");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }
     /**
      * Obre la interfície del fitxer de configuració.
      * @throws IOException 

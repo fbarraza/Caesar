@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane id="mainMenu" prefHeight="480.0" prefWidth="640.0" style="-fx-background-color=#BBBBBB" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.MainMenuController">
+<BorderPane id="mainMenu" prefHeight="480.0" prefWidth="640.0" style="-fx-background-color=#BBBBBB" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.MainMenuController">
    <center>
       <Pane id="MainPane" stylesheets="@../estils/estil.css" BorderPane.alignment="CENTER">
          <children>
@@ -172,6 +172,24 @@
                   <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaOperacio" text="Operacions">
                      <graphic>
                         <ImageView id="icon" fx:id="btLogout11" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaCarrec" text="Càrrecs">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout12" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirDepartament" text="Departaments">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout13" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/logout.png" />
                            </image>

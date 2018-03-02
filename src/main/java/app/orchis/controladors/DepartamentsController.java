@@ -5,8 +5,8 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.Departament;
 import app.orchis.model.MasterModel;
-import app.orchis.model.Via;
 import static app.orchis.utils.Alertes.advertir;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,55 +20,57 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
- *
+ *  Controlador mestre, tots els controladors l'hereten
  * @author m15
  */
-public class AltaViaController extends MasterController implements Initializable{
-
-    @FXML private TableView<Via> tvTipusVia;
-    @FXML private TableColumn<Via, Integer> colCodi;
-    @FXML private TableColumn<Via, String> colTipus;
-    @FXML private TableColumn<Via, String> colNom;
-    @FXML private TextField tfCodi;
-    @FXML private TextField tfTipus;
-    @FXML private TextField tfNom;
-
+public class DepartamentsController extends MasterController implements Initializable{
+    //Vars    
+            
+    @FXML private TextField tfCodi, tfNom;
     @FXML private Button btnNou, btnGuardar, btnEliminar, btnCancelar;
-
+    @FXML private TableView<Departament> tvDepartaments;
+    @FXML private TableColumn<Departament, Integer> colCodi;
+    @FXML private TableColumn<Departament, String> colNom;
+    
     private static final int FIRST = 0;
-    private MasterModel<Via> helperVia;
+    private MasterModel<Departament> helperDepartament;
     private boolean mode_insercio = false;
-
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         configuraColumnes();
-        tvTipusVia.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Via> observable, Via oldValue, Via newValue) -> {
+        tvDepartaments.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Departament> observable, Departament oldValue, Departament newValue) -> {
             if (newValue != null) {
-                tfCodi.setText(String.valueOf(newValue.getCodi_via()));
-                tfTipus.setText(newValue.getTipus_via());
-                tfNom.setText(newValue.getTipus_via());
+                tfCodi.setText(String.valueOf(newValue.getCodi_dep()));
+                tfNom.setText(newValue.getNom());
             }
         });
         Platform.runLater(() -> {
             //Obtenim els usuaris
-            helperVia = new MasterModel(emf, Via.class);
+            helperDepartament = new MasterModel(emf, Departament.class);
             inicia();            
         });        
 
-
-        tvTipusVia.requestFocus();
+        tvDepartaments.requestFocus();
+    }
+    
+    
+    //Getters and Setters
+    private void configuraColumnes() {
+        colCodi.setCellValueFactory(new PropertyValueFactory<>("codi_departament"));
+        colNom.setCellValueFactory(new PropertyValueFactory<>("nom_departament"));
     }
     
     public void inicia() {
         
         refrescaTaula(FIRST);
-        if (tvTipusVia.getItems().isEmpty()) {
+        if (tvDepartaments.getItems().isEmpty()) {
             btnNou.setDisable(false);
             btnGuardar.setDisable(true);
             btnEliminar.setDisable(true);
@@ -80,36 +82,31 @@ public class AltaViaController extends MasterController implements Initializable
             btnCancelar.setDisable(true);
         }
     }
-
-    private void configuraColumnes() {
-        colCodi.setCellValueFactory(new PropertyValueFactory<>("codi_via"));
-        colTipus.setCellValueFactory(new PropertyValueFactory<>("tipus_via"));
-    }
-
+    
     private void refrescaTaula() {
-        tvTipusVia.getItems().removeAll();
-        tvTipusVia.getItems().setAll(getVies());
-        if (tvTipusVia.getItems().isEmpty()) {
+        tvDepartaments.getItems().removeAll();
+        tvDepartaments.getItems().setAll(getCarrecs());
+        if (tvDepartaments.getItems().isEmpty()) {
             tfCodi.clear();
-            tfTipus.clear();
+            tfNom.clear();
             btnEliminar.setDisable(true);
             btnGuardar.setDisable(true);
         }
     }
-
+    
     private void refrescaTaula(int index) {
         refrescaTaula();
-        tvTipusVia.requestFocus();
-        tvTipusVia.getSelectionModel().select(index);
-        tvTipusVia.getFocusModel().focus(index);
+        tvDepartaments.requestFocus();
+        tvDepartaments.getSelectionModel().select(index);
+        tvDepartaments.getFocusModel().focus(index);
     }
-
+    
     private void refrescaTaula(boolean last) {
         refrescaTaula();
-        tvTipusVia.getSelectionModel().selectLast();
+        tvDepartaments.getSelectionModel().selectLast();
     }
-
-    @FXML
+ 
+        @FXML
     private void btnNouOnAction (ActionEvent event) {
         inserir();
     }
@@ -131,7 +128,7 @@ public class AltaViaController extends MasterController implements Initializable
     
     public void inserir() {
         tfCodi.clear();        
-        tfTipus.requestFocus();
+        tfNom.requestFocus();
         btnNou.setDisable(true);
         btnGuardar.setDisable(false);
         btnEliminar.setDisable(true);
@@ -140,17 +137,17 @@ public class AltaViaController extends MasterController implements Initializable
     }
     
     public void cancelar() {
-        if (!tvTipusVia.getItems().isEmpty()) {
-            Via item = tvTipusVia.getSelectionModel().getSelectedItem();
-            tfCodi.setText(String.valueOf(item.getCodi_via()));
-            tfTipus.setText(item.getTipus_via());            
+        if (!tvDepartaments.getItems().isEmpty()) {
+            Departament item = tvDepartaments.getSelectionModel().getSelectedItem();
+            tfCodi.setText(String.valueOf(item.getCodi_dep()));
+            tfNom.setText(item.getNom());            
             btnNou.setDisable(false);
             btnGuardar.setDisable(false);
             btnEliminar.setDisable(false);
 
         } else {
             tfCodi.clear();
-            tfTipus.clear();
+            tfNom.clear();
             btnNou.setDisable(false);
             btnGuardar.setDisable(true);
             btnEliminar.setDisable(true);
@@ -160,15 +157,15 @@ public class AltaViaController extends MasterController implements Initializable
     }
     
     public void eliminar () {
-        if (!tvTipusVia.getItems().isEmpty()) {
+        if (!tvDepartaments.getItems().isEmpty()) {
             if (advertir("Està segur d'eliminar l'element?") == ButtonType.YES) {
-                Via v = tvTipusVia.getSelectionModel().getSelectedItem();
-                if (v != null) {
-                    int indexActual = tvTipusVia.getItems().indexOf(v);
+                Departament d = tvDepartaments.getSelectionModel().getSelectedItem();
+                if (d != null) {
+                    int indexActual = tvDepartaments.getItems().indexOf(d);
                     int nouIndex = indexActual - 1;
                     if (indexActual == FIRST)
                         nouIndex = FIRST;
-                    helperVia.eliminar(v,true);
+                    tvDepartaments.eliminar(d,true);
                     refrescaTaula(nouIndex);
                 }
             }
@@ -176,22 +173,22 @@ public class AltaViaController extends MasterController implements Initializable
     }
 
     public void guardar () {
-        if (!tfTipus.getText().isEmpty()) {
+        if (!tfNom.getText().isEmpty()) {
             boolean last = false;
             int index = -1;
             if (mode_insercio) {
-                Via v = new Via();
-                v.setCodi_via(0);
-                v.setTipus_via(tfTipus.getText());                
-                helperVia.afegir(v,true);
+                Departament d = new Departament();
+                d.setCodi_dep(0);
+                d.setNom(tfNom.getText());      
+                tvDepartaments.afegir(d,true);
                 mode_insercio = false;
                 last = true;
             } else {
-                Via v = tvTipusVia.getSelectionModel().getSelectedItem();
-                index = tvTipusVia.getSelectionModel().getSelectedIndex();
-                v.setTipus_via(tfTipus.getText());                
+                Departament d = tvDepartaments.getSelectionModel().getSelectedItem();
+                index = tvDepartaments.getSelectionModel().getSelectedIndex();
+                d.setNom(tfNom.getText());                
 
-                helperVia.actualitzar(v,true);
+                helperDepartament.actualitzar(d,true);
             }
 
             if (last)
@@ -206,16 +203,16 @@ public class AltaViaController extends MasterController implements Initializable
         } else {
             advertir("El camp <nom> és obligatori");
         }
-    }    
+    }
     
-    /**
-     * Obté una llista completa de tots els usuaris.
+     /**
+     * Obté una llista completa de tots els càrrecs.
      * @return 
      */
-    private ObservableList<Via> getVies() {
-        ArrayList<Via> llista = (ArrayList) helperVia.getAll();        
-        ObservableList<Via> llistaVi = FXCollections.observableArrayList(llista);
+    private ObservableList<Departament> getCarrecs() {
+        ArrayList<Departament> llista = (ArrayList) helperDepartament.getAll();        
+        ObservableList<Departament> llistaDe = FXCollections.observableArrayList(llista);
         
-        return llistaVi;
+        return llistaDe;
     }
 }

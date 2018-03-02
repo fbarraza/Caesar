@@ -18,6 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "departament")
 public class Departament implements Serializable{
+
     private static final long serialVersionUID = 15;
     
     //Vars
