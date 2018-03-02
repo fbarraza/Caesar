@@ -143,7 +143,7 @@ public class MainMenuController extends MasterController implements Initializabl
     }     
     
     /**
-     * Obre la interfície d'alta d'usuaris.
+     * Obre la interfície d'alta Operacions.
      * @throws IOException 
      */
     @FXML private void obrirAltaOperacio() throws IOException{
@@ -158,11 +158,56 @@ public class MainMenuController extends MasterController implements Initializabl
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(new Scene(root));
-        stage.setTitle("Alta Impostos");
+        stage.setTitle("Alta Operacions");
         stage.setResizable(false);
         stage.show();        
         
     }      
+    
+    /**
+     * Obre la interfície d'alta de formes pagament.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaFPagament() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaFPagament.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaFPagamentController controller = fxmlLoader.<AltaFPagamentController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Formes Pagament");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }         
+    
+    
+    /**
+     * Obre la interfície d'alta d'Adreces.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaAdreca() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaAdreca.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaAdrecaController controller = fxmlLoader.<AltaAdrecaController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Adreces");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }          
     
     /**
      * Obre la interfície d'alta d'usuaris.

@@ -196,6 +196,7 @@ public class AltaFPagamentController extends MasterController implements Initial
             } else {
                 FormaPagament f = tvTipusPagament.getSelectionModel().getSelectedItem();
                 index = tvTipusPagament.getSelectionModel().getSelectedIndex();
+                f.setCodi_pag(Integer.parseInt(tfCodi.getText()));
                 f.setNom(tfNom.getText());
                 f.setFormula(tfFormula.getText());
 

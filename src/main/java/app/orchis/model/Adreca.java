@@ -29,7 +29,10 @@ public class Adreca implements Serializable{
     private String nom_adre;
     
     @Column(name = "poblacio")
-    private String poblacio;    
+    private String poblacio;   
+    
+    @Column(name = "centre")
+    private String centre;        
     
     @Column(name = "cp")
     private String cp;        

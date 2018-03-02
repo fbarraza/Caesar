@@ -6,8 +6,12 @@
 package app.orchis.controladors;
 
 import app.orchis.model.Adreca;
+import app.orchis.model.Client;
 import app.orchis.model.MasterModel;
 import app.orchis.model.Impost;
+import app.orchis.model.Pais;
+import app.orchis.model.Provincia;
+import app.orchis.model.Via;
 import static app.orchis.utils.Alertes.advertir;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,10 +25,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import static javafx.scene.input.KeyCode.T;
 
 /**
  *
@@ -45,16 +51,24 @@ public class AltaAdrecaController extends MasterController implements Initializa
     @FXML private TextField tfNom;
     @FXML private TextField tfPob;
     @FXML private TextField tfCp;
-    @FXML private TextField tfCli;
-    @FXML private TextField tfPais;
-    @FXML private TextField tfProv;
-    @FXML private TextField tfVia;
+    @FXML private ComboBox<String> cbCli;
+    @FXML private ComboBox<String> cbPais;
+    @FXML private ComboBox<String> cbProv;
+    @FXML private ComboBox<String> cbVia;
     
 
     @FXML private Button btnNou, btnGuardar, btnEliminar, btnCancelar;
 
     private static final int FIRST = 0;
     private MasterModel<Adreca> helperAd;
+    private MasterModel<Client> helperCl;
+    private MasterModel<Pais> helperPa;
+    private MasterModel<Provincia> helperPr;
+    private MasterModel<Via> helperVia;
+    private ArrayList<Client> aClient;
+    private ArrayList<Pais> aPais;
+    private ArrayList<Provincia> aProv;
+    private ArrayList<Via> aVia;
     private boolean mode_insercio = false;
 
     @Override
@@ -66,16 +80,21 @@ public class AltaAdrecaController extends MasterController implements Initializa
                 tfNom.setText(newValue.getNom_adre());
                 tfPob.setText(newValue.getPoblacio());
                 tfCp.setText(newValue.getCp());
-                tfCli.setText(String.valueOf(newValue.getCodi_cli()));
-                tfPais.setText(String.valueOf(newValue.getCodi_pais()));
-                tfProv.setText(String.valueOf(newValue.getCodi_prov()));
-                tfVia.setText(String.valueOf(newValue.getCodi_via()));
+                /*cbCli.setText(String.valueOf(newValue.getCodi_cli()));
+                cbPais.setText(String.valueOf(newValue.getCodi_pais()));
+                cbProv.setText(String.valueOf(newValue.getCodi_prov()));
+                cbVia.setText(String.valueOf(newValue.getCodi_via()));*/
             }
         });
         Platform.runLater(() -> {
             //Obtenim els usuaris
             helperAd = new MasterModel(emf, Adreca.class);
-            inicia();            
+            helperCl = new MasterModel(emf, Client.class);
+            helperPa = new MasterModel(emf, Pais.class);
+            helperPr = new MasterModel(emf, Provincia.class);
+            helperVia = new MasterModel(emf, Via.class);
+            inicia();    
+            carregaCb();            
         });        
 
         tvTipusAdreca.requestFocus();
@@ -96,6 +115,45 @@ public class AltaAdrecaController extends MasterController implements Initializa
             btnCancelar.setDisable(true);
         }
     }
+    
+    private void carregaCb(){
+        carregaForeign();
+        configuraCb();                
+    }
+    
+    private void configuraCb(){
+        //Vars                        
+        ObservableList<String> dataCl = FXCollections.observableArrayList();
+        ObservableList<String> dataPa = FXCollections.observableArrayList();
+        ObservableList<String> dataPr = FXCollections.observableArrayList();
+        ObservableList<String> dataVi = FXCollections.observableArrayList();
+
+        //Clients
+        for (int i = 0; i < aClient.size(); i++) {
+            dataCl.add(aClient.get(i).getNom_jur());
+        }
+        cbCli.setItems(dataCl);        
+        
+        //Països
+        for (int i = 0; i < aPais.size(); i++) {
+            dataPa.add(aPais.get(i).getNom());
+        }
+        cbPais.setItems(dataPa);
+        
+        
+        //Provincies
+        for (int i = 0; i < aProv.size(); i++) {
+            dataPr.add(aProv.get(i).getNom());
+        }
+        cbProv.setItems(dataPr);        
+        
+        //Vies
+        for (int i = 0; i < aVia.size(); i++) {
+            dataVi.add(aVia.get(i).getTipus_via());
+        }
+        cbVia.setItems(dataVi);                                             
+        
+    }
 
     private void configuraColumnes() {
         colCodi.setCellValueFactory(new PropertyValueFactory<>("codi_adre"));        
@@ -113,10 +171,10 @@ public class AltaAdrecaController extends MasterController implements Initializa
         tfNom.clear();
         tfPob.clear();
         tfCp.clear();
-        tfCli.clear();
-        tfPais.clear();
-        tfProv.clear();
-        tfVia.clear();        
+        cbCli.getSelectionModel().selectFirst();
+        cbPais.getSelectionModel().selectFirst();
+        cbProv.getSelectionModel().selectFirst();
+        cbVia.getSelectionModel().selectFirst();
     }
     private void refrescaTaula() {
         tvTipusAdreca.getItems().removeAll();
@@ -177,10 +235,10 @@ public class AltaAdrecaController extends MasterController implements Initializa
             tfNom.setText(item.getNom_adre());
             tfPob.setText(item.getPoblacio());
             tfCp.setText(item.getCp());
-            tfCli.setText(String.valueOf(item.getCodi_cli()));
-            tfPais.setText(String.valueOf(item.getCodi_pais()));
-            tfProv.setText(String.valueOf(item.getCodi_prov()));
-            tfVia.setText(String.valueOf(item.getCodi_via()));
+            //cbCli.setText(String.valueOf(item.getCodi_cli()));
+            //cbPais.setText(String.valueOf(item.getCodi_pais()));
+            //cbProv.setText(String.valueOf(item.getCodi_prov()));
+            //cbVia.setText(String.valueOf(item.getCodi_via()));
                         
             btnNou.setDisable(false);
             btnGuardar.setDisable(false);
@@ -223,9 +281,9 @@ public class AltaAdrecaController extends MasterController implements Initializa
                     a.setNom_adre(tfNom.getText());
                     a.setCp(tfCp.getText());
                     a.setCodi_cli(Integer.parseInt(tfCp.getText()));
-                    a.setCodi_pais(Integer.parseInt(tfPais.getText()));
-                    a.setCodi_prov(Integer.parseInt(tfProv.getText()));
-                    a.setCodi_via(Integer.parseInt(tfVia.getText()));
+                    //a.setCodi_pais(Integer.parseInt(cbPais.getText()));
+                    //a.setCodi_prov(Integer.parseInt(cbProv.getText()));
+                    //a.setCodi_via(Integer.parseInt(cbVia.getText()));
                     helperAd.afegir(a,true);
                     mode_insercio = false;
                     last = true;
@@ -236,9 +294,9 @@ public class AltaAdrecaController extends MasterController implements Initializa
                     a.setNom_adre(tfNom.getText());
                     a.setCp(tfCp.getText());
                     a.setCodi_cli(Integer.parseInt(tfCp.getText()));
-                    a.setCodi_pais(Integer.parseInt(tfPais.getText()));
-                    a.setCodi_prov(Integer.parseInt(tfProv.getText()));
-                    a.setCodi_via(Integer.parseInt(tfVia.getText()));
+                    //a.setCodi_pais(Integer.parseInt(cbPais.getText()));
+                    //a.setCodi_prov(Integer.parseInt(cbProv.getText()));
+                    //a.setCodi_via(Integer.parseInt(cbVia.getText()));
 
                     helperAd.actualitzar(a,true);
                 }
@@ -259,6 +317,13 @@ public class AltaAdrecaController extends MasterController implements Initializa
             advertir("El camp <nom> és obligatori");
         }
     }    
+    
+    private void carregaForeign(){
+        aClient = (ArrayList) helperCl.getAll();
+        aPais = (ArrayList) helperPa.getAll();
+        aProv = (ArrayList) helperPr.getAll();
+        aVia = (ArrayList) helperVia.getAll();                     
+    }
     
     /**
      * Obté una llista completa de tots els usuaris.
