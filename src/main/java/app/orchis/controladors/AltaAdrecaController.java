@@ -15,6 +15,8 @@ import app.orchis.model.Via;
 import static app.orchis.utils.Alertes.advertir;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
@@ -70,6 +72,14 @@ public class AltaAdrecaController extends MasterController implements Initializa
     private ArrayList<Provincia> aProv;
     private ArrayList<Via> aVia;
     private boolean mode_insercio = false;
+    private Map mClient = new HashMap<String, Integer>();
+    private Map mClient2 = new HashMap<Integer, String>();
+    private Map mPais = new HashMap<String, Integer>();
+    private Map mPais2 = new HashMap<Integer, String>();
+    private Map mProv = new HashMap<String, Integer>();
+    private Map mProv2 = new HashMap<Integer, String>();
+    private Map mVia = new HashMap<String, Integer>();
+    private Map mVia2 = new HashMap<Integer, String>();    
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -80,10 +90,10 @@ public class AltaAdrecaController extends MasterController implements Initializa
                 tfNom.setText(newValue.getNom_adre());
                 tfPob.setText(newValue.getPoblacio());
                 tfCp.setText(newValue.getCp());
-                //cbCli.getSelectionModel().select(newValue.getCodi_cli());
-                /*cbPais.setText(String.valueOf(newValue.getCodi_pais()));
-                cbProv.setText(String.valueOf(newValue.getCodi_prov()));
-                cbVia.setText(String.valueOf(newValue.getCodi_via()));*/
+                cbCli.getSelectionModel().select((String) mClient2.get(newValue.getCodi_cli()));
+                cbPais.getSelectionModel().select(newValue.getCodi_pais());
+                cbProv.getSelectionModel().select(String.valueOf(newValue.getCodi_prov()));
+                cbVia.getSelectionModel().select(String.valueOf(newValue.getCodi_via()));
             }
         });
         Platform.runLater(() -> {
@@ -131,12 +141,16 @@ public class AltaAdrecaController extends MasterController implements Initializa
         //Clients
         for (int i = 0; i < aClient.size(); i++) {
             dataCl.add(aClient.get(i).getNom_jur());
+            mClient.put(aClient.get(i).getNom_jur(),aClient.get(i).getCodi_cli());
+            mClient2.put(aClient.get(i).getCodi_cli(),aClient.get(i).getNom_jur());
         }
         cbCli.setItems(dataCl);        
         
         //Països
         for (int i = 0; i < aPais.size(); i++) {
             dataPa.add(aPais.get(i).getNom());
+            mPais.put(aPais.get(i).getNom(),aPais.get(i).getCodi_pais());
+            mPais2.put(aPais.get(i).getCodi_pais(),aPais.get(i).getNom());            
         }
         cbPais.setItems(dataPa);
         
@@ -144,12 +158,16 @@ public class AltaAdrecaController extends MasterController implements Initializa
         //Provincies
         for (int i = 0; i < aProv.size(); i++) {
             dataPr.add(aProv.get(i).getNom());
+            mProv.put(aProv.get(i).getNom(),aProv.get(i).getCodi_prov());
+            mProv2.put(aProv.get(i).getCodi_prov(),aProv.get(i).getNom());            
         }
         cbProv.setItems(dataPr);        
         
         //Vies
         for (int i = 0; i < aVia.size(); i++) {
             dataVi.add(aVia.get(i).getTipus_via());
+            mVia.put(aVia.get(i).getTipus_via(),aClient.get(i).getCodi_via());
+            mVia2.put(aVia.get(i).getCodi_via(),aVia.get(i).getTipus_via());            
         }
         cbVia.setItems(dataVi);                                             
         
