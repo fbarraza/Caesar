@@ -87,7 +87,7 @@
               </MenuItem>
             </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Comandes">
+            <Menu mnemonicParsing="false" text="Departaments">
              <items>
               <MenuItem mnemonicParsing="false" text="Nova comanda">
                      <graphic>
@@ -109,7 +109,7 @@
               </MenuItem>
             </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Magatzem">
+            <Menu mnemonicParsing="false" text="Carrecs">
              <items>
               <MenuItem id="MenuItem" mnemonicParsing="false" text="Consultar stock">
                      <graphic>
@@ -190,6 +190,33 @@
                   <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaAdreca" text="Adreces">
                      <graphic>
                         <ImageView id="icon" fx:id="btLogout1111" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaCarrec" text="Carrec">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout11111" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaDepartament" text="Departament">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout11112" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaContacte" text="Contactes">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout11113" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
                            <image>
                               <Image url="@../icons/logout.png" />
                            </image>

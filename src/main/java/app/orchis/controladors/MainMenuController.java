@@ -210,6 +210,72 @@ public class MainMenuController extends MasterController implements Initializabl
     }          
     
     /**
+     * Obre la interfície d'alta d'Adreces.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaCarrec() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaCarrec.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaCarrecController controller = fxmlLoader.<AltaCarrecController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Càrrecs");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }    
+
+    /**
+     * Obre la interfície d'alta d'Adreces.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaDepartament() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaDepartament.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaDepartamentController controller = fxmlLoader.<AltaDepartamentController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Departaments");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }    
+
+    /**
+     * Obre la interfície d'alta d'Adreces.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaContacte() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaContacte.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaContacteController controller = fxmlLoader.<AltaContacteController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Contactes");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }        
+    
+    /**
      * Obre la interfície d'alta d'usuaris.
      * @throws IOException 
      */
