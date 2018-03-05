@@ -101,7 +101,7 @@ public class Configuracio implements Serializable{
         
         Configuracio config = (Configuracio) query.getSingleResult();
         return config.getIntents();
-    }     
+    }
     
     public static Configuracio getConfig(EntityManagerFactory emf){
         //Creació Entity Manager i del CB

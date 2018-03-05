@@ -165,7 +165,7 @@ public class DepartamentsController extends MasterController implements Initiali
                     int nouIndex = indexActual - 1;
                     if (indexActual == FIRST)
                         nouIndex = FIRST;
-                    tvDepartaments.eliminar(d,true);
+                    helperDepartament.eliminar(d,true);
                     refrescaTaula(nouIndex);
                 }
             }
@@ -180,7 +180,7 @@ public class DepartamentsController extends MasterController implements Initiali
                 Departament d = new Departament();
                 d.setCodi_dep(0);
                 d.setNom(tfNom.getText());      
-                tvDepartaments.afegir(d,true);
+                helperDepartament.afegir(d,true);
                 mode_insercio = false;
                 last = true;
             } else {

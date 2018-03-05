@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox id="MainPane" alignment="TOP_CENTER" prefHeight="451.0" prefWidth="600.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.AltaCarrecController">
+<VBox id="MainPane" alignment="TOP_CENTER" prefHeight="451.0" prefWidth="600.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.DepartamentsController">
     <children>
       <SplitPane dividerPositions="0.7" orientation="VERTICAL" prefHeight="456.0" prefWidth="600.0">
         <items>
@@ -42,5 +42,5 @@
             </AnchorPane>
         </items>
       </SplitPane>
-   </children>    
+   </children>
 </VBox>
