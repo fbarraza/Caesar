@@ -6,6 +6,20 @@
         192.168.1.114-->
     <class>app.orchis.model.Usuari</class>
     <class>app.orchis.model.Configuracio</class>
+    <class>app.orchis.model.Client</class>
+    <class>app.orchis.model.Pais</class>
+    <class>app.orchis.model.Via</class>    
+    <class>app.orchis.model.Adreca</class>
+    <class>app.orchis.model.Carrec</class>
+    <class>app.orchis.model.Comercial</class>
+    <class>app.orchis.model.Comptabilitat</class>
+    <class>app.orchis.model.Contacte</class>
+    <class>app.orchis.model.Departament</class>
+    <class>app.orchis.model.FormaPagament</class>
+    <class>app.orchis.model.Impost</class>
+    <class>app.orchis.model.Operacio</class>
+    <class>app.orchis.model.Provincia</class>
+    <class>app.orchis.model.Tresoreria</class>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://10.0.207.114:3306/OrchisDB?zeroDateTimeBehavior=convertToNull"/>

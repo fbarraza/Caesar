@@ -15,11 +15,8 @@ import javax.persistence.PersistenceContext;
  * @author m15
  */
 public class MasterController {
-    //Vars
-    @PersistenceContext(name = "persistencia")
-    public EntityManagerFactory emf;
-    @PersistenceContext(name = "odoo")
-    public EntityManagerFactory emfO;
+    //Vars    
+    public EntityManagerFactory emf;    
     public Usuari user;
     public MasterModel<Usuari> helperU;
     

@@ -7,21 +7,13 @@ and open the template in the editor.
     Created on : 03/11/2017, 16:38:18
     Author     : Francisco Barraza - Orchis
 */
-/* FONT GENERAL DE L'APLICACIÓ */
-@font-face{ /* AQUÍ ÉS COM EL CSS DE TOTA LA VIDA, sense -fx davant */
-    font-family: Napoleodoni;
-    src: url(../fonts/napoleodoni.ttf);
-    /* Font: https://www.creamundo.com/es/napoleodoni */
-}
 
 .bttext{
-        -fx-font-family: Napoleodoni;
-        -fx-font-size: "20px";
-    }    
+        -fx-font-size: 18px;
+}    
 /* TEXT DE BOTONS I TEXT GENERAL DE LA APLICACIÓ */  
 #textgeneral{
-    -fx-font-family: Napoleodoni;
-    -fx-font-size: "18px";
+    -fx-font-size: 15px;
 }
 
 /* -------------------INICI PANELLS PRINCIPALS */
@@ -33,11 +25,9 @@ and open the template in the editor.
 /* INICI COMPORTAMENT BARRA DE MENÚS, BOTONS, I MENÚS DE INTERFÍCIE */
 #MenuBarButton:active, #MenuBarButton:hover, #MenuBarButton:pressed, #MenuBarButton:focus, #MenuBarButton:showing, #MenuBarButton:inactive, MenuBarButton:armed{
     -fx-background-color: #bababa;
-    -fx-font-family: Napoleodoni;
 }
 
 #MenuItem{
-   -fx-font-family: Napoleodoni;
    -fx-background-color: #ededed;
    -fx-text-fill: #000000;
 }
@@ -50,8 +40,7 @@ and open the template in the editor.
 
 /* ALINEACIÓ TEXT BOTONS LOGIN */
 #buttonLogin{
-    -fx-align-content: "center";
-    -fx-font-family: Napoleodoni;
+    -fx-align-content: center;
 }
 
 /* TEXT CORPORATIU 'M15'*/
@@ -59,8 +48,7 @@ and open the template in the editor.
 /* ----------------------------------------------------------- TEXT LOGIN */
 
 #LoginCorp{
-    -fx-font-family: Napoleodoni;
-    -fx-font-size: "46px";
+    -fx-font-size: 33px;
     -fx-style: Bold;
     -fx-opacity: 1.0;
 }
@@ -68,51 +56,45 @@ and open the template in the editor.
 /* TEXT D'ERROR, LOGIN */
 #showerr{ 
     -fx-fill:#990000;
-    -fx-font-family: Napoleodoni;
 }
     
 /* ------------------------------------------------------------- FI LOGIN */
 
 /* ------------------------------------------------------------- TEXT SPLASH */
 .SplashCorp, .LoginCorp{
-    -fx-font-size: 40px;
+    -fx-font-size: 22px;
     -fx-style: Bold;
-    -fx-font-family: Napoleodoni;
-    -fx-opacity: 1.0;
+    -fx-opacity: 1.0;    
     }
 
 .LoginCorp{
-    -fx-font-size: 48px;
-    }
+    -fx-font-size: 33px;    
+}
     
 /* ------------------------------------------------------------- FI SPLASH */
     
 /* ------------------------------------ TEXTS MENÚ PRINCIPAL */
 #MainCorp{ /* IDENTIFICADOR */
-    -fx-font-size: 96px;
+    -fx-font-size: 66px;
     -fx-style: Bold;
-    -fx-font-family: Napoleodoni;
     -fx-opacity: 0.2;
 }
 
 /* ------------------------------- LOGO CORPORATIU 'M15', AL CENTRE */
 .MainCorp{ /* CLASSE */
-    -fx-font-size: 180px;
+    -fx-font-size: 140px;
     -fx-style: Bold;
-    -fx-font-family: Napoleodoni;
     -fx-opacity: 0.2;
 }
 
 /*------------------------- TEXT MENÚS I SUBMENÚS SUPERIORS, MAIN MENU */
 .MainMM{
-    -fx-font-family: Napoleodoni;
-    -fx-font-size: 16px;
+    -fx-font-size: 13px;
     }
 
 /* --------------------------------------- TEXT MENÚ PRINCIPAL, TOOLBAR */
 #menuBar, #TextTB, #LabelTB{
-    -fx-font-family: Napoleodoni;
-    -fx-font-size: 16px;
+    -fx-font-size: 13px;
 }
 
 /* --------------------------------------------------------------------------------- FI MAIN MENU */
@@ -123,22 +105,20 @@ and open the template in the editor.
 }
 
 #MainTPanelCorp{
-    -fx-font-family: Napoleodoni;
     -fx-font-size: 38px;
     -fx-style: Bold;
 }
 
 /* ICONES BOTONS NAVEGACIÓ ALTA D'USUARIS */
 /* MIDA ICONES */
-.btPrimer, .btAnterior, .btSeguent, .btFinal{
+.btPrimer, .btAnterior, .btSeguent, .btFinal, #navigation-button{
     -fx-background-size: cover, auto;
-    -fx-min-width: "36px";
-    -fx-min-height: "36px";
-    -fx-pref-width: "36px";
-    -fx-pref-height: "36px";
-    -fx-align-content: "center";
-    }
-
+    -fx-min-width: 36px;
+    -fx-min-height: 36px;
+    -fx-pref-width: 36px;
+    -fx-pref-height: 36px;
+    -fx-align-content: center;
+}
     /* URL ICONES DE NAVEGACIÓ TAULA */
 .btPrimer{
     -fx-background-image: url(../icons/principi.png);
@@ -151,4 +131,24 @@ and open the template in the editor.
     }
 .btFinal{
     -fx-background-image: url(../icons/final.png);
-    }
+}
+
+.navigation-button-delete {
+    -fx-background-image: url('../icons/navigation_button_delete.png');
+}
+
+.navigation-button-new {
+    -fx-background-image: url('../icons/navigation_button_new.png');
+}
+
+.navigation-button-save {
+    -fx-background-image: url('../icons/navigation_button_save.png');
+}
+
+.navigation-button-cancel {
+    -fx-background-image: url('../icons/navigation_button_cancel.png');
+}
+
+.tableView TableColumn{
+    -fx-alignment: CENTER;
+}

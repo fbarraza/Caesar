@@ -77,6 +77,205 @@ public class MainMenuController extends MasterController implements Initializabl
     }
     
     /**
+     * Obre la interfície d'alta de països.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaPais() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaPais.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaPaisController controller = fxmlLoader.<AltaPaisController>getController();
+
+        //Vars
+        controller.setEmf(emf);        
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Països");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }    
+    
+    /**
+     * Obre la interfície d'alta d'usuaris.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaVia() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaVia.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaViaController controller = fxmlLoader.<AltaViaController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Vies");
+        stage.setResizable(false);
+        stage.show();        
+        
+    } 
+    
+    /**
+     * Obre la interfície d'alta d'usuaris.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaImpost() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaImpost.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaImpostController controller = fxmlLoader.<AltaImpostController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Impostos");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }     
+    
+    /**
+     * Obre la interfície d'alta Operacions.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaOperacio() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaOperacio.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaOperacioController controller = fxmlLoader.<AltaOperacioController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Operacions");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }      
+    
+    /**
+     * Obre la interfície d'alta de formes pagament.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaFPagament() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaFPagament.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaFPagamentController controller = fxmlLoader.<AltaFPagamentController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Formes Pagament");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }         
+    
+    
+    /**
+     * Obre la interfície d'alta d'Adreces.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaAdreca() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaAdreca.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaAdrecaController controller = fxmlLoader.<AltaAdrecaController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Adreces");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }          
+    
+    /**
+     * Obre la interfície d'alta d'Adreces.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaCarrec() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaCarrec.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaCarrecController controller = fxmlLoader.<AltaCarrecController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Càrrecs");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }    
+
+    /**
+     * Obre la interfície d'alta d'Adreces.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaDepartament() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaDepartament.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaDepartamentController controller = fxmlLoader.<AltaDepartamentController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Departaments");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }    
+
+    /**
+     * Obre la interfície d'alta d'Adreces.
+     * @throws IOException 
+     */
+    @FXML private void obrirAltaContacte() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaContacte.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AltaContacteController controller = fxmlLoader.<AltaContacteController>getController();
+
+        //Vars
+        controller.setEmf(emf);
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Alta Contactes");
+        stage.setResizable(false);
+        stage.show();        
+        
+    }        
+    
+    /**
      * Obre la interfície d'alta d'usuaris.
      * @throws IOException 
      */
