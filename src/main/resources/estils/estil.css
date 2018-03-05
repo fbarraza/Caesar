@@ -148,3 +148,7 @@ and open the template in the editor.
 .navigation-button-cancel {
     -fx-background-image: url('../icons/navigation_button_cancel.png');
 }
+
+.tableView TableColumn{
+    -fx-alignment: CENTER;
+}

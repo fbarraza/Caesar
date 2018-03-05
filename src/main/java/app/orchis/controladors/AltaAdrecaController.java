@@ -91,9 +91,9 @@ public class AltaAdrecaController extends MasterController implements Initializa
                 tfPob.setText(newValue.getPoblacio());
                 tfCp.setText(newValue.getCp());
                 cbCli.getSelectionModel().select((String) mClient2.get(newValue.getCodi_cli()));
-                cbPais.getSelectionModel().select(newValue.getCodi_pais());
-                cbProv.getSelectionModel().select(String.valueOf(newValue.getCodi_prov()));
-                cbVia.getSelectionModel().select(String.valueOf(newValue.getCodi_via()));
+                cbPais.getSelectionModel().select((String) mPais2.get(newValue.getCodi_pais()));
+                cbProv.getSelectionModel().select((String) mProv2.get(newValue.getCodi_prov()));
+                cbVia.getSelectionModel().select((String) mVia2.get(newValue.getCodi_via()));
             }
         });
         Platform.runLater(() -> {
@@ -253,10 +253,10 @@ public class AltaAdrecaController extends MasterController implements Initializa
             tfNom.setText(item.getNom_adre());
             tfPob.setText(item.getPoblacio());
             tfCp.setText(item.getCp());
-            //cbCli.setText(String.valueOf(item.getCodi_cli()));
-            //cbPais.setText(String.valueOf(item.getCodi_pais()));
-            //cbProv.setText(String.valueOf(item.getCodi_prov()));
-            //cbVia.setText(String.valueOf(item.getCodi_via()));
+            cbCli.getSelectionModel().select((String) mClient2.get(item.getCodi_cli()));
+            cbPais.getSelectionModel().select((String) mPais2.get(item.getCodi_pais()));
+            cbProv.getSelectionModel().select((String) mProv2.get(item.getCodi_prov()));
+            cbVia.getSelectionModel().select((String) mVia2.get(item.getCodi_via()));
                         
             btnNou.setDisable(false);
             btnGuardar.setDisable(false);
@@ -298,10 +298,11 @@ public class AltaAdrecaController extends MasterController implements Initializa
                     a.setCodi_adre(0);                    
                     a.setNom_adre(tfNom.getText());
                     a.setCp(tfCp.getText());
-                    a.setCodi_cli(Integer.parseInt(tfCp.getText()));
-                    //a.setCodi_pais(Integer.parseInt(cbPais.getText()));
-                    //a.setCodi_prov(Integer.parseInt(cbProv.getText()));
-                    //a.setCodi_via(Integer.parseInt(cbVia.getText()));
+                    a.setPoblacio(tfPob.getText());
+                    a.setCodi_cli( (Integer) mClient.get(cbCli.getValue()));                    
+                    a.setCodi_pais( (Integer) mPais.get(cbPais.getValue()));
+                    a.setCodi_prov( (Integer) mProv.get(cbProv.getValue()));
+                    a.setCodi_via((Integer) mVia.get(cbVia.getValue()));
                     helperAd.afegir(a,true);
                     mode_insercio = false;
                     last = true;
@@ -312,9 +313,10 @@ public class AltaAdrecaController extends MasterController implements Initializa
                     a.setNom_adre(tfNom.getText());
                     a.setCp(tfCp.getText());
                     a.setCodi_cli(Integer.parseInt(tfCp.getText()));
-                    //a.setCodi_pais(Integer.parseInt(cbPais.getText()));
-                    //a.setCodi_prov(Integer.parseInt(cbProv.getText()));
-                    //a.setCodi_via(Integer.parseInt(cbVia.getText()));
+                    a.setCodi_cli( (Integer) mClient.get(cbCli.getValue()));
+                    a.setCodi_pais( (Integer) mPais.get(cbPais.getValue()));
+                    a.setCodi_prov( (Integer) mProv.get(cbProv.getValue()));
+                    a.setCodi_via((Integer) mVia.get(cbVia.getValue()));
 
                     helperAd.actualitzar(a,true);
                 }
