@@ -25,9 +25,6 @@ public class Via {
     @Column(name = "tipus_via")
     private String tipus_via;
 
-    @Column(name = "nom_via")
-    private String nom_via;
-
     //GETTERS AND SETTERS
     public Integer getCodi_via() {
         return codi_via;
@@ -44,13 +41,8 @@ public class Via {
     public void setTipus_via(String tipus_via) {
         this.tipus_via = tipus_via;
     }
-    
-    public String getNom_via() {
-        return nom_via;
-    }
 
-    public void setNom_via(String nom_via) {
-        this.nom_via = nom_via;
-    }
+    
+    
     
 }

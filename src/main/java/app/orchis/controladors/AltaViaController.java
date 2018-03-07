@@ -34,10 +34,8 @@ public class AltaViaController extends MasterController implements Initializable
     @FXML private TableView<Via> tvTipusVia;
     @FXML private TableColumn<Via, Integer> colCodi;
     @FXML private TableColumn<Via, String> colTipus;
-    @FXML private TableColumn<Via, String> colNom;
-    @FXML private TextField tfCodi;
+    @FXML private TextField tfCodi;    
     @FXML private TextField tfTipus;
-    @FXML private TextField tfNom;
 
     @FXML private Button btnNou, btnGuardar, btnEliminar, btnCancelar;
 
@@ -52,7 +50,6 @@ public class AltaViaController extends MasterController implements Initializable
             if (newValue != null) {
                 tfCodi.setText(String.valueOf(newValue.getCodi_via()));
                 tfTipus.setText(newValue.getTipus_via());
-                tfNom.setText(newValue.getTipus_via());
             }
         });
         Platform.runLater(() -> {
@@ -217,5 +214,5 @@ public class AltaViaController extends MasterController implements Initializable
         ObservableList<Via> llistaVi = FXCollections.observableArrayList(llista);
         
         return llistaVi;
-    }
+    }    
 }

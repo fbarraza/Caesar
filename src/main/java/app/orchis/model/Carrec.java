@@ -44,5 +44,6 @@ public class Carrec implements Serializable{
 
     public void setNom(String nom) {
         this.nom = nom;
-    }    
+    }
+    
 }

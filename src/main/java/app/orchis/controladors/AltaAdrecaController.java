@@ -72,14 +72,14 @@ public class AltaAdrecaController extends MasterController implements Initializa
     private ArrayList<Provincia> aProv;
     private ArrayList<Via> aVia;
     private boolean mode_insercio = false;
-    /*private Map mClient = new HashMap<String, Integer>();
+    private Map mClient = new HashMap<String, Integer>();
     private Map mClient2 = new HashMap<Integer, String>();
     private Map mPais = new HashMap<String, Integer>();
     private Map mPais2 = new HashMap<Integer, String>();
     private Map mProv = new HashMap<String, Integer>();
     private Map mProv2 = new HashMap<Integer, String>();
     private Map mVia = new HashMap<String, Integer>();
-    private Map mVia2 = new HashMap<Integer, String>();    */
+    private Map mVia2 = new HashMap<Integer, String>();    
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

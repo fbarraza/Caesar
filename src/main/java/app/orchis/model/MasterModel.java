@@ -21,7 +21,7 @@ import org.hibernate.exception.ConstraintViolationException;
  *
  * @author m15
  */
-public class MasterModel<T> { //<T> = objecte a passar
+public class MasterModel<T> {
     
     //Vars
     private EntityManagerFactory emf;
@@ -85,9 +85,9 @@ public class MasterModel<T> { //<T> = objecte a passar
         
         em.getTransaction().begin();
         try {
-            em.remove(em.merge(t)); //em.remove -> Elimina registres de la taula
-            em.getTransaction().commit(); //em.getTransaction().commit() -> El commit puja a la BBDD.
-            if (verbose) info(placeClass.getSimpleName()+" eliminat satisfactòriament");
+            em.remove(em.merge(t));
+            em.getTransaction().commit();
+            if (verbose) info(placeClass.getSimpleName()+" eliminat satisfactòriament");  
         } catch (Exception e) {
             em.getTransaction().rollback();
         } finally {
