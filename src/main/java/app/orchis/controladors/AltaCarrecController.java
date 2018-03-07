@@ -64,7 +64,7 @@ public class AltaCarrecController extends MasterController implements Initializa
     //Getters and Setters
     private void configuraColumnes() {
         colCodi.setCellValueFactory(new PropertyValueFactory<>("codi_carrec"));
-        colNom.setCellValueFactory(new PropertyValueFactory<>("nom_carrec"));
+        colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
     }
     
     public void inicia() {
