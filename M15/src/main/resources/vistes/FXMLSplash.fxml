@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="MainAnchor" fx:id="rootPane" prefHeight="270.0" prefWidth="600.0" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.SplashScreenController">
+   <children>
+      <Text layoutX="-3.0" layoutY="36.4208984375" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="SplashCorp" text="Benvingut a M15" textAlignment="CENTER" wrappingWidth="600.0000084936619" AnchorPane.topAnchor="16.0">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Text>
+      <ImageView fitHeight="133.0" fitWidth="139.0" layoutX="234.0" layoutY="79.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imatges/loading.gif" />
+         </image>
+      </ImageView>
+      <Text layoutX="22.0" layoutY="241.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="SplashCorp" text="Carregant..." wrappingWidth="167.00000447034836" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="22.0">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

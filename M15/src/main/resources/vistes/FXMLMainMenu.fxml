@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane id="mainMenu" prefHeight="480.0" prefWidth="640.0" style="-fx-background-color=#BBBBBB" stylesheets="@../estils/estil.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.MainMenuController">
+   <center>
+      <Pane id="MainPane" stylesheets="@../estils/estil.css" BorderPane.alignment="CENTER">
+         <children>
+         </children>
+      </Pane>
+   </center>
+   <top>
+      <MenuBar id="menuBar" opacity="0.9" prefHeight="29.0" prefWidth="640.0" stylesheets="@../estils/estil.css" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Clients">
+            <items>
+              <MenuItem mnemonicParsing="false" styleClass=".MainMM" text="Alta de clients">
+                  <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/client.png" />
+                           </image>
+                        </ImageView>
+                  </graphic>
+              </MenuItem>
+              <MenuItem mnemonicParsing="false" text="Filtra clients">
+                     <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/filtra.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+              </MenuItem>
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Proveidors">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Alta de proveidor">
+                     <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/proveidors.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+              </MenuItem>
+              <MenuItem mnemonicParsing="false" text="Filtra proveidors">
+                     <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/filtra.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+              </MenuItem>
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Facturació">
+             <items>
+              <MenuItem mnemonicParsing="false" text="Nova facturació">
+                     <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/facturacio.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+              </MenuItem>
+              <MenuItem mnemonicParsing="false" text="Filtra factures">
+                     <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/filtra.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+              </MenuItem>
+            </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Departaments">
+             <items>
+              <MenuItem mnemonicParsing="false" text="Nova comanda">
+                     <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/comanda.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+              </MenuItem>
+              <MenuItem mnemonicParsing="false" text="Filtrar comandes">
+                     <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/filtra.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+              </MenuItem>
+            </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Carrecs">
+             <items>
+              <MenuItem id="MenuItem" mnemonicParsing="false" text="Consultar stock">
+                     <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/consultar.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+              </MenuItem>
+              <MenuItem id="MenuItem" mnemonicParsing="false" text="Sol·licitud de stock">
+                     <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/solicitar.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+              </MenuItem>
+              <MenuItem id="MenuItem" mnemonicParsing="false" text="Informe de stock">
+                     <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/informe.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+              </MenuItem>
+            </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Mestres">
+               <items>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaPais" text="Països">
+                     <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaVia" text="Vies">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaImpost" text="Impostos">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout1" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaOperacio" text="Operacions">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout11" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaFPagament" text="Forma Pagament">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout111" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaAdreca" text="Adreces">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout1111" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaCarrec" text="Carrec">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout11111" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaDepartament" text="Departament">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout11112" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaContacte" text="Contactes">
+                     <graphic>
+                        <ImageView id="icon" fx:id="btLogout11113" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+               </items>
+            </Menu>
+            <Menu fx:id="mnAdminSettings" mnemonicParsing="false" text="ADMIN">
+               <items>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirAltaUsuari" text="Alta d'usuaris">
+                     <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/nousuari.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem id="MenuItem" mnemonicParsing="false" onAction="#obrirConfig" text="Gestionar configuració">
+                     <graphic>
+                        <ImageView id="icon" fitHeight="16.0" fitWidth="16.0" styleClass="MMicon">
+                           <image>
+                              <Image url="@../icons/settings.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+               </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <bottom>
+      <ToolBar prefHeight="24.0" prefWidth="640.0" BorderPane.alignment="CENTER">
+         <items>
+            <Text id="TextTB" strokeType="OUTSIDE" strokeWidth="0.0" text="Usuari connectat:" />
+            <Label id="LabelTB" fx:id="lbUserActual" stylesheets="@../estils/estil.css" />
+            <Text id="TextTB" strokeType="OUTSIDE" strokeWidth="0.0" text="Servidor:" textAlignment="CENTER" />
+            <Label id="LabelTB" fx:id="lbServer" stylesheets="@../estils/estil.css" />
+         </items></ToolBar>
+   </bottom>
+</BorderPane>
