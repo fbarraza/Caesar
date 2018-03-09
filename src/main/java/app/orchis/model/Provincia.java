@@ -56,7 +56,10 @@ public class Provincia implements Serializable{
         this.codi_pais = codi_pais;
     }
 
-
+   @Override
+    public String toString(){
+        return this.getNom();
+    }
     
     
 }

@@ -16,6 +16,7 @@ import static app.orchis.utils.Alertes.advertir;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -45,7 +46,7 @@ public class AltaAdrecaController extends MasterController implements Initializa
     @FXML private TableColumn<Adreca, String> colNom;
     @FXML private TableColumn<Adreca, String> colPob;
     @FXML private TableColumn<Adreca, String> colCp;
-    @FXML private TableColumn<Adreca, Integer> colCli;
+    @FXML private TableColumn<Adreca, Client> colCli;
     @FXML private TableColumn<Adreca, Integer> colPais;
     @FXML private TableColumn<Adreca, Integer> colProv;
     @FXML private TableColumn<Adreca, Integer> colVia;    
@@ -53,10 +54,10 @@ public class AltaAdrecaController extends MasterController implements Initializa
     @FXML private TextField tfNom;
     @FXML private TextField tfPob;
     @FXML private TextField tfCp;
-    @FXML private ComboBox<String> cbCli;
-    @FXML private ComboBox<String> cbPais;
-    @FXML private ComboBox<String> cbProv;
-    @FXML private ComboBox<String> cbVia;
+    @FXML private ComboBox<Client> cbCli;
+    @FXML private ComboBox<Pais> cbPais;
+    @FXML private ComboBox<Provincia> cbProv;
+    @FXML private ComboBox<Via> cbVia;
     
 
     @FXML private Button btnNou, btnGuardar, btnEliminar, btnCancelar;
@@ -67,19 +68,19 @@ public class AltaAdrecaController extends MasterController implements Initializa
     private MasterModel<Pais> helperPa;
     private MasterModel<Provincia> helperPr;
     private MasterModel<Via> helperVia;
-    private ArrayList<Client> aClient;
-    private ArrayList<Pais> aPais;
-    private ArrayList<Provincia> aProv;
-    private ArrayList<Via> aVia;
+    private List<Client> aClient;
+    private List<Pais> aPais;
+    private List<Provincia> aProv;
+    private List<Via> aVia;
     private boolean mode_insercio = false;
-    private Map mClient = new HashMap<String, Integer>();
+   /* private Map mClient = new HashMap<String, Integer>();
     private Map mClient2 = new HashMap<Integer, String>();
     private Map mPais = new HashMap<String, Integer>();
     private Map mPais2 = new HashMap<Integer, String>();
     private Map mProv = new HashMap<String, Integer>();
     private Map mProv2 = new HashMap<Integer, String>();
     private Map mVia = new HashMap<String, Integer>();
-    private Map mVia2 = new HashMap<Integer, String>();    
+    private Map mVia2 = new HashMap<Integer, String>();*/
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -90,10 +91,10 @@ public class AltaAdrecaController extends MasterController implements Initializa
                 tfNom.setText(newValue.getNom_adre());
                 tfPob.setText(newValue.getPoblacio());
                 tfCp.setText(newValue.getCp());
-                cbCli.getSelectionModel().select((String) mClient2.get(newValue.getCodi_cli()));
-                cbPais.getSelectionModel().select((String) mPais2.get(newValue.getCodi_pais()));
-                cbProv.getSelectionModel().select((String) mProv2.get(newValue.getCodi_prov()));
-                cbVia.getSelectionModel().select((String) mVia2.get(newValue.getCodi_via()));
+                cbCli.getSelectionModel().select(newValue.getCli());                
+                cbPais.getSelectionModel().select(newValue.getPais());
+                cbProv.getSelectionModel().select(newValue.getProv());
+                cbVia.getSelectionModel().select(newValue.getVia());
             }
         });
         Platform.runLater(() -> {
@@ -132,6 +133,11 @@ public class AltaAdrecaController extends MasterController implements Initializa
     }
     
     private void configuraCb(){
+        cbCli.getItems().addAll(aClient);
+        cbPais.getItems().addAll(aPais);
+        cbProv.getItems().addAll(aProv);
+        cbVia.getItems().addAll(aVia);        
+        /*
         //Vars                        
         ObservableList<String> dataCl = FXCollections.observableArrayList();
         ObservableList<String> dataPa = FXCollections.observableArrayList();
@@ -141,16 +147,16 @@ public class AltaAdrecaController extends MasterController implements Initializa
         //Clients
         for (int i = 0; i < aClient.size(); i++) {
             dataCl.add(aClient.get(i).getNom_jur());
-            mClient.put(aClient.get(i).getNom_jur(),aClient.get(i).getCodi_cli());
-            mClient2.put(aClient.get(i).getCodi_cli(),aClient.get(i).getNom_jur());
+            //mClient.put(aClient.get(i).getNom_jur(),aClient.get(i).getCodi_cli());
+            //mClient2.put(aClient.get(i).getCodi_cli(),aClient.get(i).getNom_jur());
         }
         cbCli.setItems(dataCl);        
         
         //Països
         for (int i = 0; i < aPais.size(); i++) {
             dataPa.add(aPais.get(i).getNom());
-            mPais.put(aPais.get(i).getNom(),aPais.get(i).getCodi_pais());
-            mPais2.put(aPais.get(i).getCodi_pais(),aPais.get(i).getNom());            
+            //mPais.put(aPais.get(i).getNom(),aPais.get(i).getCodi_pais());
+            //mPais2.put(aPais.get(i).getCodi_pais(),aPais.get(i).getNom());            
         }
         cbPais.setItems(dataPa);
         
@@ -158,18 +164,18 @@ public class AltaAdrecaController extends MasterController implements Initializa
         //Provincies
         for (int i = 0; i < aProv.size(); i++) {
             dataPr.add(aProv.get(i).getNom());
-            mProv.put(aProv.get(i).getNom(),aProv.get(i).getCodi_prov());
-            mProv2.put(aProv.get(i).getCodi_prov(),aProv.get(i).getNom());            
+            //mProv.put(aProv.get(i).getNom(),aProv.get(i).getCodi_prov());
+            //mProv2.put(aProv.get(i).getCodi_prov(),aProv.get(i).getNom());            
         }
         cbProv.setItems(dataPr);        
         
         //Vies
         for (int i = 0; i < aVia.size(); i++) {
             dataVi.add(aVia.get(i).getTipus_via());
-            mVia.put(aVia.get(i).getTipus_via(),aClient.get(i).getCodi_via());
-            mVia2.put(aVia.get(i).getCodi_via(),aVia.get(i).getTipus_via());            
+            //mVia.put(aVia.get(i).getTipus_via(),aClient.get(i).getCodi_via());
+            //mVia2.put(aVia.get(i).getCodi_via(),aVia.get(i).getTipus_via());            
         }
-        cbVia.setItems(dataVi);                                             
+        cbVia.setItems(dataVi);     */
         
     }
 
@@ -178,10 +184,10 @@ public class AltaAdrecaController extends MasterController implements Initializa
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom_adre"));
         colPob.setCellValueFactory(new PropertyValueFactory<>("poblacio"));
         colCp.setCellValueFactory(new PropertyValueFactory<>("cp"));
-        colCli.setCellValueFactory(new PropertyValueFactory<>("codi_cli"));
-        colPais.setCellValueFactory(new PropertyValueFactory<>("codi_pais"));
-        colProv.setCellValueFactory(new PropertyValueFactory<>("codi_prov"));        
-        colVia.setCellValueFactory(new PropertyValueFactory<>("codi_via"));    
+        colCli.setCellValueFactory(new PropertyValueFactory<>("cli"));
+        colPais.setCellValueFactory(new PropertyValueFactory<>("pais"));
+        colProv.setCellValueFactory(new PropertyValueFactory<>("prov"));        
+        colVia.setCellValueFactory(new PropertyValueFactory<>("via"));    
     }
 
     private void netejaTf(){
@@ -189,10 +195,10 @@ public class AltaAdrecaController extends MasterController implements Initializa
         tfNom.clear();
         tfPob.clear();
         tfCp.clear();
-        cbCli.getSelectionModel().selectFirst();
-        cbPais.getSelectionModel().selectFirst();
-        cbProv.getSelectionModel().selectFirst();
-        cbVia.getSelectionModel().selectFirst();
+        cbCli.getSelectionModel().select(null);
+        cbPais.getSelectionModel().select(null);
+        cbProv.getSelectionModel().select(null);
+        cbVia.getSelectionModel().select(null);
     }
     private void refrescaTaula() {
         tvTipusAdreca.getItems().removeAll();
@@ -253,11 +259,10 @@ public class AltaAdrecaController extends MasterController implements Initializa
             tfNom.setText(item.getNom_adre());
             tfPob.setText(item.getPoblacio());
             tfCp.setText(item.getCp());
-            cbCli.getSelectionModel().select((String) mClient2.get(item.getCodi_cli()));
-            cbPais.getSelectionModel().select((String) mPais2.get(item.getCodi_pais()));
-            cbProv.getSelectionModel().select((String) mProv2.get(item.getCodi_prov()));
-            cbVia.getSelectionModel().select((String) mVia2.get(item.getCodi_via()));
-                        
+            cbCli.getSelectionModel().select(item.getCli());
+            cbPais.getSelectionModel().select(item.getPais());
+            cbProv.getSelectionModel().select(item.getProv());
+            cbVia.getSelectionModel().select(item.getVia());                        
             btnNou.setDisable(false);
             btnGuardar.setDisable(false);
             btnEliminar.setDisable(false);
@@ -289,53 +294,49 @@ public class AltaAdrecaController extends MasterController implements Initializa
     }
 
     public void guardar () {
-        if (!tfPob.getText().isEmpty()) {
-            if(!tfNom.getText().isEmpty()){
-                boolean last = false;
-                int index = -1;
-                if (mode_insercio) {
-                    Adreca a = new Adreca();
-                    a.setCodi_adre(0);                    
-                    a.setNom_adre(tfNom.getText());
-                    a.setCp(tfCp.getText());
-                    a.setPoblacio(tfPob.getText());
-                    a.setCodi_cli( (Integer) mClient.get(cbCli.getValue()));                    
-                    a.setCodi_pais( (Integer) mPais.get(cbPais.getValue()));
-                    a.setCodi_prov( (Integer) mProv.get(cbProv.getValue()));
-                    a.setCodi_via((Integer) mVia.get(cbVia.getValue()));
-                    helperAd.afegir(a,true);
-                    mode_insercio = false;
-                    last = true;
-                } else {
-                    Adreca a = tvTipusAdreca.getSelectionModel().getSelectedItem();
-                    index = tvTipusAdreca.getSelectionModel().getSelectedIndex();
-                    a.setCodi_adre(Integer.parseInt(tfCodi.getText()));    
-                    a.setNom_adre(tfNom.getText());
-                    a.setCp(tfCp.getText());
-                    a.setCodi_cli(Integer.parseInt(tfCp.getText()));
-                    a.setCodi_cli( (Integer) mClient.get(cbCli.getValue()));
-                    a.setCodi_pais( (Integer) mPais.get(cbPais.getValue()));
-                    a.setCodi_prov( (Integer) mProv.get(cbProv.getValue()));
-                    a.setCodi_via((Integer) mVia.get(cbVia.getValue()));
-
-                    helperAd.actualitzar(a,true);
-                }
-
-                if (last)
-                    refrescaTaula(last);
-                else
-                    refrescaTaula(index);
-
-                btnNou.setDisable(false);
-                btnGuardar.setDisable(false);
-                btnEliminar.setDisable(false);
-                btnCancelar.setDisable(true);
+        if(!tfNom.getText().isEmpty()){
+            boolean last = false;
+            int index = -1;
+            if (mode_insercio) {
+                Adreca a = new Adreca();
+                a.setCodi_adre(0);                    
+                a.setNom_adre(tfNom.getText());
+                a.setCp(tfCp.getText());
+                a.setPoblacio(tfPob.getText());
+                System.out.println(cbCli.getSelectionModel().getSelectedItem());
+                a.setCli(cbCli.getSelectionModel().getSelectedItem());
+                a.setPais(cbPais.getSelectionModel().getSelectedItem());
+                a.setProv(cbProv.getSelectionModel().getSelectedItem());
+                a.setVia(cbVia.getSelectionModel().getSelectedItem());
+                helperAd.afegir(a,true);
+                mode_insercio = false;
+                last = true;
             } else {
-                advertir("El camp <abreviatura> és obligatori");                
+                Adreca a = tvTipusAdreca.getSelectionModel().getSelectedItem();
+                index = tvTipusAdreca.getSelectionModel().getSelectedIndex();
+                a.setCodi_adre(Integer.parseInt(tfCodi.getText()));    
+                a.setNom_adre(tfNom.getText());
+                a.setCp(tfCp.getText());
+                a.setCli(cbCli.getSelectionModel().getSelectedItem());
+                a.setPais(cbPais.getSelectionModel().getSelectedItem());
+                a.setProv(cbProv.getSelectionModel().getSelectedItem());
+                a.setVia(cbVia.getSelectionModel().getSelectedItem());
+
+                helperAd.actualitzar(a,true);
             }
+
+            if (last)
+                refrescaTaula(last);
+            else
+                refrescaTaula(index);
+
+            btnNou.setDisable(false);
+            btnGuardar.setDisable(false);
+            btnEliminar.setDisable(false);
+            btnCancelar.setDisable(true);
         } else {
-            advertir("El camp <nom> és obligatori");
-        }
+            advertir("El camp <nom> és obligatori");                
+        }        
     }    
     
     private Integer trobaEquiv(ArrayList a, int codi){

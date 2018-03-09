@@ -259,46 +259,46 @@ public class AltaContacteController extends MasterController implements Initiali
         }
     }
 
-//    public void guardar() {
-//        if (chkPrincipal.isSelected()) {
-//            if (!tfNom.getText().isEmpty()) {
-//                boolean last = false;
-//                int index = -1;
-//                if (mode_insercio) {
-//                    Contacte con = new Contacte();
-//                    con.setCodi_impost(0);
-//                    con.setNom(tfNom.getText());
-//                    con.setValor(Float.parseFloat(tfValor.getText()));
-//                    helperCon.afegir(con, true);
-//                    mode_insercio = false;
-//                    last = true;
-//                } else {
-//                    Contacte con = tvContacte.getSelectionModel().getSelectedItem();
-//                    index = tvContacte.getSelectionModel().getSelectedIndex();
-//                    con.setCodi_ctte(Integer.parseInt(tfCodi.getText()));
-//                    con.setNom(tfNom.getText());
-//                    con.setValor(Float.parseFloat(tfValor.getText()));
-//
-//                    helperCon.actualitzar(con, true);
-//                }
-//
-//                if (last) {
-//                    refrescaTaula(last);
-//                } else {
-//                    refrescaTaula(index);
-//                }
-//
-//                btnNou.setDisable(false);
-//                btnGuardar.setDisable(false);
-//                btnEliminar.setDisable(false);
-//                btnCancelar.setDisable(true);
-//            } else {
-//                advertir("El camp <abreviatura> és obligatori");
-//            }
-//        } else {
-//            advertir("El camp <nom> és obligatori");
-//        }
-//    }
+/*    public void guardar() {
+        if (chkPrincipal.isSelected()) {
+            if (!tfNom.getText().isEmpty()) {
+                boolean last = false;
+                int index = -1;
+                if (mode_insercio) {
+                    Contacte con = new Contacte();
+                    con.setCodi_impost(0);
+                    con.setNom(tfNom.getText());
+                    con.setValor(Float.parseFloat(tfValor.getText()));
+                    helperCon.afegir(con, true);
+                    mode_insercio = false;
+                    last = true;
+                } else {
+                    Contacte con = tvContacte.getSelectionModel().getSelectedItem();
+                    index = tvContacte.getSelectionModel().getSelectedIndex();
+                    con.setCodi_ctte(Integer.parseInt(tfCodi.getText()));
+                    con.setNom(tfNom.getText());
+                    con.setValor(Float.parseFloat(tfValor.getText()));
+
+                    helperCon.actualitzar(con, true);
+                }
+
+                if (last) {
+                    refrescaTaula(last);
+                } else {
+                    refrescaTaula(index);
+                }
+
+                btnNou.setDisable(false);
+                btnGuardar.setDisable(false);
+                btnEliminar.setDisable(false);
+                btnCancelar.setDisable(true);
+            } else {
+                advertir("El camp <abreviatura> és obligatori");
+            }
+        } else {
+            advertir("El camp <nom> és obligatori");
+        }
+    }*/
 
     /**
      * Obté una llista completa de tots els usuaris.

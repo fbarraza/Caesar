@@ -42,7 +42,8 @@ public class Via {
         this.tipus_via = tipus_via;
     }
 
-    
-    
-    
+   @Override
+    public String toString(){
+        return this.getTipus_via();
+    }            
 }

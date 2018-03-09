@@ -193,8 +193,10 @@ public class MainMenuController extends MasterController implements Initializabl
      */
     @FXML private void obrirAltaAdreca() throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vistes/FXMLAltaAdreca.fxml"));
+        AltaAdrecaController controller = new AltaAdrecaController();
+        fxmlLoader.setController(controller);
         Parent root = (Parent) fxmlLoader.load();
-        AltaAdrecaController controller = fxmlLoader.<AltaAdrecaController>getController();
+
 
         //Vars
         controller.setEmf(emf);

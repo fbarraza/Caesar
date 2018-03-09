@@ -6,9 +6,12 @@
 package app.orchis.model;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -37,17 +40,22 @@ public class Adreca implements Serializable{
     @Column(name = "cp")
     private String cp;        
     
-    @Column(name = "codi_cli")
-    private Integer codi_cli;
+    //@OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
+    @JoinColumn(name = "codi_cli")   
+    private Client cli;
     
-    @Column(name = "codi_pais")
-    private Integer codi_pais;
+    @OneToOne
+    @JoinColumn(name = "codi_pais")  
+    private Pais pais;
 
-    @Column(name = "codi_prov")
-    private Integer codi_prov;    
+    @OneToOne
+    @JoinColumn(name = "codi_prov")  
+    private Provincia prov;    
     
-    @Column(name = "codi_via")
-    private Integer codi_via;    
+    @OneToOne
+    @JoinColumn(name = "codi_via")  
+    private Via via;    
     
     //GETTERS AND SETTERS
     public Integer getCodi_adre() {
@@ -82,38 +90,43 @@ public class Adreca implements Serializable{
         this.cp = cp;
     }
 
-    public Integer getCodi_cli() {
-        return codi_cli;
+    public String getCentre() {
+        return centre;
     }
 
-    public void setCodi_cli(Integer codi_cli) {
-        this.codi_cli = codi_cli;
+    public void setCentre(String centre) {
+        this.centre = centre;
     }
 
-    public Integer getCodi_pais() {
-        return codi_pais;
+    public Client getCli() {
+        return cli;
     }
 
-    public void setCodi_pais(Integer codi_pais) {
-        this.codi_pais = codi_pais;
+    public void setCli(Client cli) {
+        this.cli = cli;
     }
 
-    public Integer getCodi_prov() {
-        return codi_prov;
+    public Pais getPais() {
+        return pais;
     }
 
-    public void setCodi_prov(Integer codi_prov) {
-        this.codi_prov = codi_prov;
+    public void setPais(Pais pais) {
+        this.pais = pais;
     }
 
-    public Integer getCodi_via() {
-        return codi_via;
+    public Provincia getProv() {
+        return prov;
     }
 
-    public void setCodi_via(Integer codi_via) {
-        this.codi_via = codi_via;
+    public void setProv(Provincia prov) {
+        this.prov = prov;
     }
-    
-    
-    
+
+    public Via getVia() {
+        return via;
+    }
+
+    public void setVia(Via via) {
+        this.via = via;
+    }    
 }

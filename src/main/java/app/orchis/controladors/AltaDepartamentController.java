@@ -30,7 +30,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  * @author m15
  */
 public class AltaDepartamentController extends MasterController implements Initializable{
-    //Vars    
+    //Vars  
             
     @FXML private TextField tfCodi, tfNom;
     @FXML private Button btnNou, btnGuardar, btnEliminar, btnCancelar;
@@ -63,8 +63,8 @@ public class AltaDepartamentController extends MasterController implements Initi
     
     //Getters and Setters
     private void configuraColumnes() {
-        colCodi.setCellValueFactory(new PropertyValueFactory<>("codi_departament"));
-        colNom.setCellValueFactory(new PropertyValueFactory<>("nom_departament"));
+        colCodi.setCellValueFactory(new PropertyValueFactory<>("codi_dep"));
+        colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
     }
     
     public void inicia() {
@@ -140,7 +140,7 @@ public class AltaDepartamentController extends MasterController implements Initi
         if (!tvDepartaments.getItems().isEmpty()) {
             Departament item = tvDepartaments.getSelectionModel().getSelectedItem();
             tfCodi.setText(String.valueOf(item.getCodi_dep()));
-            tfNom.setText(item.getNom());            
+            tfNom.setText(item.getNom());
             btnNou.setDisable(false);
             btnGuardar.setDisable(false);
             btnEliminar.setDisable(false);

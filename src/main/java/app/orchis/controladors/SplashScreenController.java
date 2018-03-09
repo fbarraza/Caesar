@@ -44,7 +44,7 @@ public class SplashScreenController extends MasterController implements Initiali
         try {
             emf = appConfig.loadAppConfig();           
         } catch (Exception e){
-            System.out.println("No s'ha pogut inicialitzar l'EMF!");
+          //  System.out.println("No s'ha pogut inicialitzar l'EMF!");
         }
     }
     
