@@ -75,7 +75,7 @@ public class Main {
                 
                 while (rst.next()) {
                     int IDCon = rst.getInt(mc.getIDCon());
-                    String NIF = rst.getString(String.valueOf(mc.getNIF()));
+                    String NIF = rst.getString(mc.getNIF());
                     String Nom = rst.getString(mc.getNom());
                     String Domicili = rst.getString(mc.getDomicili());
                     System.out.println("IDCon: " + IDCon + ". NIF: " + NIF + ". Nom: " + Nom + ". Domicili: " + Domicili);
