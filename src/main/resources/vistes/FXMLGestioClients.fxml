@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="590.0" prefWidth="1421.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.orchis.controladors.GestioClientsController">
+    <stylesheets>
+        <URL value="@/estils/estil.css" />
+    </stylesheets>
+   <children>
+      <HBox alignment="CENTER_LEFT" layoutX="1038.0" layoutY="29.0" prefHeight="18.0" prefWidth="104.0" spacing="5.0">
+         <children>
+            <CheckBox mnemonicParsing="false" />
+            <Label text="Bloquejat" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="1038.0" layoutY="62.0" prefHeight="18.0" prefWidth="104.0" spacing="5.0">
+         <children>
+            <CheckBox mnemonicParsing="false" />
+            <Label text="Eliminat" />
+         </children>
+      </HBox>
+      <TextField fx:id="tfReferencia" layoutX="16.0" layoutY="38.0" />
+      <Label layoutX="16.0" layoutY="21.0" text="Referencia" />
+      <Label layoutX="203.0" layoutY="21.0" text="Nom comercial" />
+      <TextField fx:id="tfNomCom" layoutX="203.0" layoutY="36.0" prefHeight="26.0" prefWidth="202.0" />
+      <Label layoutX="429.0" layoutY="21.0" text="Nom jurídic" />
+      <TextField fx:id="tfNimJur" layoutX="429.0" layoutY="36.0" prefHeight="26.0" prefWidth="223.0" />
+      <Label layoutX="16.0" layoutY="85.0" text="NIF" />
+      <TextField fx:id="tfNIF" layoutX="14.0" layoutY="105.0" />
+      <Label layoutX="203.0" layoutY="87.0" text="Comercial" />
+      <TextField fx:id="tfComercial" layoutX="229.0" layoutY="105.0" />
+      <TabPane layoutX="16.0" layoutY="155.0" prefHeight="402.0" prefWidth="1396.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab fx:id="tabDadesGenerals" text="Dades Generals">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="361.0" prefWidth="949.0">
+                     <children>
+                        <Label layoutX="106.0" layoutY="34.0" text="Via" />
+                        <ComboBox fx:id="cmbVia" layoutX="156.0" layoutY="29.0" prefHeight="26.0" prefWidth="120.0" />
+                        <TextField fx:id="tfNomCarrer" layoutX="302.0" layoutY="29.0" prefHeight="26.0" prefWidth="202.0" />
+                        <Label layoutX="104.0" layoutY="75.0" text="C.P" />
+                        <TextField fx:id="tfCP" layoutX="156.0" layoutY="70.0" prefHeight="26.0" prefWidth="125.0" />
+                        <Label layoutX="301.0" layoutY="75.0" text="Poblacio" />
+                        <TextField fx:id="tfPoblacio" layoutX="363.0" layoutY="70.0" prefHeight="26.0" prefWidth="140.0" />
+                        <Label layoutX="90.0" layoutY="114.0" text="Provincia" />
+                        <Label layoutX="301.0" layoutY="115.0" text="Pais" />
+                        <ComboBox fx:id="cmbPais" layoutX="344.0" layoutY="109.0" prefHeight="26.0" prefWidth="159.0" />
+                        <TextField fx:id="tfProvincia" layoutX="156.0" layoutY="109.0" prefHeight="26.0" prefWidth="125.0" />
+                        <Label layoutX="97.0" layoutY="199.0" text="Contacte" />
+                        <Label layoutX="101.0" layoutY="233.0" text="Email" />
+                        <Label layoutX="99.0" layoutY="270.0" text="Telèfons" />
+                        <Label layoutX="88.0" layoutY="306.0" text="Dept/Càrrec" />
+                        <Label layoutX="92.0" layoutY="339.0" text="Horari de" />
+                        <Label layoutX="320.0" layoutY="339.0" text="fins a" />
+                        <TextField layoutX="173.0" layoutY="194.0" prefHeight="26.0" prefWidth="334.0" />
+                        <TextField layoutX="173.0" layoutY="230.0" prefHeight="26.0" prefWidth="335.0" />
+                        <TextField layoutX="173.0" layoutY="265.0" prefHeight="26.0" prefWidth="159.0" />
+                        <TextField layoutX="172.0" layoutY="301.0" prefHeight="26.0" prefWidth="159.0" />
+                        <TextField layoutX="172.0" layoutY="334.0" prefHeight="26.0" prefWidth="140.0" />
+                        <TextField layoutX="338.0" layoutY="265.0" />
+                        <TextField layoutX="363.0" layoutY="334.0" prefHeight="26.0" prefWidth="146.0" />
+                        <TextField layoutX="338.0" layoutY="301.0" prefHeight="26.0" prefWidth="171.0" />
+                        <Label layoutX="667.0" layoutY="33.0" text="Observacions" />
+                        <Label layoutX="667.0" layoutY="198.0" text="Avisos" />
+                        <TextArea fx:id="taObservacions" layoutX="661.0" layoutY="54.0" prefHeight="122.0" prefWidth="673.0" />
+                        <TextArea fx:id="taAvisos" layoutX="667.0" layoutY="222.0" prefHeight="138.0" prefWidth="673.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab fx:id="tabTresoreria" text="Tresoreria">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="434.0" layoutY="89.0" text="Forma pagament" />
+                        <Label layoutX="434.0" layoutY="154.0" text="Recarrec" />
+                        <Label layoutX="434.0" layoutY="214.0" text="Descompte" />
+                        <Label layoutX="434.0" layoutY="266.0" text="IBAN" />
+                        <ComboBox fx:id="cmbFormaPagament" layoutX="604.0" layoutY="83.0" prefHeight="26.0" prefWidth="179.0" />
+                        <TextField fx:id="tfRecarrec" layoutX="604.0" layoutY="152.0" prefHeight="26.0" prefWidth="179.0" />
+                        <TextField fx:id="tfDescompte" layoutX="604.0" layoutY="211.0" prefHeight="26.0" prefWidth="182.0" />
+                        <TextField fx:id="tfIban" layoutX="604.0" layoutY="261.0" prefHeight="26.0" prefWidth="182.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab fx:id="tfComptabilitat" text="Comptabilitat">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="524.0" layoutY="95.0" text="Regim" />
+                        <Label layoutX="524.0" layoutY="223.0" text="Tipus operacio" />
+                        <TextField fx:id="tfRegim" layoutX="652.0" layoutY="90.0" />
+                        <TextField fx:id="tfTipusOperacio" layoutX="652.0" layoutY="218.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="tabTarifa" text="Tarifa">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="465.0" layoutY="177.0" text="Descompte comercial" />
+                        <TextField fx:id="tfDescompteComercial" layoutX="636.0" layoutY="172.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="tabContactes" text="Contactes">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="369.0" prefWidth="1382.0">
+                     <children>
+                        <Label layoutX="34.0" layoutY="281.0" text="Codi" />
+                        <Label layoutX="33.0" layoutY="311.0" text="Nom" />
+                        <Label layoutX="295.0" layoutY="280.0" text="Càrrec" />
+                        <Label layoutX="275.0" layoutY="311.0" text="Departament" />
+                        <Label layoutX="591.0" layoutY="282.0" text="Telefòn 1" />
+                        <Label layoutX="591.0" layoutY="311.0" text="Telefòn 2" />
+                        <TextField layoutX="82.0" layoutY="278.0" />
+                        <TextField layoutX="82.0" layoutY="306.0" />
+                        <TextField layoutX="669.0" layoutY="276.0" />
+                        <TextField layoutX="669.0" layoutY="306.0" />
+                        <Label layoutX="925.0" layoutY="279.0" text="Fax" />
+                        <Label layoutX="923.0" layoutY="311.0" text="Email" />
+                        <TextField layoutX="968.0" layoutY="275.0" />
+                        <TextField layoutX="968.0" layoutY="307.0" />
+                        <CheckBox fx:id="chkPrincipal" layoutX="1189.0" layoutY="295.0" mnemonicParsing="false" text="Contacte Principal" />
+                        <TableView fx:id="tvContacte" layoutX="64.0" layoutY="15.0" prefHeight="246.0" prefWidth="1268.0">
+                           <columns>
+                              <TableColumn fx:id="colCodi1" prefWidth="73.0" text="Codi" />
+                              <TableColumn fx:id="colNom4" prefWidth="112.0" text="Nom" />
+                              <TableColumn fx:id="colCog1" prefWidth="131.0" text="Primer Cognom" />
+                              <TableColumn fx:id="colCog2" maxWidth="174.0" prefWidth="143.0" text="Segon cognom" />
+                              <TableColumn fx:id="colTel1" maxWidth="119.0" prefWidth="119.0" text="Primer telefon" />
+                              <TableColumn fx:id="colTel2" maxWidth="129.0" prefWidth="114.0" text="Segon telefon" />
+                              <TableColumn fx:id="colFax" maxWidth="173.0" prefWidth="92.0" text="Fax" />
+                              <TableColumn fx:id="colEmail" maxWidth="230.0" prefWidth="111.0" text="Email" />
+                              <TableColumn fx:id="colPrincipal" minWidth="0.0" prefWidth="104.0" text="Principal" />
+                              <TableColumn fx:id="colClient" prefWidth="75.0" text="Codi_cli" />
+                              <TableColumn fx:id="colCarrec" prefWidth="92.0" text="Carrec" />
+                              <TableColumn fx:id="colDepartament" prefWidth="100.0" text="Departament" />
+                           </columns>
+                        </TableView>
+                        <ComboBox layoutX="377.0" layoutY="275.0" prefWidth="150.0" />
+                        <ComboBox layoutX="377.0" layoutY="307.0" prefWidth="150.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="tabAdreces" text="Adreces">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="36.0" layoutY="305.0" text="Codi" />
+                        <Label layoutX="34.0" layoutY="330.0" text="Centre" />
+                        <Label layoutX="320.0" layoutY="302.0" text="Via" />
+                        <Label layoutX="319.0" layoutY="333.0" text="C.P" />
+                        <Label layoutX="593.0" layoutY="308.0" text="Poblacio" />
+                        <Label layoutX="592.0" layoutY="337.0" text="Provincia" />
+                        <Label layoutX="887.0" layoutY="275.0" text="Païs" />
+                        <Label layoutX="887.0" layoutY="307.0" text="Telefòn" />
+                        <Label layoutX="887.0" layoutY="338.0" text="Horari de" />
+                        <TextField layoutX="88.0" layoutY="298.0" />
+                        <TextField layoutX="89.0" layoutY="327.0" />
+                        <ComboBox layoutX="361.0" layoutY="298.0" prefWidth="150.0" />
+                        <ComboBox layoutX="362.0" layoutY="329.0" prefWidth="150.0" />
+                        <ComboBox layoutX="663.0" layoutY="301.0" prefWidth="150.0" />
+                        <ComboBox layoutX="663.0" layoutY="332.0" prefWidth="150.0" />
+                        <ComboBox layoutX="947.0" layoutY="271.0" prefHeight="26.0" prefWidth="265.0" />
+                        <TextField layoutX="947.0" layoutY="302.0" prefHeight="26.0" prefWidth="263.0" />
+                        <TextField layoutX="961.0" layoutY="332.0" prefHeight="26.0" prefWidth="98.0" />
+                        <Label layoutX="1072.0" layoutY="337.0" text="fins a" />
+                        <TextField layoutX="1121.0" layoutY="332.0" prefHeight="26.0" prefWidth="91.0" />
+                        <TableView fx:id="tvTipusPais" layoutX="209.0" layoutY="21.0" prefHeight="238.0" prefWidth="991.0">
+                           <columns>
+                              <TableColumn fx:id="colCodi" prefWidth="73.0" text="Codi" />
+                              <TableColumn fx:id="colAbreviatura" prefWidth="83.0" text="Nom" />
+                              <TableColumn fx:id="colNom" prefWidth="170.0" text="Poblacio" />
+                              <TableColumn fx:id="colNom1" maxWidth="114.0" prefWidth="106.0" text="Codi Postal" />
+                              <TableColumn fx:id="colNom2" maxWidth="110.0" prefWidth="110.0" text="Client" />
+                              <TableColumn fx:id="colNom3" maxWidth="129.0" prefWidth="129.0" text="Pais" />
+                              <TableColumn fx:id="colNom31" maxWidth="173.0" prefWidth="155.0" text="Provincia" />
+                              <TableColumn fx:id="colNom32" maxWidth="224.0" prefWidth="163.0" text="Via" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>
