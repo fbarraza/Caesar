@@ -21,12 +21,12 @@
                     <columns>
                       <TableColumn fx:id="colCodi" prefWidth="73.0" text="Codi" />
                       <TableColumn fx:id="colNom" prefWidth="83.0" text="Nom" />
-                        <TableColumn fx:id="colPob" prefWidth="170.0" text="Poblacio" />
-                        <TableColumn fx:id="colCp" maxWidth="114.0" prefWidth="106.0" text="Codi Postal" />
-                        <TableColumn fx:id="colCli" maxWidth="110.0" prefWidth="110.0" text="Client" />
-                        <TableColumn fx:id="colPais" maxWidth="129.0" prefWidth="129.0" text="Pais" />
-                        <TableColumn fx:id="colProv" maxWidth="173.0" prefWidth="155.0" text="Provincia" />
-                        <TableColumn fx:id="colVia" maxWidth="224.0" prefWidth="163.0" text="Via" />
+                        <TableColumn fx:id="colPob" prefWidth="151.0" text="Poblacio" />
+                        <TableColumn fx:id="colCp" maxWidth="125.0" prefWidth="103.0" text="Codi Postal" />
+                        <TableColumn fx:id="colCli" maxWidth="164.0" prefWidth="164.0" text="Client" />
+                        <TableColumn fx:id="colPais" maxWidth="148.0" prefWidth="116.0" text="Pais" />
+                        <TableColumn fx:id="colProv" maxWidth="173.0" prefWidth="165.0" text="Provincia" />
+                        <TableColumn fx:id="colVia" maxWidth="224.0" prefWidth="134.0" text="Via" />
                     </columns>
                   </TableView>
                </children>

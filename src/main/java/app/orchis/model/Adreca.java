@@ -40,19 +40,20 @@ public class Adreca implements Serializable{
     @Column(name = "cp")
     private String cp;        
     
-    @OneToOne(cascade = CascadeType.PERSIST)
+    //@OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
     @JoinColumn(name = "codi_cli")   
     private Client cli;
     
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
     @JoinColumn(name = "codi_pais")  
     private Pais pais;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
     @JoinColumn(name = "codi_prov")  
     private Provincia prov;    
     
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
     @JoinColumn(name = "codi_via")  
     private Via via;    
     

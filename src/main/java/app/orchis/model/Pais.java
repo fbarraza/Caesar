@@ -53,5 +53,9 @@ public class Pais implements Serializable{
         this.nom = nom;
     }
     
+   @Override
+    public String toString(){
+        return this.getNom();
+    }    
     
 }

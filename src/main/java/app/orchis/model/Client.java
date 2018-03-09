@@ -133,7 +133,10 @@ public class Client implements Serializable{
         this.codi_prov = codi_prov;
     }
 
-
+    @Override
+    public String toString(){
+        return this.getNom_jur();
+    }
     
     
 }
