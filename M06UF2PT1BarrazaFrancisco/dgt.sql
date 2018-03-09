@@ -19,6 +19,14 @@
 -- Table structure for table `contribuent`
 --
 
+CREATE DATABASE IF NOT EXISTS `dgt`;
+
+CREATE USER IF NOT EXISTS 'dgt'@'localhost';
+
+GRANT ALL PRIVILEGES ON dgt.* TO 'dgt'@'localhost';
+
+FLUSH PRIVILEGES;
+
 DROP TABLE IF EXISTS `contribuent`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;

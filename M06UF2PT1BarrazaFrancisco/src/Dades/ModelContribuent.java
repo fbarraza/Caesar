@@ -6,17 +6,17 @@ public class ModelContribuent {
     private String NIF;
     private String Nom;
     private String Domicili;
-    
-public ModelContribuent(){
-    
-}
 
-public ModelContribuent(int idcon, String nif, String nom, String domicili){
-    this.IDCon=idcon;
-    this.NIF=nif;
-    this.Nom=nom;
-    this.Domicili=domicili;
-}
+    public ModelContribuent() {
+
+    }
+
+    public ModelContribuent(int idcon, String nif, String nom, String domicili) {
+        this.IDCon = idcon;
+        this.NIF = nif;
+        this.Nom = nom;
+        this.Domicili = domicili;
+    }
 
     public int getIDCon() {
         return IDCon;
@@ -50,5 +50,4 @@ public ModelContribuent(int idcon, String nif, String nom, String domicili){
         this.Domicili = Domicili;
     }
 
-    
 }

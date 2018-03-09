@@ -10,7 +10,7 @@ public class Connexio extends ModelConnexio {
 
     public Connection ConnectionJDBC() throws SQLException, ClassNotFoundException, Exception {
 
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        Class.forName("com.mysql.jdbc.Driver");
         connection_ = DriverManager.getConnection(getUrl(), getLogin(), getPassword());
         if (connection_ != null) {
             //	st_ = connection_ . createStatement () ;
@@ -22,5 +22,3 @@ public class Connexio extends ModelConnexio {
     }
 
 }
-
-
