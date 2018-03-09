@@ -8,16 +8,13 @@ package app.orchis.controladors;
 import app.orchis.model.Adreca;
 import app.orchis.model.Client;
 import app.orchis.model.MasterModel;
-import app.orchis.model.Impost;
 import app.orchis.model.Pais;
 import app.orchis.model.Provincia;
 import app.orchis.model.Via;
 import static app.orchis.utils.Alertes.advertir;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
@@ -33,7 +30,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import static javafx.scene.input.KeyCode.T;
 
 /**
  *

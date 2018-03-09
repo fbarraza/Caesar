@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -49,14 +51,17 @@ public class Contacte implements Serializable{
     @Column(name = "principal")
     private boolean principal;
     
-    @Column(name = "codi_cli")
-    private Integer codi_cli;
+    @OneToOne
+    @JoinColumn(name = "codi_cli")  
+    private Client cli;
     
-    @Column(name = "codi_carrec")
-    private Integer codi_carrec;
+    @OneToOne
+    @JoinColumn(name = "codi_carrec")  
+    private Carrec ca;
     
-    @Column(name = "codi_dep")
-    private Integer codi_dep;
+    @OneToOne
+    @JoinColumn(name = "codi_dep")  
+    private Departament dep;
     
     //GETTERS AND SETTERS
     public Integer getCodi_ctte() {
@@ -131,32 +136,32 @@ public class Contacte implements Serializable{
         this.principal = principal;
     }
 
-    public Integer getCodi_cli() {
-        return codi_cli;
+    public Client getClient() {
+        return cli;
     }
 
-    public void setCodi_cli(Integer codi_cli) {
-        this.codi_cli = codi_cli;
+    public void setClient(Client codi_cli) {
+        this.cli = codi_cli;
     }
 
-    public Integer getCodi_carrec() {
-        return codi_carrec;
+    public Carrec getCarrec() {
+        return ca;
     }
 
-    public void setCodi_carrec(Integer codi_carrec) {
-        this.codi_carrec = codi_carrec;
+    public void setCarrec(Carrec codi_carrec) {
+        this.ca = codi_carrec;
     }
 
-    public Integer getCodi_dep() {
-        return codi_dep;
+    public Departament getDep() {
+        return dep;
     }
 
-    public void setCodi_dep(Integer codi_dep) {
-        this.codi_dep = codi_dep;
+    public void setDep(Departament codi_dep) {
+        this.dep = codi_dep;
     }
 
-
-
-
-    
+    @Override
+    public String toString(){
+        return this.getNom();
+    }  
 }

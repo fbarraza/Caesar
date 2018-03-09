@@ -5,11 +5,15 @@
  */
 package app.orchis.controladors;
 
+import app.orchis.model.Carrec;
+import app.orchis.model.Client;
 import app.orchis.model.Contacte;
+import app.orchis.model.Departament;
 import app.orchis.model.MasterModel;
 import static app.orchis.utils.Alertes.advertir;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
@@ -34,7 +38,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class AltaContacteController extends MasterController implements Initializable {
 
     @FXML
-    private TableView<Contacte> tvContacte;
+    private TableView<Contacte> tvTipusContacte;
     @FXML
     private TableColumn<Contacte, Integer> colCodi;
     @FXML
@@ -52,13 +56,13 @@ public class AltaContacteController extends MasterController implements Initiali
     @FXML
     private TableColumn<Contacte, String> colEmail;
     @FXML
-    private TableColumn<Contacte, Boolean> Principal;
+    private TableColumn<Contacte, Boolean> colPrincipal;
     @FXML
-    private TableColumn<Contacte, String> colClient;
+    private TableColumn<Contacte, String> colCli;
     @FXML
-    private TableColumn<Contacte, String> colCarrec;
+    private TableColumn<Contacte, String> colCa;
     @FXML
-    private TableColumn<Contacte, String> colDepartament;
+    private TableColumn<Contacte, String> colDep;
 
     @FXML
     private TextField tfCodi;
@@ -78,11 +82,11 @@ public class AltaContacteController extends MasterController implements Initiali
     private TextField tfEmail;
 
     @FXML
-    private ComboBox cmbClient;
+    private ComboBox<Client> cbCli;
     @FXML
-    private ComboBox cmbCarrec;
+    private ComboBox<Carrec> cbCa;
     @FXML
-    private ComboBox cmbDepartament;
+    private ComboBox<Departament> cbDep;
 
     @FXML
     private CheckBox chkPrincipal;
@@ -92,12 +96,18 @@ public class AltaContacteController extends MasterController implements Initiali
 
     private static final int FIRST = 0;
     private MasterModel<Contacte> helperCon;
+    private MasterModel<Client> helperCli;
+    private MasterModel<Carrec> helperCa;
+    private MasterModel<Departament> helperDep;
+    private List<Client> aClient;
+    private List<Carrec> aCa;
+    private List<Departament> aDep;
     private boolean mode_insercio = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         configuraColumnes();
-        tvContacte.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Contacte> observable, Contacte oldValue, Contacte newValue) -> {
+        tvTipusContacte.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Contacte> observable, Contacte oldValue, Contacte newValue) -> {
             if (newValue != null) {
 
                 tfCodi.setText(String.valueOf(newValue.getCodi_ctte()));
@@ -108,22 +118,28 @@ public class AltaContacteController extends MasterController implements Initiali
                 tfTel2.setText(newValue.getTel2());
                 tfFax.setText(newValue.getFax());
                 tfEmail.setText(newValue.getEmail());
-
+                chkPrincipal.setSelected(newValue.isPrincipal());
+                cbCli.getSelectionModel().select(newValue.getClient());                
+                cbCa.getSelectionModel().select(newValue.getCarrec());
+                cbDep.getSelectionModel().select(newValue.getDep());                
             }
         });
         Platform.runLater(() -> {
             //Obtenim els usuaris
             helperCon = new MasterModel(emf, Contacte.class);
+            helperCli = new MasterModel(emf, Client.class);
+            helperCa = new MasterModel(emf, Carrec.class);
+            helperDep = new MasterModel(emf, Departament.class);
             inicia();
         });
 
-        tvContacte.requestFocus();
+        tvTipusContacte.requestFocus();
     }
 
     public void inicia() {
-
+        
         refrescaTaula(FIRST);
-        if (tvContacte.getItems().isEmpty()) {
+        if (tvTipusContacte.getItems().isEmpty()) {
             btnNou.setDisable(false);
             btnGuardar.setDisable(true);
             btnEliminar.setDisable(true);
@@ -135,9 +151,20 @@ public class AltaContacteController extends MasterController implements Initiali
             btnCancelar.setDisable(true);
         }
     }
+    
+    private void carregaCb(){
+        carregaForeign();
+        configuraCb();                
+    }
+    
+    private void configuraCb(){
+        cbCli.getItems().addAll(aClient);
+        cbCa.getItems().addAll(aCa);
+        cbDep.getItems().addAll(aDep);
+    }
 
     private void configuraColumnes() {
-        colCodi.setCellValueFactory(new PropertyValueFactory<>("codi_ctte"));
+        colCodi.setCellValueFactory(new PropertyValueFactory<>("codi_ctte"));        
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
         colCog1.setCellValueFactory(new PropertyValueFactory<>("cog1"));
         colCog2.setCellValueFactory(new PropertyValueFactory<>("cog2"));
@@ -145,59 +172,13 @@ public class AltaContacteController extends MasterController implements Initiali
         colTel2.setCellValueFactory(new PropertyValueFactory<>("tel2"));
         colFax.setCellValueFactory(new PropertyValueFactory<>("fax"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colPrincipal.setCellValueFactory(new PropertyValueFactory<>("principal"));        
+        colCli.setCellValueFactory(new PropertyValueFactory<>("cli"));    
+        colCa.setCellValueFactory(new PropertyValueFactory<>("ca"));    
+        colDep.setCellValueFactory(new PropertyValueFactory<>("dep"));    
     }
 
-    private void refrescaTaula() {
-        tvContacte.getItems().removeAll();
-        tvContacte.getItems().setAll(getImpostos());
-        if (tvContacte.getItems().isEmpty()) {
-            tfCodi.clear();
-            tfNom.clear();
-            tfCog1.clear();
-            tfCog2.clear();
-            tfTel1.clear();
-            tfTel2.clear();
-            tfFax.clear();
-            tfEmail.clear();
-            /////////////////////////////////////////////
-            btnEliminar.setDisable(true);
-            btnGuardar.setDisable(true);
-        }
-    }
-
-    private void refrescaTaula(int index) {
-        refrescaTaula();
-        tvContacte.requestFocus();
-        tvContacte.getSelectionModel().select(index);
-        tvContacte.getFocusModel().focus(index);
-    }
-
-    private void refrescaTaula(boolean last) {
-        refrescaTaula();
-        tvContacte.getSelectionModel().selectLast();
-    }
-
-    @FXML
-    private void btnNouOnAction(ActionEvent event) {
-        inserir();
-    }
-
-    @FXML
-    private void btnCancelarOnAction(ActionEvent event) {
-        cancelar();
-    }
-
-    @FXML
-    private void btnEliminarOnAction(ActionEvent event) {
-        eliminar();
-    }
-
-    @FXML
-    private void btnGuardarOnAction(ActionEvent event) {
-      //  guardar();
-    }
-
-    public void inserir() {
+    private void netejaTf(){
         tfCodi.clear();
         tfNom.clear();
         tfCog1.clear();
@@ -206,7 +187,55 @@ public class AltaContacteController extends MasterController implements Initiali
         tfTel2.clear();
         tfFax.clear();
         tfEmail.clear();
-        /////////////////////////////////////////////
+        cbCli.getSelectionModel().select(null);
+        cbCa.getSelectionModel().select(null);
+        cbDep.getSelectionModel().select(null);
+        chkPrincipal.setSelected(false);
+    }
+    private void refrescaTaula() {
+        tvTipusContacte.getItems().removeAll();
+        tvTipusContacte.getItems().setAll(getContactes());
+        if (tvTipusContacte.getItems().isEmpty()) {
+            netejaTf();
+            btnEliminar.setDisable(true);
+            btnGuardar.setDisable(true);
+        }
+    }
+
+    private void refrescaTaula(int index) {
+        refrescaTaula();
+        tvTipusContacte.requestFocus();
+        tvTipusContacte.getSelectionModel().select(index);
+        tvTipusContacte.getFocusModel().focus(index);
+    }
+
+    private void refrescaTaula(boolean last) {
+        refrescaTaula();
+        tvTipusContacte.getSelectionModel().selectLast();
+    }
+
+    @FXML
+    private void btnNouOnAction (ActionEvent event) {
+        inserir();
+    }
+
+    @FXML
+    private void btnCancelarOnAction (ActionEvent event) {
+        cancelar();
+    }
+
+    @FXML
+    private void btnEliminarOnAction (ActionEvent event) {
+        eliminar();
+    }
+
+    @FXML
+    private void btnGuardarOnAction (ActionEvent event) {
+        guardar();
+    }
+    
+    public void inserir() {
+        netejaTf();
         tfNom.requestFocus();
         btnNou.setDisable(true);
         btnGuardar.setDisable(false);
@@ -214,26 +243,29 @@ public class AltaContacteController extends MasterController implements Initiali
         btnCancelar.setDisable(false);
         mode_insercio = true;
     }
-
+    
     public void cancelar() {
-        if (!tvContacte.getItems().isEmpty()) {
-            Contacte item = tvContacte.getSelectionModel().getSelectedItem();
+        if (!tvTipusContacte.getItems().isEmpty()) {
+            Contacte item = tvTipusContacte.getSelectionModel().getSelectedItem();
             tfCodi.setText(String.valueOf(item.getCodi_ctte()));
-            tfNom.setText(item.getNom());
-            tfCog1.setText(item.getCog1());
-            tfCog2.setText(item.getCog2());
-            tfTel1.setText(item.getTel1());
-            tfTel2.setText(item.getTel2());
-            tfFax.setText(item.getFax());
-            tfEmail.setText(item.getEmail());
-
+            tfNom.setText(String.valueOf(item.getNom()));
+            tfCog1.setText(String.valueOf(item.getCog1()));;
+            tfCog2.setText(String.valueOf(item.getCog2()));
+            tfTel1.setText(String.valueOf(item.getTel1()));
+            tfTel2.setText(String.valueOf(item.getTel2()));;
+            tfFax.setText(String.valueOf(item.getFax()));
+            tfEmail.setText(String.valueOf(item.getEmail()));;
+            cbCli.getSelectionModel().select(item.getClient());
+            cbCa.getSelectionModel().select(item.getCarrec());
+            cbDep.getSelectionModel().select(item.getDep());
+            chkPrincipal.setSelected(item.isPrincipal());            
+                           
             btnNou.setDisable(false);
             btnGuardar.setDisable(false);
             btnEliminar.setDisable(false);
 
         } else {
-            tfCodi.clear();
-            tfNom.clear();
+            netejaTf();
             btnNou.setDisable(false);
             btnGuardar.setDisable(true);
             btnEliminar.setDisable(true);
@@ -241,74 +273,83 @@ public class AltaContacteController extends MasterController implements Initiali
         btnCancelar.setDisable(true);
         mode_insercio = false;
     }
-
-    public void eliminar() {
-        if (!tvContacte.getItems().isEmpty()) {
+    
+    public void eliminar () {
+        if (!tvTipusContacte.getItems().isEmpty()) {
             if (advertir("Està segur d'eliminar l'element?") == ButtonType.YES) {
-                Contacte con = tvContacte.getSelectionModel().getSelectedItem();
-                if (con != null) {
-                    int indexActual = tvContacte.getItems().indexOf(con);
+                Contacte c = tvTipusContacte.getSelectionModel().getSelectedItem();
+                if (c != null) {
+                    int indexActual = tvTipusContacte.getItems().indexOf(c);
                     int nouIndex = indexActual - 1;
-                    if (indexActual == FIRST) {
+                    if (indexActual == FIRST)
                         nouIndex = FIRST;
-                    }
-                    helperCon.eliminar(con, true);
+                    helperCon.eliminar(c,true);
                     refrescaTaula(nouIndex);
                 }
             }
         }
     }
 
-/*    public void guardar() {
-        if (chkPrincipal.isSelected()) {
-            if (!tfNom.getText().isEmpty()) {
-                boolean last = false;
-                int index = -1;
-                if (mode_insercio) {
-                    Contacte con = new Contacte();
-                    con.setCodi_impost(0);
-                    con.setNom(tfNom.getText());
-                    con.setValor(Float.parseFloat(tfValor.getText()));
-                    helperCon.afegir(con, true);
-                    mode_insercio = false;
-                    last = true;
-                } else {
-                    Contacte con = tvContacte.getSelectionModel().getSelectedItem();
-                    index = tvContacte.getSelectionModel().getSelectedIndex();
-                    con.setCodi_ctte(Integer.parseInt(tfCodi.getText()));
-                    con.setNom(tfNom.getText());
-                    con.setValor(Float.parseFloat(tfValor.getText()));
-
-                    helperCon.actualitzar(con, true);
-                }
-
-                if (last) {
-                    refrescaTaula(last);
-                } else {
-                    refrescaTaula(index);
-                }
-
-                btnNou.setDisable(false);
-                btnGuardar.setDisable(false);
-                btnEliminar.setDisable(false);
-                btnCancelar.setDisable(true);
+    public void guardar () {
+        if(!tfNom.getText().isEmpty()){
+            boolean last = false;
+            int index = -1;
+            if (mode_insercio) {
+                Contacte c = new Contacte();
+                c.setCodi_ctte(0);
+                c.setNom(tfNom.getText());
+                c.setCog1(tfNom1.getText());
+                helperCon.afegir(c,true);
+                mode_insercio = false;
+                last = true;
             } else {
-                advertir("El camp <abreviatura> és obligatori");
-            }
-        } else {
-            advertir("El camp <nom> és obligatori");
-        }
-    }*/
+                Contacte c = tvTipusContacte.getSelectionModel().getSelectedItem();
+                index = tvTipusContacte.getSelectionModel().getSelectedIndex();
+                a.setCodi_adre(Integer.parseInt(tfCodi.getText()));    
+                a.setNom_adre(tfNom.getText());
+                a.setCp(tfCp.getText());
+                a.setCli(cbCli.getSelectionModel().getSelectedItem());
+                a.setPais(cbPais.getSelectionModel().getSelectedItem());
+                a.setProv(cbProv.getSelectionModel().getSelectedItem());
+                a.setVia(cbVia.getSelectionModel().getSelectedItem());
 
+                helperCon.actualitzar(c,true);
+            }
+
+            if (last)
+                refrescaTaula(last);
+            else
+                refrescaTaula(index);
+
+            btnNou.setDisable(false);
+            btnGuardar.setDisable(false);
+            btnEliminar.setDisable(false);
+            btnCancelar.setDisable(true);
+        } else {
+            advertir("El camp <nom> és obligatori");                
+        }        
+    }    
+    
+    private Integer trobaEquiv(ArrayList a, int codi){
+        
+        
+        return null;
+    }
+    
+    private void carregaForeign(){
+        aClient = (ArrayList) helperCli.getAll();
+        aCa = (ArrayList) helperCa.getAll();
+        aDep = (ArrayList) helperDep.getAll();                 
+    }
+    
     /**
      * Obté una llista completa de tots els usuaris.
-     *
-     * @return
+     * @return 
      */
-    private ObservableList<Contacte> getImpostos() {
-        ArrayList<Contacte> llista = (ArrayList) helperCon.getAll();
-        ObservableList<Contacte> llistaCon = FXCollections.observableArrayList(llista);
-
-        return llistaCon;
-    }
+    private ObservableList<Contacte> getContactes() {
+        ArrayList<Contacte> llista = (ArrayList) helperCon.getAll();        
+        ObservableList<Contacte> llistaCo = FXCollections.observableArrayList(llista);
+        
+        return llistaCo;
+    }    
 }
