@@ -294,53 +294,49 @@ public class AltaAdrecaController extends MasterController implements Initializa
     }
 
     public void guardar () {
-        if (!tfPob.getText().isEmpty()) {
-            if(!tfNom.getText().isEmpty()){
-                boolean last = false;
-                int index = -1;
-                if (mode_insercio) {
-                    Adreca a = new Adreca();
-                    a.setCodi_adre(0);                    
-                    a.setNom_adre(tfNom.getText());
-                    a.setCp(tfCp.getText());
-                    a.setPoblacio(tfPob.getText());
-                    System.out.println(cbCli.getSelectionModel().getSelectedItem());
-                    a.setCli(cbCli.getSelectionModel().getSelectedItem());
-                    a.setPais(cbPais.getSelectionModel().getSelectedItem());
-                    a.setProv(cbProv.getSelectionModel().getSelectedItem());
-                    a.setVia(cbVia.getSelectionModel().getSelectedItem());
-                    helperAd.afegir(a,true);
-                    mode_insercio = false;
-                    last = true;
-                } else {
-                    Adreca a = tvTipusAdreca.getSelectionModel().getSelectedItem();
-                    index = tvTipusAdreca.getSelectionModel().getSelectedIndex();
-                    a.setCodi_adre(Integer.parseInt(tfCodi.getText()));    
-                    a.setNom_adre(tfNom.getText());
-                    a.setCp(tfCp.getText());
-                    a.setCli(cbCli.getSelectionModel().getSelectedItem());
-                    a.setPais(cbPais.getSelectionModel().getSelectedItem());
-                    a.setProv(cbProv.getSelectionModel().getSelectedItem());
-                    a.setVia(cbVia.getSelectionModel().getSelectedItem());
-
-                    helperAd.actualitzar(a,true);
-                }
-
-                if (last)
-                    refrescaTaula(last);
-                else
-                    refrescaTaula(index);
-
-                btnNou.setDisable(false);
-                btnGuardar.setDisable(false);
-                btnEliminar.setDisable(false);
-                btnCancelar.setDisable(true);
+        if(!tfNom.getText().isEmpty()){
+            boolean last = false;
+            int index = -1;
+            if (mode_insercio) {
+                Adreca a = new Adreca();
+                a.setCodi_adre(0);                    
+                a.setNom_adre(tfNom.getText());
+                a.setCp(tfCp.getText());
+                a.setPoblacio(tfPob.getText());
+                System.out.println(cbCli.getSelectionModel().getSelectedItem());
+                a.setCli(cbCli.getSelectionModel().getSelectedItem());
+                a.setPais(cbPais.getSelectionModel().getSelectedItem());
+                a.setProv(cbProv.getSelectionModel().getSelectedItem());
+                a.setVia(cbVia.getSelectionModel().getSelectedItem());
+                helperAd.afegir(a,true);
+                mode_insercio = false;
+                last = true;
             } else {
-                advertir("El camp <abreviatura> és obligatori");                
+                Adreca a = tvTipusAdreca.getSelectionModel().getSelectedItem();
+                index = tvTipusAdreca.getSelectionModel().getSelectedIndex();
+                a.setCodi_adre(Integer.parseInt(tfCodi.getText()));    
+                a.setNom_adre(tfNom.getText());
+                a.setCp(tfCp.getText());
+                a.setCli(cbCli.getSelectionModel().getSelectedItem());
+                a.setPais(cbPais.getSelectionModel().getSelectedItem());
+                a.setProv(cbProv.getSelectionModel().getSelectedItem());
+                a.setVia(cbVia.getSelectionModel().getSelectedItem());
+
+                helperAd.actualitzar(a,true);
             }
+
+            if (last)
+                refrescaTaula(last);
+            else
+                refrescaTaula(index);
+
+            btnNou.setDisable(false);
+            btnGuardar.setDisable(false);
+            btnEliminar.setDisable(false);
+            btnCancelar.setDisable(true);
         } else {
-            advertir("El camp <nom> és obligatori");
-        }
+            advertir("El camp <nom> és obligatori");                
+        }        
     }    
     
     private Integer trobaEquiv(ArrayList a, int codi){
