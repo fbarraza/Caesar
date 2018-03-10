@@ -1,0 +1,9 @@
+S:\05-Fitxers\05-Fitxers\bin\Debug\05-Fitxers.exe.config
+S:\05-Fitxers\05-Fitxers\bin\Debug\05-Fitxers.exe
+S:\05-Fitxers\05-Fitxers\bin\Debug\05-Fitxers.pdb
+S:\05-Fitxers\05-Fitxers\obj\Debug\05-Fitxers.csprojResolveAssemblyReference.cache
+S:\05-Fitxers\05-Fitxers\obj\Debug\_05_Fitxers.Form1.resources
+S:\05-Fitxers\05-Fitxers\obj\Debug\_05_Fitxers.Properties.Resources.resources
+S:\05-Fitxers\05-Fitxers\obj\Debug\05-Fitxers.csproj.GenerateResource.Cache
+S:\05-Fitxers\05-Fitxers\obj\Debug\05-Fitxers.exe
+S:\05-Fitxers\05-Fitxers\obj\Debug\05-Fitxers.pdb

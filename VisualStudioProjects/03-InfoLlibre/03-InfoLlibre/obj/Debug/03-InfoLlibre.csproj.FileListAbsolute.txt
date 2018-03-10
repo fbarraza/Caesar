@@ -1,0 +1,9 @@
+S:\03-InfoLlibre\03-InfoLlibre\bin\Debug\03-InfoLlibre.exe.config
+S:\03-InfoLlibre\03-InfoLlibre\bin\Debug\03-InfoLlibre.exe
+S:\03-InfoLlibre\03-InfoLlibre\bin\Debug\03-InfoLlibre.pdb
+S:\03-InfoLlibre\03-InfoLlibre\obj\Debug\03-InfoLlibre.csprojResolveAssemblyReference.cache
+S:\03-InfoLlibre\03-InfoLlibre\obj\Debug\_03_InfoLlibre.Form1.resources
+S:\03-InfoLlibre\03-InfoLlibre\obj\Debug\_03_InfoLlibre.Properties.Resources.resources
+S:\03-InfoLlibre\03-InfoLlibre\obj\Debug\03-InfoLlibre.csproj.GenerateResource.Cache
+S:\03-InfoLlibre\03-InfoLlibre\obj\Debug\03-InfoLlibre.exe
+S:\03-InfoLlibre\03-InfoLlibre\obj\Debug\03-InfoLlibre.pdb

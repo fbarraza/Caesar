@@ -1,0 +1,10 @@
+S:\02-Objecte-Suma\02-Objecte-Suma\obj\Debug\02-Objecte-Suma.csprojResolveAssemblyReference.cache
+S:\02-Objecte-Suma\02-Objecte-Suma\obj\Debug\_02_Objecte_Suma.Form1.resources
+S:\02-Objecte-Suma\02-Objecte-Suma\obj\Debug\_02_Objecte_Suma.Properties.Resources.resources
+S:\02-Objecte-Suma\02-Objecte-Suma\obj\Debug\02-Objecte-Suma.csproj.GenerateResource.Cache
+S:\02-Objecte-Suma\02-Objecte-Suma\obj\Debug\02-Objecte-Suma.csproj.CoreCompileInputs.cache
+S:\02-Objecte-Suma\02-Objecte-Suma\bin\Debug\02-Objecte-Suma.exe.config
+S:\02-Objecte-Suma\02-Objecte-Suma\bin\Debug\02-Objecte-Suma.exe
+S:\02-Objecte-Suma\02-Objecte-Suma\bin\Debug\02-Objecte-Suma.pdb
+S:\02-Objecte-Suma\02-Objecte-Suma\obj\Debug\02-Objecte-Suma.exe
+S:\02-Objecte-Suma\02-Objecte-Suma\obj\Debug\02-Objecte-Suma.pdb

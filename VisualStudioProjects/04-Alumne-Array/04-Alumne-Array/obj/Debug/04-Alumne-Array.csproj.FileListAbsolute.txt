@@ -1,0 +1,9 @@
+S:\04-Alumne-Array\04-Alumne-Array\bin\Debug\04-Alumne-Array.exe.config
+S:\04-Alumne-Array\04-Alumne-Array\bin\Debug\04-Alumne-Array.exe
+S:\04-Alumne-Array\04-Alumne-Array\bin\Debug\04-Alumne-Array.pdb
+S:\04-Alumne-Array\04-Alumne-Array\obj\Debug\04-Alumne-Array.csprojResolveAssemblyReference.cache
+S:\04-Alumne-Array\04-Alumne-Array\obj\Debug\_04_Alumne_Array.Form.resources
+S:\04-Alumne-Array\04-Alumne-Array\obj\Debug\_04_Alumne_Array.Properties.Resources.resources
+S:\04-Alumne-Array\04-Alumne-Array\obj\Debug\04-Alumne-Array.csproj.GenerateResource.Cache
+S:\04-Alumne-Array\04-Alumne-Array\obj\Debug\04-Alumne-Array.exe
+S:\04-Alumne-Array\04-Alumne-Array\obj\Debug\04-Alumne-Array.pdb
